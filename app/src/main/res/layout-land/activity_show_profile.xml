@@ -19,7 +19,7 @@
         <ImageView
             android:id="@+id/user_image"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/margin_left_grid"
             android:layout_marginTop="@dimen/margin_top_grid"
