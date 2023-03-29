@@ -11,13 +11,13 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
-import androidx.exifinterface.media.ExifInterface
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.*
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.exifinterface.media.ExifInterface
 import java.io.FileDescriptor
 import java.io.IOException
 import java.util.*
@@ -37,9 +37,11 @@ val genders = listOf("Not specified", "Male", "Female")
 val sports = listOf("Basket", "Football", "Padel", "Rugby", "Tennis", "Volleyball")
 val sportLevels = listOf("Beginner", "Intermediate", "Professional")
 val languages = arrayOf("English", "Italian", "French", "German", "Spanish", "Arabic", "Chinese")
+val days = listOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
 
 class EditProfileActivity : AppCompatActivity() {
 
+    //selected languages saved after device rotation
     private var savedLanguages: String? = ""
     private var languagesView: TextView? = null
     //imageView for profile pic
@@ -58,6 +60,10 @@ class EditProfileActivity : AppCompatActivity() {
         val imgButton = findViewById<ImageButton>(R.id.imageButton)
         registerForContextMenu(imgButton)
 
+        //spinner for gender
+        val genderSpinner = findViewById<Spinner>(R.id.editGender)
+        genderSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, genders)
+
         //auto complete text view for city
         val cityInput = findViewById<AutoCompleteTextView>(R.id.editCity)
 
@@ -69,48 +75,16 @@ class EditProfileActivity : AppCompatActivity() {
             Toast.makeText(this, "Selected city: $selectedCity", Toast.LENGTH_SHORT).show()
         }
 
-        //spinner for gender
-        val genderSpinner = findViewById<Spinner>(R.id.editGender)
-        genderSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, genders)
-
-        //spinner for sport
-        val sportSpinner = findViewById<Spinner>(R.id.editGames)
-        sportSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, sports)
-
-        //spinner for sport level
-        val sportLevelSpinner = findViewById<Spinner>(R.id.editGameLevel)
-        sportLevelSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, sportLevels)
-
-        //time picker for start time
-        val startTimeView = findViewById<EditText>(R.id.editStartTime)
-
-        startTimeView.setOnClickListener {
-            val cal = Calendar.getInstance()
-            val hour = cal.get(Calendar.HOUR_OF_DAY)
-            val minutes = cal.get(Calendar.MINUTE)
-
-            val timePickerDialog = TimePickerDialog(this, { _, hourOfDay, minute ->
-                val selectedTime = String.format("%02d:%02d", hourOfDay, minute)
-                startTimeView.setText(selectedTime)
-            }, hour, minutes, true)
-
-            timePickerDialog.show()
+        //add a new time slot
+        val addSlot = findViewById<TextView>(R.id.addTime)
+        addSlot.setOnClickListener {
+            handleNewTimeSlot()
         }
 
-        //time picker for end time
-        val endTimeView = findViewById<EditText>(R.id.editEndTime)
-
-        endTimeView.setOnClickListener {
-            val cal = Calendar.getInstance()
-            val hour = cal.get(Calendar.HOUR_OF_DAY)
-            val minutes = cal.get(Calendar.MINUTE)
-
-            val timePickerDialog = TimePickerDialog(this, { _, hourOfDay, minute ->
-                val selectedTime = String.format("%02d:%02d", hourOfDay, minute)
-                endTimeView.setText(selectedTime)
-            }, hour, minutes, true)
-
-            timePickerDialog.show()
+        //add a new sport
+        val addSport = findViewById<TextView>(R.id.addSport)
+        addSport.setOnClickListener {
+            handleNewSport()
         }
 
         //multi selection menu for languages
@@ -307,5 +281,64 @@ class EditProfileActivity : AppCompatActivity() {
             ExifInterface.ORIENTATION_ROTATE_270 -> 270
             else -> 0
         }
+    }
+
+    //handle adding new time slot
+    @SuppressLint("InflateParams")
+    private fun handleNewTimeSlot() {
+        val addSlotContainer = findViewById<LinearLayout>(R.id.timeContainer)
+
+        val timeList = layoutInflater.inflate(R.layout.add_new_time_slot, addSlotContainer, false)
+
+        //spinner for days
+        val daysSpinner = timeList.findViewById<Spinner>(R.id.editDay)
+        daysSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, days)
+
+        //time picker for start time
+        val startTimeView = timeList.findViewById<EditText>(R.id.editStartTime)
+
+        startTimeView.setOnClickListener {
+            handleClock(startTimeView)
+        }
+
+        //time picker for end time
+        val endTimeView = timeList.findViewById<EditText>(R.id.editEndTime)
+
+        endTimeView.setOnClickListener {
+            handleClock(endTimeView)
+        }
+
+        addSlotContainer.addView(timeList)
+    }
+
+    private fun handleClock(timeView: EditText) {
+        val cal = Calendar.getInstance()
+        val hour = cal.get(Calendar.HOUR_OF_DAY)
+        val minutes = cal.get(Calendar.MINUTE)
+
+        val timePickerDialog = TimePickerDialog(this, { _, hourOfDay, minute ->
+            val selectedTime = String.format("%02d:%02d", hourOfDay, minute)
+            timeView.setText(selectedTime)
+        }, hour, minutes, true)
+
+        timePickerDialog.show()
+    }
+
+    //handle adding new sport
+    @SuppressLint("InflateParams")
+    private fun handleNewSport() {
+        val addSportContainer = findViewById<LinearLayout>(R.id.sportsContainer)
+
+        val sportList = layoutInflater.inflate(R.layout.add_new_sport, addSportContainer, false)
+
+        //spinner for sport
+        val sportSpinner = sportList.findViewById<Spinner>(R.id.editGames)
+        sportSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, sports)
+
+        //spinner for sport level
+        val sportLevelSpinner = sportList.findViewById<Spinner>(R.id.editGameLevel)
+        sportLevelSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, sportLevels)
+
+        addSportContainer.addView(sportList)
     }
 }
