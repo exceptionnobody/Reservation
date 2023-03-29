@@ -199,9 +199,8 @@ class EditProfileActivity : AppCompatActivity() {
                 true
             }
             R.id.take_picture -> {
-                //ask for permission of camera upon first launch of application
-                if (checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_DENIED) {
+                //ask for permission of camera
+                if (checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
                     val permission = arrayOf(android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     requestPermissions(permission, 112)
                 }
