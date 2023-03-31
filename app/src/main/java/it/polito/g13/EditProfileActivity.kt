@@ -11,6 +11,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.*
@@ -184,17 +185,30 @@ class EditProfileActivity : AppCompatActivity() {
     override fun onContextItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.select_from_gallery -> {
-                //choose image from gallery
-                val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                @Suppress("DEPRECATION")
-                startActivityForResult(galleryIntent, resultLoadImage)
+                //android 13
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                    checkSelfPermission(android.Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_DENIED) {
+                    val permission = arrayOf(android.Manifest.permission.READ_MEDIA_IMAGES)
+                    requestPermissions(permission, 112)
+                }
+                //lower version
+                else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU &&
+                    (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED)) {
+                    val permission = arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                    requestPermissions(permission, 113)
+                }
+                else {
+                    val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                    @Suppress("DEPRECATION")
+                    startActivityForResult(galleryIntent, resultLoadImage)
+                }
                 true
             }
             R.id.take_picture -> {
                 //ask for permission of camera
                 if (checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
-                    val permission = arrayOf(android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    requestPermissions(permission, 112)
+                    val permission = arrayOf(android.Manifest.permission.CAMERA)
+                    requestPermissions(permission, 114)
                 }
                 else {
                     openCamera()
@@ -204,6 +218,24 @@ class EditProfileActivity : AppCompatActivity() {
             else -> super.onContextItemSelected(item)
         }
     }
+
+    //manage permission result
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == 112 || requestCode == 113) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //choose image from gallery
+                val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                @Suppress("DEPRECATION")
+                startActivityForResult(galleryIntent, resultLoadImage)
+            }
+        }
+        else if (requestCode == 114) {
+            openCamera()
+        }
+    }
+
 
     //open camera so that user can capture image
     private fun openCamera() {
