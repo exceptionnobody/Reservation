@@ -57,7 +57,17 @@ class EditProfileActivity : AppCompatActivity() {
         //change profile picture
         imageView = findViewById(R.id.user_image)
         val imgButton = findViewById<ImageButton>(R.id.imageButton)
-        registerForContextMenu(imgButton)
+
+        //menu to edit profile pic (take picture or select from gallery)
+        imgButton.setOnClickListener {
+            val popup = PopupMenu(this, imgButton)
+            popup.menuInflater.inflate(R.menu.edit_img_menu, popup.menu)
+            popup.setOnMenuItemClickListener { item ->
+                //handle context menu item click
+                handlePictureChange(item)
+            }
+            popup.show()
+        }
 
         //spinner for gender
         val genderSpinner = findViewById<Spinner>(R.id.editGender)
@@ -169,20 +179,8 @@ class EditProfileActivity : AppCompatActivity() {
         languagesView?.text = savedLanguages
     }
 
-    //menu to edit profile pic (take picture or select from gallery)
-    override fun onCreateContextMenu(
-        menu: ContextMenu?,
-        v: View?,
-        menuInfo: ContextMenu.ContextMenuInfo?
-    ) {
-        super.onCreateContextMenu(menu, v, menuInfo)
-
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.edit_img_menu, menu)
-    }
-
     //option selected to edit profile picture
-    override fun onContextItemSelected(item: MenuItem): Boolean {
+    private fun handlePictureChange(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.select_from_gallery -> {
                 //android 13
