@@ -3,7 +3,6 @@ package it.polito.g13
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
-import android.app.TimePickerDialog
 import android.content.ContentValues
 import android.content.DialogInterface
 import android.content.Intent
@@ -37,7 +36,6 @@ val genders = listOf("Not specified", "Male", "Female")
 val sports = listOf("Basket", "Football", "Padel", "Rugby", "Tennis", "Volleyball")
 val sportLevels = listOf("Beginner", "Intermediate", "Professional")
 val languages = arrayOf("English", "Italian", "French", "German", "Spanish", "Arabic", "Chinese")
-val days = listOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
 
 class EditProfileActivity : AppCompatActivity() {
 
@@ -73,12 +71,6 @@ class EditProfileActivity : AppCompatActivity() {
         cityInput.setOnItemClickListener { _, _, position, _ ->
             val selectedCity = cityAdapter.getItem(position).toString()
             Toast.makeText(this, "Selected city: $selectedCity", Toast.LENGTH_SHORT).show()
-        }
-
-        //add a new time slot
-        val addSlot = findViewById<TextView>(R.id.addTime)
-        addSlot.setOnClickListener {
-            handleNewTimeSlot()
         }
 
         //add a new sport
@@ -280,47 +272,6 @@ class EditProfileActivity : AppCompatActivity() {
             ExifInterface.ORIENTATION_ROTATE_270 -> 270
             else -> 0
         }
-    }
-
-    //handle adding new time slot
-    @SuppressLint("InflateParams")
-    private fun handleNewTimeSlot() {
-        val addSlotContainer = findViewById<LinearLayout>(R.id.timeContainer)
-
-        val timeList = layoutInflater.inflate(R.layout.add_new_time_slot, addSlotContainer, false)
-
-        //spinner for days
-        val daysSpinner = timeList.findViewById<Spinner>(R.id.editDay)
-        daysSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, days)
-
-        //time picker for start time
-        val startTimeView = timeList.findViewById<EditText>(R.id.editStartTime)
-
-        startTimeView.setOnClickListener {
-            handleClock(startTimeView)
-        }
-
-        //time picker for end time
-        val endTimeView = timeList.findViewById<EditText>(R.id.editEndTime)
-
-        endTimeView.setOnClickListener {
-            handleClock(endTimeView)
-        }
-
-        addSlotContainer.addView(timeList)
-    }
-
-    private fun handleClock(timeView: EditText) {
-        val cal = Calendar.getInstance()
-        val hour = cal.get(Calendar.HOUR_OF_DAY)
-        val minutes = cal.get(Calendar.MINUTE)
-
-        val timePickerDialog = TimePickerDialog(this, { _, hourOfDay, minute ->
-            val selectedTime = String.format("%02d:%02d", hourOfDay, minute)
-            timeView.setText(selectedTime)
-        }, hour, minutes, true)
-
-        timePickerDialog.show()
     }
 
     //handle adding new sport
