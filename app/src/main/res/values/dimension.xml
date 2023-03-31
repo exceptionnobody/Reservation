@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_left_grid">16dp</dimen>
+    <dimen name="margin_right_grid">16dp</dimen>
+    <dimen name="margin_top_grid">16dp</dimen>
+    <dimen name="margin_bottom_grid">16dp</dimen>
+    <dimen name="margin_top_title_first_level">28dp</dimen>
+    <dimen name="margin_start_title_first_level">19dp</dimen>
+    <dimen name="margin_start_title_second_level">24dp</dimen>
+    <dimen name="margin_top_under_first_title">10dp</dimen>
+    <dimen name="margin_top_title_second_level">26dp</dimen>
+    <dimen name="margin_top_under_second_title">4dp</dimen>
+    <dimen name="margin_start_content_text">24dp</dimen>
+</resources>

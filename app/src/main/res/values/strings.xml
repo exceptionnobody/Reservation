@@ -23,7 +23,7 @@
     <string name="title_city">City</string>
     <string name="user_city">No city selected where to play</string>
     <string name="title_time">Time</string>
-    <string name="user_time">No time selected</string>
+    <string name="user_time">No time range selected where to play</string>
     <string name="title_games">Games I play</string>
     <string name="user_games">No games selected</string>
     <string name="title_feedback">What other people say about me</string>
