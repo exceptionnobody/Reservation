@@ -12,6 +12,6 @@
     <dimen name="margin_top_under_second_title">4dp</dimen>
     <dimen name="margin_start_content_text">5dp</dimen>
     <dimen name="margin_end_content_text">5dp</dimen>
-    <dimen name="input_padding_y">10dp</dimen>
+    <dimen name="input_padding_y">12.5dp</dimen>
     <dimen name="input_padding_x">15dp</dimen>
 </resources>

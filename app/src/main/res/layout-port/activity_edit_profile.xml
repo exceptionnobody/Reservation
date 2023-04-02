@@ -20,20 +20,28 @@
             android:layout_marginStart="@dimen/margin_left_grid"
             android:layout_marginEnd="@dimen/margin_right_grid"
             android:orientation="vertical"
-            android:paddingTop="40dp"
-            android:weightSum="3">
+            android:paddingTop="40dp">
 
-            <FrameLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
+                <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/user_image"
-                    android:layout_width="wrap_content"
+                    android:layout_width="180dp"
                     android:layout_height="180dp"
                     android:layout_gravity="center"
-                    android:layout_weight="1"
                     android:contentDescription="@string/user_image"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
                     app:srcCompat="@drawable/user_image" />
 
                 <ImageButton
@@ -41,20 +49,23 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_gravity="bottom"
-                    android:layout_marginStart="200dp"
-                    android:layout_marginBottom="130dp"
                     android:background="@drawable/image_button"
                     android:contentDescription="@string/edit_image"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/user_image"
+                    app:layout_constraintHorizontal_bias="0.94"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0"
                     app:srcCompat="@drawable/camera" />
 
-            </FrameLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="9dp"
-                android:layout_weight="2"
                 android:orientation="vertical">
 
                 <TextView

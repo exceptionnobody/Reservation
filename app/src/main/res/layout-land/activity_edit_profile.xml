@@ -14,23 +14,37 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:baselineAligned="false"
+        >
 
-        <FrameLayout
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            >
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/margin_left_grid"
+            android:layout_marginTop="@dimen/margin_top_grid"
+            android:layout_marginBottom="@dimen/margin_bottom_grid"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/scrollView2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/user_image"
-                android:layout_width="271dp"
-                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="@dimen/margin_left_grid"
-                android:layout_marginTop="@dimen/margin_top_grid"
-                android:layout_marginBottom="@dimen/margin_bottom_grid"
                 android:layout_weight="1"
                 android:contentDescription="@string/user_image"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
                 app:srcCompat="@drawable/user_image" />
 
             <ImageButton
@@ -38,19 +52,22 @@
                 android:layout_width="65dp"
                 android:layout_height="65dp"
                 android:layout_gravity="bottom"
-                android:layout_marginStart="230dp"
-                android:layout_marginBottom="40dp"
                 android:background="@drawable/image_button"
                 android:contentDescription="@string/edit_image"
+                app:layout_constraintBottom_toBottomOf="@+id/user_image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.96"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/user_image"
+                app:layout_constraintVertical_bias="0.89"
                 app:srcCompat="@drawable/camera" />
 
-        </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ScrollView
             android:id="@+id/scrollView2"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginEnd="96dp"
             android:layout_weight="2">
 
             <LinearLayout
