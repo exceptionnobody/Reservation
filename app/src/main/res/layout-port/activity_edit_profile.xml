@@ -45,7 +45,7 @@
                     android:layout_marginBottom="130dp"
                     android:background="@drawable/image_button"
                     android:contentDescription="@string/edit_image"
-                    app:srcCompat="@android:drawable/ic_menu_camera" />
+                    app:srcCompat="@drawable/camera" />
 
             </FrameLayout>
 
