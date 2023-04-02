@@ -399,9 +399,9 @@
                     android:clickable="true"
                     android:contentDescription="@string/add_sport"
                     android:focusable="true"
-                    app:backgroundTint="#FF5722"
+                    app:backgroundTint="@color/primary_orange"
                     app:fabCustomSize="20dp"
-                    app:srcCompat="@android:drawable/ic_menu_add" />
+                    app:srcCompat="@drawable/plus_icon" />
 
                 <TextView
                     android:id="@+id/addSport"
@@ -411,7 +411,7 @@
                     android:layout_marginTop="-37dp"
                     android:fontFamily="@font/crete_round"
                     android:text="@string/add_sport"
-                    android:textColor="#FF5722"
+                    android:textColor="@color/primary_orange"
                     android:textSize="20sp" />
 
                 <TextView
