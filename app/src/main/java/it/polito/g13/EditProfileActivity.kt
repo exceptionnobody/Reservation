@@ -27,6 +27,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.encodeToString
 
+
 val cities = listOf(
     "Agrigento", "Alessandria", "Ancona", "Aosta", "Arezzo", "Ascoli Piceno", "Asti", "Avellino", "Bari", "Barletta-Andria-Trani", "Belluno", "Benevento",
     "Bergamo", "Biella", "Bologna", "Bolzano", "Brescia", "Brindisi", "Cagliari", "Caltanissetta", "Campobasso", "Carbonia-Iglesias", "Caserta", "Catania",
@@ -38,6 +39,8 @@ val cities = listOf(
     "Siracusa", "Sondrio", "Taranto", "Teramo", "Terni", "Torino", "Trapani", "Trento", "Treviso", "Trieste", "Udine", "Varese", "Venezia", "Verbano-Cusio-Ossola",
     "Vercelli", "Verona", "Vibo Valentia", "Vicenza", "Viterbo"
 )
+
+//Json.decodeFromString<Array<String>>
 val genders = listOf("Not specified", "Male", "Female")
 val sports = listOf("Basket", "Football", "Padel", "Rugby", "Tennis", "Volleyball")
 val sportLevels = listOf("Beginner", "Intermediate", "Professional")

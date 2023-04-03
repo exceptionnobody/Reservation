@@ -1,46 +1,64 @@
 package it.polito.g13
 
-import android.R
-import android.R.id
-import android.R.layout
+
+
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.AttributeSet
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
+import android.view.*
+
+
 import android.widget.TextView
+
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
+import java.lang.reflect.Array.getInt
 
 
 class ShowProfileActivity : AppCompatActivity() {
     lateinit var sharedPreference:SharedPreferences
-
-    var user_name: String= ""
-    var user_nickname:String= ""
-    var user_age:Int =0
-    var user_gender:String= ""
-    var user_mail:String= "" //view?.findViewById(R.id.)
-    var user_number:Int =0
-    var user_description:String= ""
-    var user_languages:Array<String> =  arrayOf("")
-    var user_city:String= ""
+    lateinit var user_name: TextView //= null//: String= ""
+    lateinit var user_nickname: TextView //= null//:String= ""
+    lateinit var user_age: TextView //= null//:Int =0
+    lateinit var user_gender: TextView //= null// :String= ""
+    lateinit var user_mail: TextView //= null //:String= "" //view?.findViewById(R.id.)
+    lateinit var user_number: TextView //= null//:Int =0
+    lateinit var user_description: TextView //= null//:String= ""
+    lateinit var user_languages: TextView //= null//:String = ""
+    lateinit var user_city: TextView //= null//:String= ""
     //var user_time:String= ""
-    var user_games:Array<String> = arrayOf("")
+    var user_games: TextView? = null//:Array<String> = arrayOf("")
     //var user_feedback:Array<String> = arrayOf("") //view?.findViewById(R.id.)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedPreference =  getSharedPreferences("preferences", 0); // 0 - for private mode
-        getDataFromSharedPref()
 
+        //getDataFromSharedPref()
+        setContentView(R.layout.activity_show_profile)
+        sharedPreference =  getSharedPreferences("preferences", 0) // 0 - for private mode
+        this.user_name=findViewById(R.id.user_name)
+        this.user_nickname=findViewById(R.id.user_nickname)
+        this.user_age=findViewById(R.id.user_age)
+        this.user_gender=findViewById(R.id.user_gender)
+        this.user_mail=findViewById(R.id.user_email)
+        this.user_number=findViewById(R.id.user_number)
+        this.user_languages=findViewById(R.id.user_languages)
+        this.user_description=findViewById(R.id.user_description)
+        this.user_city =findViewById(R.id.user_city)
+        user_name.text="ciao"
+    }
 
-        //setContentView(R.layout.activity_show_profile)
-    }override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    /*override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
+        return super.onCreateView(name, context, attrs)
+
+    }*/
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
-        //inflater.inflate(R.menu.menu_profile, menu)
+        inflater.inflate(R.menu.menu_profile, menu)
         super.onCreateOptionsMenu(menu)
         return true
     }
@@ -56,24 +74,19 @@ class ShowProfileActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        //getDataFromSharedPref()
+        getDataFromSharedPref()
     }
 
     private fun getDataFromSharedPref() {
-        //val edit=sharedPreference.edit()
-
-
-        // user_name= sharedPreference.getString("user_name",R.string.user_name.toString())!!//view?.findViewById(R.id.)
-
-         //   tv.text = "quel che ti pare"
-          user_nickname= sharedPreference.getString("user_nickname","default")!!//view?.findViewById(R.id.)
-          user_age = sharedPreference.getInt("user_age",18)//view?.findViewById(R.id.)
-          user_gender= sharedPreference.getString("user_gender","default")!!//view?.findViewById(R.id.)
-          user_mail= sharedPreference.getString("user_mail","default")!!//view?.findViewById(R.id.)
-          user_number= sharedPreference.getInt("user_number",328888888)//view?.findViewById(R.id.)
-        user_languages=Json.decodeFromString<Array<String>>(sharedPreference.getString("user_nickname","default")!!)
-          user_description= sharedPreference.getString("user_description","default")!!//view?.findViewById(R.id.) user_languages= sharedPreference.getString("user_nickname","default")!!.de//sharedPreference.getString("user_nickname","default")!!. //view?.findViewById(R.id.)
-          user_city= sharedPreference.getString("user_city","default")!!//view?.findViewById(R.id.)
+        user_name.text = sharedPreference.getString("user_name",getString(R.string.user_name))//?.text=sharedPreference.getString("user_name",R.string.user_name.toString())!!//view?.findViewById(R.id.)
+        user_nickname.text= sharedPreference.getString("user_nickname",getString(R.string.user_nickname))!!//view?.findViewById(R.id.)
+        user_age.text = sharedPreference.getString("user_age",getString(R.string.user_age))//view?.findViewById(R.id.)
+        user_gender.text= sharedPreference.getString("user_gender",getString(R.string.user_gender))!!//view?.findViewById(R.id.)
+        user_mail.text= sharedPreference.getString("user_mail",getString(R.string.user_email))!!//view?.findViewById(R.id.)
+        user_number.text= sharedPreference.getString("user_number",getString(R.string.user_number))//view?.findViewById(R.id.)
+        user_languages.text=sharedPreference.getString("user_nickname",getString(R.string.user_languages))!!
+        user_description.text= sharedPreference.getString("user_description",getString(R.string.user_description))!!
+        user_city.text= sharedPreference.getString("user_city",getString(R.string.user_city))!!//view?.findViewById(R.id.)
 
          // user_games= //view?.findViewById(R.id.)
 
