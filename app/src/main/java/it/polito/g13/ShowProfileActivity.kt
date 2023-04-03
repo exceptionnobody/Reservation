@@ -1,16 +1,24 @@
 package it.polito.g13
 
-import android.content.Context
+import android.R
+import android.R.id
+import android.R.layout
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.content.SharedPreferences
+import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+
 
 class ShowProfileActivity : AppCompatActivity() {
-    //val sharedPreference =  getSharedPreferences("preferences",Context.MODE_PRIVATE); // 0 - for private mode
+    lateinit var sharedPreference:SharedPreferences
+
     var user_name: String= ""
     var user_nickname:String= ""
     var user_age:Int =0
@@ -18,17 +26,21 @@ class ShowProfileActivity : AppCompatActivity() {
     var user_mail:String= "" //view?.findViewById(R.id.)
     var user_number:Int =0
     var user_description:String= ""
-    var user_languages:Array<String> = arrayOf("")
+    var user_languages:Array<String> =  arrayOf("")
     var user_city:String= ""
     //var user_time:String= ""
     var user_games:Array<String> = arrayOf("")
     //var user_feedback:Array<String> = arrayOf("") //view?.findViewById(R.id.)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_show_profile)
+        sharedPreference =  getSharedPreferences("preferences", 0); // 0 - for private mode
+        getDataFromSharedPref()
+
+
+        //setContentView(R.layout.activity_show_profile)
     }override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.menu_profile, menu)
+        //inflater.inflate(R.menu.menu_profile, menu)
         super.onCreateOptionsMenu(menu)
         return true
     }
@@ -44,25 +56,28 @@ class ShowProfileActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        getDataFromSharedPref()
+        //getDataFromSharedPref()
     }
 
     private fun getDataFromSharedPref() {
-        /*   if (file.exists()){
-         try {
-         user_name= view?.findViewById(R.id.)
-          user_nickname= view?.findViewById(R.id.)
-          user_age = view?.findViewById(R.id.)
-          user_gender= view?.findViewById(R.id.)
-          user_mail= view?.findViewById(R.id.)
-          user_number= view?.findViewById(R.id.)
-          user_description= view?.findViewById(R.id.)
-          user_languages= view?.findViewById(R.id.)
-          user_city= view?.findViewById(R.id.)
-          user_time= view?.findViewById(R.id.)
-          user_games= view?.findViewById(R.id.)
-          user_feedback= view?.findViewById(R.id.)
+        //val edit=sharedPreference.edit()
 
+
+        // user_name= sharedPreference.getString("user_name",R.string.user_name.toString())!!//view?.findViewById(R.id.)
+
+         //   tv.text = "quel che ti pare"
+          user_nickname= sharedPreference.getString("user_nickname","default")!!//view?.findViewById(R.id.)
+          user_age = sharedPreference.getInt("user_age",18)//view?.findViewById(R.id.)
+          user_gender= sharedPreference.getString("user_gender","default")!!//view?.findViewById(R.id.)
+          user_mail= sharedPreference.getString("user_mail","default")!!//view?.findViewById(R.id.)
+          user_number= sharedPreference.getInt("user_number",328888888)//view?.findViewById(R.id.)
+        user_languages=Json.decodeFromString<Array<String>>(sharedPreference.getString("user_nickname","default")!!)
+          user_description= sharedPreference.getString("user_description","default")!!//view?.findViewById(R.id.) user_languages= sharedPreference.getString("user_nickname","default")!!.de//sharedPreference.getString("user_nickname","default")!!. //view?.findViewById(R.id.)
+          user_city= sharedPreference.getString("user_city","default")!!//view?.findViewById(R.id.)
+
+         // user_games= //view?.findViewById(R.id.)
+
+/*
           var file= File((context as Context).filesDir,fileName)
           if (file.exists()){
               try {
@@ -113,7 +128,7 @@ class ShowProfileActivity : AppCompatActivity() {
           }
 
           //if file does not exist
-          else{
+
               fullName?.text= (resources.getString(R.string.saved_default_fullName))
               nickname?.text= (resources.getString(R.string.saved_default_nickname))
               location?.text = (resources.getString(R.string.saved_default_location))
@@ -131,7 +146,7 @@ class ShowProfileActivity : AppCompatActivity() {
               phone?.text = (resources.getString(R.string.saved_default_phone))
               cameraFilePath=void
               photoChoice="Camera"
-          }
+
     */  }
 
 }

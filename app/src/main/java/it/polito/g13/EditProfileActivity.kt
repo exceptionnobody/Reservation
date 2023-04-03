@@ -6,10 +6,12 @@ import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
+//import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -21,6 +23,9 @@ import androidx.exifinterface.media.ExifInterface
 import java.io.FileDescriptor
 import java.io.IOException
 import java.util.*
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.encodeToString
 
 val cities = listOf(
     "Agrigento", "Alessandria", "Ancona", "Aosta", "Arezzo", "Ascoli Piceno", "Asti", "Avellino", "Bari", "Barletta-Andria-Trani", "Belluno", "Benevento",
@@ -40,6 +45,7 @@ val languages = arrayOf("English", "Italian", "French", "German", "Spanish", "Ar
 
 class EditProfileActivity : AppCompatActivity() {
 
+    lateinit var sharedPreference:SharedPreferences
     //selected languages saved after device rotation
     private var savedLanguages: String? = ""
     private var languagesView: TextView? = null
@@ -50,9 +56,11 @@ class EditProfileActivity : AppCompatActivity() {
     private val resultLoadImage = 123
     private val imageCaptureCode = 654
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
+        sharedPreference =  getSharedPreferences("preferences", 0);
 
         //change profile picture
         imageView = findViewById(R.id.user_image)
