@@ -326,5 +326,11 @@ class EditProfileActivity : AppCompatActivity() {
         sportLevelSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, sportLevels)
 
         addSportContainer.addView(sportList)
+
+        //delete inserted sport
+        val deleteSportIcon = sportList.findViewById<FloatingActionButton>(R.id.delete_sport)
+        deleteSportIcon.setOnClickListener {
+            addSportContainer.removeView(sportList)
+        }
     }
 }

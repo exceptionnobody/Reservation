@@ -30,9 +30,9 @@
             android:id="@+id/editGameLevel"
             android:layout_width="155dp"
             android:layout_height="48dp"
-            android:layout_alignParentEnd="true"
+            android:layout_marginStart="100dp"
             android:layout_marginTop="4dp"
-            android:layout_marginEnd="@dimen/margin_start_content_text"
+            android:layout_toEndOf="@+id/editGames"
             android:background="@drawable/edit_fields"
             android:contentDescription="@string/user_time"
             android:fontFamily="@font/crete_round"
@@ -41,6 +41,19 @@
             android:spinnerMode="dropdown"
             android:textColor="@color/black"
             android:textSize="16sp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/delete_sport"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/margin_start_content_text"
+            android:clickable="true"
+            android:contentDescription="@string/delete_sport"
+            android:focusable="true"
+            app:backgroundTint="@color/primary_orange"
+            app:fabCustomSize="35dp"
+            app:srcCompat="@drawable/trash_bin_icon" />
     </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

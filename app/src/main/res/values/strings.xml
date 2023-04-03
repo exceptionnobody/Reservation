@@ -34,4 +34,5 @@
     <string name="image_from_gallery">Select an image from the phone gallery</string>
     <string name="take_picture">Use the camera to take a picture</string>
     <string name="add_time">Add a time slot</string>
+    <string name="delete_sport">Delete a sport</string>
 </resources>
