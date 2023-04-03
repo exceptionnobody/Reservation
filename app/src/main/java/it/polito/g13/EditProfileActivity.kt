@@ -18,6 +18,7 @@ import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.exifinterface.media.ExifInterface
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.io.FileDescriptor
 import java.io.IOException
 import java.util.*
@@ -85,8 +86,13 @@ class EditProfileActivity : AppCompatActivity() {
         }
 
         //add a new sport
-        val addSport = findViewById<TextView>(R.id.addSport)
-        addSport.setOnClickListener {
+        val addSportTextContainer = findViewById<RelativeLayout>(R.id.addSportTextContainer)
+        val addSportIcon = findViewById<FloatingActionButton>(R.id.addSportIcon)
+
+        addSportTextContainer.setOnClickListener {
+            handleNewSport()
+        }
+        addSportIcon.setOnClickListener {
             handleNewSport()
         }
 

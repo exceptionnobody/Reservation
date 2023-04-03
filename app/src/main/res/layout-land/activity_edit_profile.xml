@@ -411,31 +411,38 @@
                     android:orientation="vertical"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"></LinearLayout>
+                    app:layout_constraintTop_toTopOf="parent">
+                </LinearLayout>
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/addSportIcon"
+                <RelativeLayout
+                    android:id="@+id/addSportTextContainer"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="10dp"
-                    android:clickable="true"
-                    android:contentDescription="@string/add_sport"
-                    android:focusable="true"
-                    app:backgroundTint="@color/primary_orange"
-                    app:fabCustomSize="20dp"
-                    app:srcCompat="@drawable/plus_icon" />
+                    android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/addSport"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="52dp"
-                    android:layout_marginTop="-37dp"
-                    android:fontFamily="@font/crete_round"
-                    android:text="@string/add_sport"
-                    android:textColor="@color/primary_orange"
-                    android:textSize="20sp" />
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/addSportIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="10dp"
+                        android:clickable="true"
+                        android:contentDescription="@string/add_sport"
+                        android:focusable="true"
+                        app:backgroundTint="@color/primary_orange"
+                        app:fabCustomSize="20dp"
+                        app:srcCompat="@drawable/plus_icon" />
+
+                    <TextView
+                        android:id="@+id/addSport"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="52dp"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/crete_round"
+                        android:text="@string/add_sport"
+                        android:textColor="@color/primary_orange"
+                        android:textSize="20sp" />
+                </RelativeLayout>
 
                 <TextView
                     android:id="@+id/title_feedback"
