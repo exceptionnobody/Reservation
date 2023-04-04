@@ -16,10 +16,12 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.Editable
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.exifinterface.media.ExifInterface
+import com.google.android.material.textfield.TextInputEditText
 import java.io.FileDescriptor
 import java.io.IOException
 import java.util.*
@@ -58,12 +60,31 @@ class EditProfileActivity : AppCompatActivity() {
     private var imageUri: Uri? = null
     private val resultLoadImage = 123
     private val imageCaptureCode = 654
+    lateinit var user_name: EditText //= null//: String= ""
+    lateinit var user_nickname: EditText //= null//:String= ""
+    lateinit var user_age: EditText //= null//:Int =0
+    lateinit var user_gender: EditText //= null// :String= ""
+    lateinit var user_mail: EditText //= null //:String= "" //view?.findViewById(R.id.)
+    lateinit var user_number: EditText //= null//:Int =0
+    lateinit var user_description: EditText //= null//:String= ""
+    lateinit var user_languages: EditText //= null//:String = ""
+    lateinit var user_city: EditText //= null//:String= "
 
+//gender=spinner no edit view
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
         sharedPreference =  getSharedPreferences("preferences", 0);
+        this.user_name=findViewById(R.id.editFullName)
+        this.user_nickname=findViewById(R.id.editNickname)
+        this.user_age=findViewById(R.id.editAge)
+        this.user_mail=findViewById(R.id.editEmail)
+        this.user_number=findViewById(R.id.editNumber)
+        this.user_description=findViewById(R.id.editDescription)
+        this.user_city =findViewById(R.id.editCity)
+        getDataFromSharedPref()
+
 
         //change profile picture
         imageView = findViewById(R.id.user_image)
@@ -332,4 +353,28 @@ class EditProfileActivity : AppCompatActivity() {
 
         addSportContainer.addView(sportList)
     }
+
+    private fun getDataFromSharedPref(){
+        user_name.hint = sharedPreference.getString("user_name",getString(R.string.user_name))//?.text=sharedPreference.getString("user_name",R.string.user_name.toString())!!//view?.findViewById(R.id.)
+         //= sharedPreference.getString("user_name","ciao")             ----------------- .append per gli edit text
+        user_nickname.hint= sharedPreference.getString("user_nickname",getString(R.string.user_nickname))!!//view?.findViewById(R.id.)
+        user_age.hint = sharedPreference.getString("user_age",getString(R.string.user_age))//view?.findViewById(R.id.)
+        //user_gender.hint= sharedPreference.getString("user_gender",getString(R.string.user_gender))!!//view?.findViewById(R.id.)
+        user_mail.hint= sharedPreference.getString("user_mail",getString(R.string.user_email))!!//view?.findViewById(R.id.)
+        user_number.hint= sharedPreference.getString("user_number",getString(R.string.user_number))//view?.findViewById(R.id.)
+        //user_languages.hint=sharedPreference.getString("user_nickname",getString(R.string.user_languages))!!
+        user_description.hint= sharedPreference.getString("user_description",getString(R.string.user_description))!!
+        user_city.hint = sharedPreference.getString("user_city",getString(R.string.user_city))!!//view?.findViewById(R.id.)
+    }
+    private fun saveDataToPref(){
+        var x=sharedPreference.edit()
+       // x.putString("user_name", if (user_name.text.length!=0){return user_name.text}; else{})
+
+
+    }
+
+
+
+
+
 }

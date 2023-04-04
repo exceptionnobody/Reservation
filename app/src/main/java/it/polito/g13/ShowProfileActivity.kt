@@ -49,7 +49,6 @@ class ShowProfileActivity : AppCompatActivity() {
         this.user_languages=findViewById(R.id.user_languages)
         this.user_description=findViewById(R.id.user_description)
         this.user_city =findViewById(R.id.user_city)
-        user_name.text="ciao"
     }
 
     /*override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
