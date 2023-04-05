@@ -3,6 +3,7 @@ package it.polito.g13
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.ClipData.Item
 import android.content.ContentValues
 import android.content.DialogInterface
 import android.content.Intent
@@ -20,6 +21,7 @@ import android.text.Editable
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 import androidx.exifinterface.media.ExifInterface
 import com.google.android.material.textfield.TextInputEditText
 import java.io.FileDescriptor
@@ -56,6 +58,7 @@ class EditProfileActivity : AppCompatActivity() {
     private var languagesView: TextView? = null
     //imageView for profile pic
     private var imageView: ImageView? = null
+    lateinit var genderSpinner : Spinner
     //variable used to take picture from camera
     private var imageUri: Uri? = null
     private val resultLoadImage = 123
@@ -67,7 +70,7 @@ class EditProfileActivity : AppCompatActivity() {
     lateinit var user_mail: EditText //= null //:String= "" //view?.findViewById(R.id.)
     lateinit var user_number: EditText //= null//:Int =0
     lateinit var user_description: EditText //= null//:String= ""
-    lateinit var user_languages: EditText //= null//:String = ""
+
     lateinit var user_city: EditText //= null//:String= "
 
 //gender=spinner no edit view
@@ -85,6 +88,13 @@ class EditProfileActivity : AppCompatActivity() {
         this.user_city =findViewById(R.id.editCity)
         getDataFromSharedPref()
 
+        val confirmButton =findViewById<Button>(R.id.confirm_button)
+        confirmButton.setOnClickListener{
+            saveDataToPref()
+            this.finish()
+        }
+        val cancelButton =findViewById<Button>(R.id.cancel_button)
+        cancelButton.setOnClickListener { this.finish() }
 
         //change profile picture
         imageView = findViewById(R.id.user_image)
@@ -102,7 +112,7 @@ class EditProfileActivity : AppCompatActivity() {
         }
 
         //spinner for gender
-        val genderSpinner = findViewById<Spinner>(R.id.editGender)
+        genderSpinner= findViewById(R.id.editGender)
         genderSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, genders)
 
         //auto complete text view for city
@@ -189,6 +199,7 @@ class EditProfileActivity : AppCompatActivity() {
             //show dialog
             builder.show()
         }
+
     }
 
     //save state when there is device rotation
@@ -366,15 +377,38 @@ class EditProfileActivity : AppCompatActivity() {
         user_description.hint= sharedPreference.getString("user_description",getString(R.string.user_description))!!
         user_city.hint = sharedPreference.getString("user_city",getString(R.string.user_city))!!//view?.findViewById(R.id.)
     }
+
+
     private fun saveDataToPref(){
+        val genderSpinner = findViewById<Spinner>(R.id.editGender)
         var x=sharedPreference.edit()
+        x.clear()
+        if (user_name.text.toString()!="")
+            x.putString("user_name",user_name.text.toString())
+        if (user_nickname.text.toString()!="")
+            x.putString("user_name",user_nickname.text.toString())
+        if(user_age.text.toString()!="")
+            x.putString("user_age",user_age.text.toString())
+        if(user_mail.text.toString()!="")
+            x.putString("user_age",user_mail.text.toString())
+        if(user_number.text.toString()!="")
+            x.putString("user_age",user_number.text.toString())
+        if(user_description.text.toString()!="")
+            x.putString("user_age",user_description.text.toString())
+        if(user_city.text.toString()!="")
+            x.putString("user_age",user_city.text.toString())
+        if(savedLanguages!="")
+            x.putString("user_languages",savedLanguages)
+        x.putString("user_gender" , genderSpinner.selectedItem.toString())
+        if (imageUri!=null)
+            true // serve necessariamente il file
+
+        x.apply()
+
        // x.putString("user_name", if (user_name.text.length!=0){return user_name.text}; else{})
 
 
     }
-
-
-
 
 
 }

@@ -3,6 +3,7 @@ package it.polito.g13
 
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -76,6 +77,11 @@ class ShowProfileActivity : AppCompatActivity() {
         getDataFromSharedPref()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        @Suppress("DEPRECATION")
+        super.onActivityResult(requestCode, resultCode, data)
+
+    }
     private fun getDataFromSharedPref() {
         user_name.text = sharedPreference.getString("user_name",getString(R.string.user_name))//?.text=sharedPreference.getString("user_name",R.string.user_name.toString())!!//view?.findViewById(R.id.)
         user_nickname.text= sharedPreference.getString("user_nickname",getString(R.string.user_nickname))!!//view?.findViewById(R.id.)
@@ -83,7 +89,7 @@ class ShowProfileActivity : AppCompatActivity() {
         user_gender.text= sharedPreference.getString("user_gender",getString(R.string.user_gender))!!//view?.findViewById(R.id.)
         user_mail.text= sharedPreference.getString("user_mail",getString(R.string.user_email))!!//view?.findViewById(R.id.)
         user_number.text= sharedPreference.getString("user_number",getString(R.string.user_number))//view?.findViewById(R.id.)
-        user_languages.text=sharedPreference.getString("user_nickname",getString(R.string.user_languages))!!
+        user_languages.text=sharedPreference.getString("user_languages",getString(R.string.user_languages))!!
         user_description.text= sharedPreference.getString("user_description",getString(R.string.user_description))!!
         user_city.text= sharedPreference.getString("user_city",getString(R.string.user_city))!!//view?.findViewById(R.id.)
 
