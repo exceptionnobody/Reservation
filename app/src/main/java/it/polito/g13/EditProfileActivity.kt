@@ -1,6 +1,5 @@
 package it.polito.g13
 
-//import android.media.ExifInterface
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
@@ -23,10 +22,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.exifinterface.media.ExifInterface
 import kotlinx.serialization.encodeToString
 import java.io.ByteArrayOutputStream
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.io.FileDescriptor
 import java.io.IOException
 import java.util.*
-
 
 val cities = listOf(
     "Agrigento", "Alessandria", "Ancona", "Aosta", "Arezzo", "Ascoli Piceno", "Asti", "Avellino", "Bari", "Barletta-Andria-Trani", "Belluno", "Benevento",
@@ -39,8 +38,6 @@ val cities = listOf(
     "Siracusa", "Sondrio", "Taranto", "Teramo", "Terni", "Torino", "Trapani", "Trento", "Treviso", "Trieste", "Udine", "Varese", "Venezia", "Verbano-Cusio-Ossola",
     "Vercelli", "Verona", "Vibo Valentia", "Vicenza", "Viterbo"
 )
-
-//Json.decodeFromString<Array<String>>
 val genders = listOf("Not specified", "Male", "Female")
 val sports = listOf("Basket", "Football", "Padel", "Rugby", "Tennis", "Volleyball")
 val sportLevels = listOf("Beginner", "Intermediate", "Professional")
@@ -124,8 +121,13 @@ class EditProfileActivity : AppCompatActivity() {
         }
 
         //add a new sport
-        val addSport = findViewById<TextView>(R.id.addSport)
-        addSport.setOnClickListener {
+        val addSportTextContainer = findViewById<RelativeLayout>(R.id.addSportTextContainer)
+        val addSportIcon = findViewById<FloatingActionButton>(R.id.addSportIcon)
+
+        addSportTextContainer.setOnClickListener {
+            handleNewSport()
+        }
+        addSportIcon.setOnClickListener {
             handleNewSport()
         }
 
@@ -196,7 +198,6 @@ class EditProfileActivity : AppCompatActivity() {
             //show dialog
             builder.show()
         }
-
     }
 
     //save state when there is device rotation
@@ -360,6 +361,12 @@ class EditProfileActivity : AppCompatActivity() {
         sportLevelSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, sportLevels)
 
         addSportContainer.addView(sportList)
+
+        //delete inserted sport
+        val deleteSportIcon = sportList.findViewById<FloatingActionButton>(R.id.delete_sport)
+        deleteSportIcon.setOnClickListener {
+            addSportContainer.removeView(sportList)
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
