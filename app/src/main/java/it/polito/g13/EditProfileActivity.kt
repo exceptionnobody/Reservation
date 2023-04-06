@@ -1,9 +1,9 @@
 package it.polito.g13
 
+//import android.media.ExifInterface
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.ClipData.Item
 import android.content.ContentValues
 import android.content.DialogInterface
 import android.content.Intent
@@ -12,24 +12,20 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
-//import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.text.Editable
 import android.view.*
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
 import androidx.exifinterface.media.ExifInterface
-import com.google.android.material.textfield.TextInputEditText
+import kotlinx.serialization.encodeToString
+import java.io.ByteArrayOutputStream
 import java.io.FileDescriptor
 import java.io.IOException
 import java.util.*
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.encodeToString
 
 
 val cities = listOf(
@@ -75,6 +71,7 @@ class EditProfileActivity : AppCompatActivity() {
 
 //gender=spinner no edit view
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
@@ -376,13 +373,22 @@ class EditProfileActivity : AppCompatActivity() {
         //user_languages.hint=sharedPreference.getString("user_nickname",getString(R.string.user_languages))!!
         user_description.hint= sharedPreference.getString("user_description",getString(R.string.user_description))!!
         user_city.hint = sharedPreference.getString("user_city",getString(R.string.user_city))!!//view?.findViewById(R.id.)
+
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun saveDataToPref(){
-        val genderSpinner = findViewById<Spinner>(R.id.editGender)
         var x=sharedPreference.edit()
         x.clear()
+        val baos = ByteArrayOutputStream()
+        if (imageUri!=null){
+            uriToBitmap(imageUri!!)!!.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+            val compressImage: ByteArray = baos.toByteArray()
+            val sEncodedImage: String = Base64.getEncoder().encodeToString(compressImage)//Base64.encodeToString(compressImage, Base64.DEFAULT)
+            x.putString("user_image",sEncodedImage)
+        }
+        val genderSpinner = findViewById<Spinner>(R.id.editGender)
         if (user_name.text.toString()!="")
             x.putString("user_name",user_name.text.toString())
         if (user_nickname.text.toString()!="")
@@ -400,9 +406,6 @@ class EditProfileActivity : AppCompatActivity() {
         if(savedLanguages!="")
             x.putString("user_languages",savedLanguages)
         x.putString("user_gender" , genderSpinner.selectedItem.toString())
-        if (imageUri!=null)
-            true // serve necessariamente il file
-
         x.apply()
 
        // x.putString("user_name", if (user_name.text.length!=0){return user_name.text}; else{})

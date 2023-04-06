@@ -2,27 +2,23 @@ package it.polito.g13
 
 
 
-import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.Bundle
-import android.util.AttributeSet
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.*
-
-
+import android.widget.ImageView
 import android.widget.TextView
-
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import java.lang.reflect.Array.getInt
+import java.util.*
 
 
 class ShowProfileActivity : AppCompatActivity() {
     lateinit var sharedPreference:SharedPreferences
+    lateinit var user_image: ImageView
     lateinit var user_name: TextView //= null//: String= ""
     lateinit var user_nickname: TextView //= null//:String= ""
     lateinit var user_age: TextView //= null//:Int =0
@@ -41,6 +37,7 @@ class ShowProfileActivity : AppCompatActivity() {
         //getDataFromSharedPref()
         setContentView(R.layout.activity_show_profile)
         sharedPreference =  getSharedPreferences("preferences", 0) // 0 - for private mode
+        this.user_image=findViewById(R.id.user_image)
         this.user_name=findViewById(R.id.user_name)
         this.user_nickname=findViewById(R.id.user_nickname)
         this.user_age=findViewById(R.id.user_age)
@@ -72,6 +69,7 @@ class ShowProfileActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onResume() {
         super.onResume()
         getDataFromSharedPref()
@@ -82,7 +80,19 @@ class ShowProfileActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun getDataFromSharedPref() {
+        val x:String ?= sharedPreference.getString("user_image",null)
+        if (x!=null){
+            val encodedImage: String = sharedPreference.getString("user_image", "").toString()
+            val b: ByteArray = Base64.getDecoder().decode(encodedImage)
+            val bitmapImage = BitmapFactory.decodeByteArray(b, 0, b.size)
+            user_image.setImageBitmap(bitmapImage)
+        }
+        else{
+            user_image.setImageResource(R.drawable.user_image)
+        }
         user_name.text = sharedPreference.getString("user_name",getString(R.string.user_name))//?.text=sharedPreference.getString("user_name",R.string.user_name.toString())!!//view?.findViewById(R.id.)
         user_nickname.text= sharedPreference.getString("user_nickname",getString(R.string.user_nickname))!!//view?.findViewById(R.id.)
         user_age.text = sharedPreference.getString("user_age",getString(R.string.user_age))//view?.findViewById(R.id.)
