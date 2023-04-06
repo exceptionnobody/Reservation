@@ -72,6 +72,7 @@ class EditProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
+        imageView = findViewById(R.id.user_image)
         sharedPreference =  getSharedPreferences("preferences", 0);
         this.user_name=findViewById(R.id.editFullName)
         this.user_nickname=findViewById(R.id.editNickname)
@@ -91,7 +92,7 @@ class EditProfileActivity : AppCompatActivity() {
         cancelButton.setOnClickListener { this.finish() }
 
         //change profile picture
-        imageView = findViewById(R.id.user_image)
+
         val imgButton = findViewById<ImageButton>(R.id.imageButton)
 
         //menu to edit profile pic (take picture or select from gallery)
@@ -373,7 +374,7 @@ class EditProfileActivity : AppCompatActivity() {
     private fun getDataFromSharedPref(){
         val x:String ?= sharedPreference.getString("user_image",null)
         if (x!=null){
-            val encodedImage: String = sharedPreference.getString("user_image", "").toString()
+            val encodedImage: String? = sharedPreference.getString("user_image", null)
             val b: ByteArray = Base64.getDecoder().decode(encodedImage)
             val bitmapImage = BitmapFactory.decodeByteArray(b, 0, b.size)
             imageView?.setImageBitmap(bitmapImage)
@@ -397,6 +398,7 @@ class EditProfileActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun saveDataToPref(){
+        var y:String?=sharedPreference.getString("user_image",null)
         var x=sharedPreference.edit()
         x.clear()
         val baos = ByteArrayOutputStream()
@@ -406,27 +408,25 @@ class EditProfileActivity : AppCompatActivity() {
             val sEncodedImage: String = Base64.getEncoder().encodeToString(compressImage)//Base64.encodeToString(compressImage, Base64.DEFAULT)
             x.putString("user_image",sEncodedImage)
         }
-        else if (sharedPreference.getString("user_image",null)!=null){
-            val compressImage: ByteArray = baos.toByteArray()
-            val sEncodedImage: String = Base64.getEncoder().encodeToString(compressImage)//Base64.encodeToString(compressImage, Base64.DEFAULT)
-            x.putString("user_image",sEncodedImage)
-        }
+        else
+            x.putString("user_image",y)
+
 
         val genderSpinner = findViewById<Spinner>(R.id.editGender)
         if (user_name.text.toString()!="")
             x.putString("user_name",user_name.text.toString())
         if (user_nickname.text.toString()!="")
-            x.putString("user_name",user_nickname.text.toString())
+            x.putString("user_nickname",user_nickname.text.toString())
         if(user_age.text.toString()!="")
             x.putString("user_age",user_age.text.toString())
         if(user_mail.text.toString()!="")
-            x.putString("user_age",user_mail.text.toString())
+            x.putString("user_mail",user_mail.text.toString())
         if(user_number.text.toString()!="")
-            x.putString("user_age",user_number.text.toString())
+            x.putString("user_number",user_number.text.toString())
         if(user_description.text.toString()!="")
-            x.putString("user_age",user_description.text.toString())
+            x.putString("user_description",user_description.text.toString())
         if(user_city.text.toString()!="")
-            x.putString("user_age",user_city.text.toString())
+            x.putString("user_city",user_city.text.toString())
         if(savedLanguages!="")
             x.putString("user_languages",savedLanguages)
         x.putString("user_gender" , genderSpinner.selectedItem.toString())
