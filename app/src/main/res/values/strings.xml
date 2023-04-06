@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Mad</string>
     <string name="user_image">user image</string>
+    <string name="edit_image">edit picture</string>
     <string name="title_basic_information">My basic information</string>
     <string name="title_user_name">Name and surname</string>
     <string name="user_name">Your full name</string>
@@ -27,4 +28,11 @@
     <string name="user_games">No games selected</string>
     <string name="title_feedback">What other people say about me</string>
     <string name="user_feedback">No feedback</string>
+    <string name="confirm_button">Confirm</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="add_sport">Add a sport</string>
+    <string name="image_from_gallery">Select an image from the phone gallery</string>
+    <string name="take_picture">Use the camera to take a picture</string>
+    <string name="add_time">Add a time slot</string>
+    <string name="delete_sport">Delete a sport</string>
 </resources>

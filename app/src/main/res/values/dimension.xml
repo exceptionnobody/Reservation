@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_left_grid">16dp</dimen>
+    <dimen name="margin_right_grid">16dp</dimen>
+    <dimen name="margin_top_grid">16dp</dimen>
+    <dimen name="margin_bottom_grid">16dp</dimen>
+    <dimen name="margin_top_title_first_level">23dp</dimen>
+    <dimen name="margin_start_title_first_level">15dp</dimen>
+    <dimen name="margin_start_title_second_level">20dp</dimen>
+    <dimen name="margin_top_under_first_title">10dp</dimen>
+    <dimen name="margin_top_title_second_level">15dp</dimen>
+    <dimen name="margin_top_under_second_title">4dp</dimen>
+    <dimen name="margin_start_content_text">5dp</dimen>
+    <dimen name="margin_end_content_text">5dp</dimen>
+    <dimen name="input_padding_y">12.5dp</dimen>
+    <dimen name="input_padding_x">15dp</dimen>
+</resources>
