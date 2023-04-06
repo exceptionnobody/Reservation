@@ -362,17 +362,28 @@ class EditProfileActivity : AppCompatActivity() {
         addSportContainer.addView(sportList)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun getDataFromSharedPref(){
-        user_name.hint = sharedPreference.getString("user_name",getString(R.string.user_name))//?.text=sharedPreference.getString("user_name",R.string.user_name.toString())!!//view?.findViewById(R.id.)
+        val x:String ?= sharedPreference.getString("user_image",null)
+        if (x!=null){
+            val encodedImage: String = sharedPreference.getString("user_image", "").toString()
+            val b: ByteArray = Base64.getDecoder().decode(encodedImage)
+            val bitmapImage = BitmapFactory.decodeByteArray(b, 0, b.size)
+            imageView?.setImageBitmap(bitmapImage)
+        }
+        else{
+            imageView?.setImageResource(R.drawable.user_image)
+        }
+        user_name.setText(sharedPreference.getString("user_name",getString(R.string.user_name))) //?.text=sharedPreference.getString("user_name",R.string.user_name.toString())!!//view?.findViewById(R.id.)
          //= sharedPreference.getString("user_name","ciao")             ----------------- .append per gli edit text
-        user_nickname.hint= sharedPreference.getString("user_nickname",getString(R.string.user_nickname))!!//view?.findViewById(R.id.)
-        user_age.hint = sharedPreference.getString("user_age",getString(R.string.user_age))//view?.findViewById(R.id.)
-        //user_gender.hint= sharedPreference.getString("user_gender",getString(R.string.user_gender))!!//view?.findViewById(R.id.)
-        user_mail.hint= sharedPreference.getString("user_mail",getString(R.string.user_email))!!//view?.findViewById(R.id.)
-        user_number.hint= sharedPreference.getString("user_number",getString(R.string.user_number))//view?.findViewById(R.id.)
+        user_nickname.setText( sharedPreference.getString("user_nickname",getString(R.string.user_nickname))!!)//view?.findViewById(R.id.)
+        user_age.setText(sharedPreference.getString("user_age",getString(R.string.user_age)))//view?.findViewById(R.id.)
+       // user_gender.setSelection(genders.indexOf("Male")) //view?.findViewById(R.id.)           sharedPreference.getString("user_gender",""=!!
+        user_mail.setText( sharedPreference.getString("user_mail",getString(R.string.user_email))!!)//view?.findViewById(R.id.)
+        user_number.setText( sharedPreference.getString("user_number",getString(R.string.user_number)))//view?.findViewById(R.id.)
         //user_languages.hint=sharedPreference.getString("user_nickname",getString(R.string.user_languages))!!
-        user_description.hint= sharedPreference.getString("user_description",getString(R.string.user_description))!!
-        user_city.hint = sharedPreference.getString("user_city",getString(R.string.user_city))!!//view?.findViewById(R.id.)
+        user_description.setText( sharedPreference.getString("user_description",getString(R.string.user_description))!!)
+        user_city.setText( sharedPreference.getString("user_city",getString(R.string.user_city))!!)//view?.findViewById(R.id.)
 
     }
 
@@ -388,6 +399,12 @@ class EditProfileActivity : AppCompatActivity() {
             val sEncodedImage: String = Base64.getEncoder().encodeToString(compressImage)//Base64.encodeToString(compressImage, Base64.DEFAULT)
             x.putString("user_image",sEncodedImage)
         }
+        else if (sharedPreference.getString("user_image",null)!=null){
+            val compressImage: ByteArray = baos.toByteArray()
+            val sEncodedImage: String = Base64.getEncoder().encodeToString(compressImage)//Base64.encodeToString(compressImage, Base64.DEFAULT)
+            x.putString("user_image",sEncodedImage)
+        }
+
         val genderSpinner = findViewById<Spinner>(R.id.editGender)
         if (user_name.text.toString()!="")
             x.putString("user_name",user_name.text.toString())
