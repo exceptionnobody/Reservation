@@ -19,6 +19,7 @@ import android.view.*
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 import androidx.exifinterface.media.ExifInterface
 import kotlinx.serialization.encodeToString
 import java.io.ByteArrayOutputStream
@@ -42,6 +43,7 @@ val genders = listOf("Not specified", "Male", "Female")
 val sports = listOf("Basket", "Football", "Padel", "Rugby", "Tennis", "Volleyball")
 val sportLevels = listOf("Beginner", "Intermediate", "Professional")
 val languages = arrayOf("English", "Italian", "French", "German", "Spanish", "Arabic", "Chinese")
+var glist= mutableListOf<String>()
 
 class EditProfileActivity : AppCompatActivity() {
 
@@ -59,7 +61,6 @@ class EditProfileActivity : AppCompatActivity() {
     lateinit var user_name: EditText //= null//: String= ""
     lateinit var user_nickname: EditText //= null//:String= ""
     lateinit var user_age: EditText //= null//:Int =0
-    lateinit var user_gender: EditText //= null// :String= ""
     lateinit var user_mail: EditText //= null //:String= "" //view?.findViewById(R.id.)
     lateinit var user_number: EditText //= null//:Int =0
     lateinit var user_description: EditText //= null//:String= ""
@@ -81,7 +82,7 @@ class EditProfileActivity : AppCompatActivity() {
         this.user_number=findViewById(R.id.editNumber)
         this.user_description=findViewById(R.id.editDescription)
         this.user_city =findViewById(R.id.editCity)
-        getDataFromSharedPref()
+
 
         val confirmButton =findViewById<Button>(R.id.confirm_button)
         confirmButton.setOnClickListener{
@@ -106,9 +107,7 @@ class EditProfileActivity : AppCompatActivity() {
             popup.show()
         }
 
-        //spinner for gender
-        genderSpinner= findViewById(R.id.editGender)
-        genderSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, genders)
+
 
         //auto complete text view for city
         val cityInput = findViewById<AutoCompleteTextView>(R.id.editCity)
@@ -134,8 +133,12 @@ class EditProfileActivity : AppCompatActivity() {
 
         //multi selection menu for languages
         languagesView = findViewById(R.id.editLanguages)
+
         val selectedLanguages = BooleanArray(languages.size) { false }
         val listLanguages = mutableListOf<Int>()
+       // if (savedLanguages!=null && savedLanguages!="")
+         //   savedLanguages?.split(",")?.forEach { j:String -> listLanguages.add(languages.indexOf(j))
+           // }
 
         languagesView!!.setOnClickListener {
             //initialize alert dialog
@@ -199,6 +202,11 @@ class EditProfileActivity : AppCompatActivity() {
             //show dialog
             builder.show()
         }
+        getDataFromSharedPref()
+//spinner for gender
+        genderSpinner= findViewById(R.id.editGender)
+
+        genderSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, glist)
     }
 
     //save state when there is device rotation
@@ -372,6 +380,7 @@ class EditProfileActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getDataFromSharedPref(){
+
         val x:String ?= sharedPreference.getString("user_image",null)
         if (x!=null){
             val encodedImage: String? = sharedPreference.getString("user_image", null)
@@ -386,10 +395,22 @@ class EditProfileActivity : AppCompatActivity() {
          //= sharedPreference.getString("user_name","ciao")             ----------------- .append per gli edit text
         user_nickname.setText( sharedPreference.getString("user_nickname",getString(R.string.user_nickname))!!)//view?.findViewById(R.id.)
         user_age.setText(sharedPreference.getString("user_age",getString(R.string.user_age)))//view?.findViewById(R.id.)
-       // user_gender.setSelection(genders.indexOf("Male")) //view?.findViewById(R.id.)           sharedPreference.getString("user_gender",""=!!
+        var gender:String= sharedPreference.getString("user_gender","Not specified")!!
+        glist= genders.toMutableList()
+        if (gender == "Male") {
+            glist[0] = "Male"
+            glist[1]="Not specified"
+        }
+        if (gender == "Female") {
+            glist[0] = "Female"
+            glist[2]="Not specified"
+        }
+        //}
+        //view?.findViewById(R.id.)           sharedPreference.getString("user_gender",""=!!
         user_mail.setText( sharedPreference.getString("user_mail",getString(R.string.user_email))!!)//view?.findViewById(R.id.)
         user_number.setText( sharedPreference.getString("user_number",getString(R.string.user_number)))//view?.findViewById(R.id.)
-        //user_languages.hint=sharedPreference.getString("user_nickname",getString(R.string.user_languages))!!
+        savedLanguages=sharedPreference.getString("user_languages",getString(R.string.user_languages))!!
+        languagesView!!.text = savedLanguages
         user_description.setText( sharedPreference.getString("user_description",getString(R.string.user_description))!!)
         user_city.setText( sharedPreference.getString("user_city",getString(R.string.user_city))!!)//view?.findViewById(R.id.)
 
@@ -430,6 +451,7 @@ class EditProfileActivity : AppCompatActivity() {
         if(savedLanguages!="")
             x.putString("user_languages",savedLanguages)
         x.putString("user_gender" , genderSpinner.selectedItem.toString())
+
         x.apply()
 
        // x.putString("user_name", if (user_name.text.length!=0){return user_name.text}; else{})
@@ -439,3 +461,4 @@ class EditProfileActivity : AppCompatActivity() {
 
 
 }
+
