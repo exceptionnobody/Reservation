@@ -12,11 +12,15 @@ import android.graphics.drawable.VectorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.get
 import androidx.exifinterface.media.ExifInterface
 import kotlinx.serialization.encodeToString
@@ -226,9 +230,8 @@ class EditProfileActivity : AppCompatActivity() {
 
         if (image !is VectorDrawable) {
             context.openFileOutput(filename, MODE_PRIVATE).use {
-                //rotatedBitmap.compress(Bitmap.CompressFormat.PNG, 85, it)
 
-                globalBitmap.compress(Bitmap.CompressFormat.PNG, 85, it)
+                globalBitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
             }
         }
 
@@ -274,6 +277,7 @@ class EditProfileActivity : AppCompatActivity() {
         // Save the captured image URI to the savedInstanceState Bundle
         outState.putParcelable("imageUri", imageUri)
         outState.putString("savedLanguages", savedLanguages)
+
     }
 
     //restore state when device is rotated
@@ -286,7 +290,47 @@ class EditProfileActivity : AppCompatActivity() {
 
         savedLanguages = savedInstanceState.getString("savedLanguages")
         languagesView?.text = savedLanguages
+
+        Log.d("POLITOSTRINGDEBUGGER", "Ripristino il messaggio")
     }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("lifecyclePause","onPause invoked");
+    }
+
+    /*
+    override fun onResume() {
+        super.onResume()
+        setContentView(R.layout.activity_edit_profile)
+        context = applicationContext
+        imageView = findViewById(R.id.user_image)
+        val files: Array<String> = context.fileList()
+
+        if(imageView!!.drawable !is VectorDrawable){
+            Log.d("LIFECYCLEPHOTO","onResume invoked PHOTO");
+
+            imageView!!.setImageBitmap(globalBitmap)
+        } else {
+            imageView!!.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.user_image))
+        }
+        //change profile picture
+
+        val imgButton = findViewById<ImageButton>(R.id.imageButton)
+
+        //menu to edit profile pic (take picture or select from gallery)
+        imgButton.setOnClickListener {
+            val popup = PopupMenu(this, imgButton)
+            popup.menuInflater.inflate(R.menu.edit_img_menu, popup.menu)
+            popup.setOnMenuItemClickListener { item ->
+                //handle context menu item click
+                handlePictureChange(item)
+            }
+            popup.show()
+        }
+        Log.d("lifecycleResume","onResume invoked");
+    }
+*/
 
     //option selected to edit profile picture
     private fun handlePictureChange(item: MenuItem): Boolean {
@@ -372,20 +416,24 @@ class EditProfileActivity : AppCompatActivity() {
                 imageView!!.height,
                 false
             )
-            imageView?.setImageBitmap(rotatedBitmap)
+            imageView?.setImageBitmap(globalBitmap)
         }
 
         if (requestCode == resultLoadImage && resultCode == Activity.RESULT_OK && data != null) {
             imageUri = data.data
             val bitmap = uriToBitmap(imageUri!!)
+            val rotatedBitmap = rotateBitmap(bitmap!!, getImageRotation(imageUri))
+
             globalBitmap = Bitmap.createScaledBitmap(
-                bitmap!!,
+                rotatedBitmap,
                 imageView!!.width,
                 imageView!!.height,
                 false
             )
-            imageView?.setImageBitmap(bitmap)
+            imageView?.setImageBitmap(globalBitmap)
         }
+        Log.d("POLITOONACTIVITY", "Ottengo il risultato")
+
     }
 
     //takes URI of the image captured and returns bitmap
@@ -495,7 +543,15 @@ class EditProfileActivity : AppCompatActivity() {
         x.clear()
         val baos = ByteArrayOutputStream()
         if (imageUri!=null){
-            uriToBitmap(imageUri!!)!!.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+            //uriToBitmap(imageUri!!)!!.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+            globalBitmap= Bitmap.createScaledBitmap(
+                uriToBitmap(imageUri!!)!!,
+                imageView!!.width,
+                imageView!!.height,
+                false
+            )
+            globalBitmap = rotateBitmap(globalBitmap, getImageRotation(imageUri))
+            globalBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
             val compressImage: ByteArray = baos.toByteArray()
             val sEncodedImage: String = Base64.getEncoder().encodeToString(compressImage)//Base64.encodeToString(compressImage, Base64.DEFAULT)
             x.putString("user_image",sEncodedImage)

@@ -7,15 +7,16 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.os.Build
 import android.os.Bundle
 import android.view.*
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.toDrawable
+import org.json.JSONObject
 import java.util.*
 
 class ShowProfileActivity : AppCompatActivity() {
@@ -35,6 +36,11 @@ class ShowProfileActivity : AppCompatActivity() {
     //var user_feedback:Array<String> = arrayOf("") //view?.findViewById(R.id.)
 
     private lateinit var context : Context
+    private lateinit var jsonObject : JSONObject
+    private lateinit var genderSpinner : Spinner
+    private lateinit var sportSpinner: Spinner
+    private lateinit var sportLevelSpinner : Spinner
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         context = this.applicationContext
@@ -53,6 +59,110 @@ class ShowProfileActivity : AppCompatActivity() {
         this.user_city =findViewById(R.id.user_city)
 
         loadImageFromStorage()
+        //checkSharedPreference()
+    }
+
+    private fun checkSharedPreference() {
+        val profile = sharedPreference.getString("profile", "").toString()
+
+        if(profile!= ""){
+            jsonObject = JSONObject(profile)
+
+            var strName = jsonObject.getString(getString(R.string.save_username))
+            user_name.setText(strName)
+
+            val age = jsonObject.getString(getString(R.string.save_age))
+            user_age.setText(age)
+
+            strName = jsonObject.getString(getString(R.string.save_description))
+            user_description.setText(strName)
+
+            strName = jsonObject.getString(getString(R.string.save_nickname))
+            user_nickname.setText(strName)
+
+            strName = jsonObject.getString(getString(R.string.save_gender))
+            for (i in 0 until genderSpinner.adapter.count) {
+                if (genderSpinner.getItemAtPosition(i).toString() == strName) {
+                    genderSpinner.setSelection(i)
+                }
+            }
+
+            strName = jsonObject.getString(getString(R.string.save_email))
+            user_mail.setText(strName)
+
+            val numTelephone = jsonObject.getString(getString(R.string.save_telnumber))
+            user_number.setText(numTelephone.toString())
+
+
+            if(jsonObject.has(getString(R.string.save_city))){
+                strName = jsonObject.getString(getString(R.string.save_city))
+                user_city.setText(strName)
+            }
+
+            if(jsonObject.has(getString(R.string.save_languages))){
+                val savedLanguages = jsonObject.getString(getString(R.string.save_languages))
+                user_languages.text = savedLanguages
+            }
+
+            if(jsonObject.has(getString(R.string.save_numbersports))){
+                val test = findViewById<LinearLayout>(R.id.sportsContainer)
+
+                val num = jsonObject.getInt(getString(R.string.save_numbersports))
+
+                val sportsGames = jsonObject.getString(getString(R.string.save_namesports)).replace("[", "").replace("]","").split(", ")
+                val levelsGames = jsonObject.getString(getString(R.string.save_levelsports)).replace("[", "").replace("]","").split(", ")
+
+                for(l in 0 until  num) {
+                    val sportList = layoutInflater.inflate(R.layout.add_new_sport, test, false)
+
+                    sportSpinner = sportList.findViewById(R.id.editGames)
+
+                    ArrayAdapter.createFromResource(
+                        this,
+                        R.array.allsports,
+                        android.R.layout.simple_spinner_item
+                    ).also { adapter ->
+                        // Specify the layout to use when the list of choices appears
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        // Apply the adapter to the spinner
+                        sportSpinner.adapter = adapter
+                    }
+
+                    for (j in 0 until sportSpinner.adapter.count) {
+                        if (sportSpinner.getItemAtPosition(j).toString() == sportsGames[l]) {
+                            sportSpinner.setSelection(j)
+                            break
+                        }
+                    }
+
+                    sportLevelSpinner = sportList.findViewById(R.id.editGameLevel)
+
+                    ArrayAdapter.createFromResource(
+                        this,
+                        R.array.levels,
+                        android.R.layout.simple_spinner_item
+                    ).also { adapter ->
+                        // Specify the layout to use when the list of choices appears
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        // Apply the adapter to the spinner
+                        sportLevelSpinner.adapter = adapter
+                    }
+
+                    for (j in 0 until sportLevelSpinner.adapter.count) {
+                        if (sportLevelSpinner.getItemAtPosition(j).toString()  == levelsGames[l]) {
+                            sportLevelSpinner.setSelection(j)
+                            break
+                        }
+                    }
+
+
+                    test.addView(sportList)
+
+                }
+            }
+
+        }
+
     }
 
     private fun loadImageFromStorage() {
@@ -107,6 +217,7 @@ class ShowProfileActivity : AppCompatActivity() {
             val encodedImage: String = sharedPreference.getString("user_image", "").toString()
             val b: ByteArray = Base64.getDecoder().decode(encodedImage)
             val bitmapImage = BitmapFactory.decodeByteArray(b, 0, b.size)
+
             user_image.setImageBitmap(bitmapImage)
         }
         else{
