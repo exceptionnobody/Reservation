@@ -226,9 +226,8 @@ class EditProfileActivity : AppCompatActivity() {
 
     private fun persistData() {
 
-        val image = imageView!!.drawable
 
-        if (image !is VectorDrawable) {
+        if (imageUri != null) {
             context.openFileOutput(filename, MODE_PRIVATE).use {
 
                 globalBitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
