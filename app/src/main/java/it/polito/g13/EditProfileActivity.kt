@@ -3,14 +3,12 @@ package it.polito.g13
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.ContentValues
-import android.content.DialogInterface
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
+import android.graphics.drawable.VectorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -24,6 +22,7 @@ import androidx.exifinterface.media.ExifInterface
 import kotlinx.serialization.encodeToString
 import java.io.ByteArrayOutputStream
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import org.json.JSONObject
 import java.io.FileDescriptor
 import java.io.IOException
 import java.util.*
@@ -44,7 +43,7 @@ val sports = listOf("Basket", "Football", "Padel", "Rugby", "Tennis", "Volleybal
 val sportLevels = listOf("Beginner", "Intermediate", "Professional")
 val languages = arrayOf("English", "Italian", "French", "German", "Spanish", "Arabic", "Chinese")
 var glist= mutableListOf<String>()
-
+const val filename = "myPhoto"
 class EditProfileActivity : AppCompatActivity() {
 
     lateinit var sharedPreference:SharedPreferences
@@ -67,14 +66,25 @@ class EditProfileActivity : AppCompatActivity() {
 
     lateinit var user_city: EditText //= null//:String= "
 
+
+    /*Data for storage */
+    private lateinit var context : Context
+    private lateinit var jsonObject : JSONObject
+    private lateinit var globalBitmap: Bitmap
+    private lateinit var editor: SharedPreferences.Editor
+
 //gender=spinner no edit view
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        context = this.applicationContext
         setContentView(R.layout.activity_edit_profile)
+        jsonObject = JSONObject()
+
         imageView = findViewById(R.id.user_image)
-        sharedPreference =  getSharedPreferences("preferences", 0);
+        sharedPreference =  getSharedPreferences("preferences", 0)
+        editor = sharedPreference.edit()
         this.user_name=findViewById(R.id.editFullName)
         this.user_nickname=findViewById(R.id.editNickname)
         this.user_age=findViewById(R.id.editAge)
@@ -87,6 +97,7 @@ class EditProfileActivity : AppCompatActivity() {
         val confirmButton =findViewById<Button>(R.id.confirm_button)
         confirmButton.setOnClickListener{
             saveDataToPref()
+            persistData()
             this.finish()
         }
         val cancelButton =findViewById<Button>(R.id.cancel_button)
@@ -209,6 +220,54 @@ class EditProfileActivity : AppCompatActivity() {
         genderSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, glist)
     }
 
+    private fun persistData() {
+
+        val image = imageView!!.drawable
+
+        if (image !is VectorDrawable) {
+            context.openFileOutput(filename, MODE_PRIVATE).use {
+                //rotatedBitmap.compress(Bitmap.CompressFormat.PNG, 85, it)
+
+                globalBitmap.compress(Bitmap.CompressFormat.PNG, 85, it)
+            }
+        }
+
+        jsonObject.put(getString(R.string.save_username), user_name.text.toString() )
+        jsonObject.put(getString(R.string.save_age), user_age.text.toString())
+        jsonObject.put(getString(R.string.save_email), user_mail.text.toString())
+        jsonObject.put(getString(R.string.save_gender), genderSpinner.selectedItem.toString() )
+        jsonObject.put(getString(R.string.save_description), user_description.text.toString() )
+        jsonObject.put(getString(R.string.save_nickname), user_nickname.text.toString() )
+        jsonObject.put(getString(R.string.save_city), user_city.text.toString())
+        jsonObject.put(getString(R.string.save_languages), languagesView!!.text)
+        jsonObject.put(getString(R.string.save_telnumber), user_number.text.toString())
+
+
+        val test = findViewById<LinearLayout>(R.id.sportsContainer)
+        if(test.childCount > 0) {
+            jsonObject.put(getString(R.string.save_numbersports), test.childCount)
+            val listOfSports = mutableListOf<String>()
+            val listOfLevels = mutableListOf<String>()
+
+            for (i in 0 until test.childCount) {
+                val v = test.getChildAt(i)
+                val game = v.findViewById<Spinner>(R.id.editGames)
+                val level = v.findViewById<Spinner>(R.id.editGameLevel)
+                listOfSports.add(game.selectedItem.toString())
+                listOfLevels.add(level.selectedItem.toString())
+            }
+
+            jsonObject.put(getString(R.string.save_namesports), listOfSports)
+            jsonObject.put(getString(R.string.save_levelsports), listOfLevels)
+
+        }
+        editor.putString("profile", jsonObject.toString())
+        editor.apply()
+        val t = Toast.makeText(this, "Confirmed", Toast.LENGTH_SHORT)
+        t.show()
+
+    }
+
     //save state when there is device rotation
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -307,12 +366,24 @@ class EditProfileActivity : AppCompatActivity() {
         if (requestCode == imageCaptureCode && resultCode == Activity.RESULT_OK) {
             val bitmap = uriToBitmap(imageUri!!)
             val rotatedBitmap = rotateBitmap(bitmap!!, getImageRotation(imageUri))
+            globalBitmap = Bitmap.createScaledBitmap(
+                rotatedBitmap,
+                imageView!!.width,
+                imageView!!.height,
+                false
+            )
             imageView?.setImageBitmap(rotatedBitmap)
         }
 
         if (requestCode == resultLoadImage && resultCode == Activity.RESULT_OK && data != null) {
             imageUri = data.data
             val bitmap = uriToBitmap(imageUri!!)
+            globalBitmap = Bitmap.createScaledBitmap(
+                bitmap!!,
+                imageView!!.width,
+                imageView!!.height,
+                false
+            )
             imageView?.setImageBitmap(bitmap)
         }
     }

@@ -2,6 +2,7 @@ package it.polito.g13
 
 
 
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
@@ -13,8 +14,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.graphics.drawable.toDrawable
 import java.util.*
-
 
 class ShowProfileActivity : AppCompatActivity() {
     lateinit var sharedPreference:SharedPreferences
@@ -31,9 +33,11 @@ class ShowProfileActivity : AppCompatActivity() {
     //var user_time:String= ""
     var user_games: TextView? = null//:Array<String> = arrayOf("")
     //var user_feedback:Array<String> = arrayOf("") //view?.findViewById(R.id.)
+
+    private lateinit var context : Context
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        context = this.applicationContext
         //getDataFromSharedPref()
         setContentView(R.layout.activity_show_profile)
         sharedPreference =  getSharedPreferences("preferences", 0) // 0 - for private mode
@@ -47,6 +51,21 @@ class ShowProfileActivity : AppCompatActivity() {
         this.user_languages=findViewById(R.id.user_languages)
         this.user_description=findViewById(R.id.user_description)
         this.user_city =findViewById(R.id.user_city)
+
+        loadImageFromStorage()
+    }
+
+    private fun loadImageFromStorage() {
+        val files: Array<String> = context.fileList()
+
+        if(files.contains(filename)){
+            val b = context.openFileInput(filename).fd
+            val c = BitmapFactory.decodeFileDescriptor(b).toDrawable(resources)
+            user_image.setImageDrawable(c)
+        } else {
+            user_image.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.user_image))
+        }
+
     }
 
     /*override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
