@@ -97,13 +97,13 @@ class EditProfileActivity : AppCompatActivity() {
         this.user_description=findViewById(R.id.editDescription)
         this.user_city =findViewById(R.id.editCity)
 
-
         val confirmButton =findViewById<Button>(R.id.confirm_button)
         confirmButton.setOnClickListener{
             saveDataToPref()
-            persistData()
+            //persistData()
             this.finish()
         }
+
         val cancelButton =findViewById<Button>(R.id.cancel_button)
         cancelButton.setOnClickListener { this.finish() }
 
@@ -297,39 +297,6 @@ class EditProfileActivity : AppCompatActivity() {
         super.onPause()
         Log.d("lifecyclePause","onPause invoked");
     }
-
-    /*
-    override fun onResume() {
-        super.onResume()
-        setContentView(R.layout.activity_edit_profile)
-        context = applicationContext
-        imageView = findViewById(R.id.user_image)
-        val files: Array<String> = context.fileList()
-
-        if(imageView!!.drawable !is VectorDrawable){
-            Log.d("LIFECYCLEPHOTO","onResume invoked PHOTO");
-
-            imageView!!.setImageBitmap(globalBitmap)
-        } else {
-            imageView!!.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.user_image))
-        }
-        //change profile picture
-
-        val imgButton = findViewById<ImageButton>(R.id.imageButton)
-
-        //menu to edit profile pic (take picture or select from gallery)
-        imgButton.setOnClickListener {
-            val popup = PopupMenu(this, imgButton)
-            popup.menuInflater.inflate(R.menu.edit_img_menu, popup.menu)
-            popup.setOnMenuItemClickListener { item ->
-                //handle context menu item click
-                handlePictureChange(item)
-            }
-            popup.show()
-        }
-        Log.d("lifecycleResume","onResume invoked");
-    }
-*/
 
     //option selected to edit profile picture
     private fun handlePictureChange(item: MenuItem): Boolean {
@@ -554,32 +521,74 @@ class EditProfileActivity : AppCompatActivity() {
             val compressImage: ByteArray = baos.toByteArray()
             val sEncodedImage: String = Base64.getEncoder().encodeToString(compressImage)//Base64.encodeToString(compressImage, Base64.DEFAULT)
             x.putString("user_image",sEncodedImage)
+            context.openFileOutput(filename, MODE_PRIVATE).use {
+
+                globalBitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
+            }
         }
         else
             x.putString("user_image",y)
 
+        /*
+         jsonObject.put(getString(R.string.save_age), user_age.text.toString())
+        jsonObject.put(getString(R.string.save_email), user_mail.text.toString())
+        jsonObject.put(getString(R.string.save_gender), genderSpinner.selectedItem.toString() )
+        jsonObject.put(getString(R.string.save_description), user_description.text.toString() )
+        jsonObject.put(getString(R.string.save_nickname), user_nickname.text.toString() )
+        jsonObject.put(getString(R.string.save_city), user_city.text.toString())
+        jsonObject.put(getString(R.string.save_languages), languagesView!!.text)
+        jsonObject.put(getString(R.string.save_telnumber), user_number.text.toString())
+         */
 
         val genderSpinner = findViewById<Spinner>(R.id.editGender)
-        if (user_name.text.toString()!="")
-            x.putString("user_name",user_name.text.toString())
-        if (user_nickname.text.toString()!="")
-            x.putString("user_nickname",user_nickname.text.toString())
-        if(user_age.text.toString()!="")
-            x.putString("user_age",user_age.text.toString())
-        if(user_mail.text.toString()!="")
-            x.putString("user_mail",user_mail.text.toString())
-        if(user_number.text.toString()!="")
-            x.putString("user_number",user_number.text.toString())
-        if(user_description.text.toString()!="")
-            x.putString("user_description",user_description.text.toString())
-        if(user_city.text.toString()!="")
-            x.putString("user_city",user_city.text.toString())
-        if(savedLanguages!="")
+        if (user_name.text.toString()!="") {
+            x.putString("user_name", user_name.text.toString())
+            jsonObject.put(getString(R.string.save_username), user_name.text.toString() )
+        }
+        if (user_nickname.text.toString()!="") {
+            x.putString("user_nickname", user_nickname.text.toString())
+            jsonObject.put(getString(R.string.save_nickname), user_nickname.text.toString() )
+
+        }
+        if(user_age.text.toString()!="") {
+            x.putString("user_age", user_age.text.toString())
+            jsonObject.put(getString(R.string.save_age), user_age.text.toString())
+
+        }
+
+        if(user_mail.text.toString()!="") {
+            x.putString("user_mail", user_mail.text.toString())
+            jsonObject.put(getString(R.string.save_email), user_mail.text.toString())
+
+        }
+        if(user_number.text.toString()!="") {
+            x.putString("user_number", user_number.text.toString())
+            jsonObject.put(getString(R.string.save_telnumber), user_number.text.toString())
+
+        }
+
+        if(user_description.text.toString()!="") {
+            x.putString("user_description", user_description.text.toString())
+            jsonObject.put(getString(R.string.save_description), user_description.text.toString() )
+        }
+
+        if(user_city.text.toString()!="") {
+            x.putString("user_city", user_city.text.toString())
+            jsonObject.put(getString(R.string.save_city), user_city.text.toString())
+        }
+        if(savedLanguages!=""){
             x.putString("user_languages",savedLanguages)
+            jsonObject.put(getString(R.string.save_languages), languagesView!!.text)
+
+        }
         x.putString("user_gender" , genderSpinner.selectedItem.toString())
+        jsonObject.put(getString(R.string.save_gender), genderSpinner.selectedItem.toString() )
+
+        x.putString("profile", jsonObject.toString())
 
         x.apply()
-
+        val t = Toast.makeText(this, "Confirmed", Toast.LENGTH_SHORT)
+        t.show()
        // x.putString("user_name", if (user_name.text.length!=0){return user_name.text}; else{})
 
 

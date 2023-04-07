@@ -20,7 +20,7 @@
             android:resource="@xml/preferences" />
         <activity
             android:name=".EditProfileActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".ShowProfileActivity"
             android:exported="true">

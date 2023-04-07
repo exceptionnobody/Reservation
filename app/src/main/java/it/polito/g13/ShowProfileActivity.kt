@@ -37,7 +37,7 @@ class ShowProfileActivity : AppCompatActivity() {
 
     private lateinit var context : Context
     private lateinit var jsonObject : JSONObject
-    private lateinit var genderSpinner : Spinner
+    private lateinit var gender : Spinner
     private lateinit var sportSpinner: Spinner
     private lateinit var sportLevelSpinner : Spinner
 
@@ -57,9 +57,8 @@ class ShowProfileActivity : AppCompatActivity() {
         this.user_languages=findViewById(R.id.user_languages)
         this.user_description=findViewById(R.id.user_description)
         this.user_city =findViewById(R.id.user_city)
-
         loadImageFromStorage()
-        //checkSharedPreference()
+        checkSharedPreference()
     }
 
     private fun checkSharedPreference() {
@@ -67,7 +66,7 @@ class ShowProfileActivity : AppCompatActivity() {
 
         if(profile!= ""){
             jsonObject = JSONObject(profile)
-
+            println("IL MIO JESONOBJECT $jsonObject")
             var strName = jsonObject.getString(getString(R.string.save_username))
             user_name.setText(strName)
 
@@ -81,11 +80,12 @@ class ShowProfileActivity : AppCompatActivity() {
             user_nickname.setText(strName)
 
             strName = jsonObject.getString(getString(R.string.save_gender))
-            for (i in 0 until genderSpinner.adapter.count) {
-                if (genderSpinner.getItemAtPosition(i).toString() == strName) {
-                    genderSpinner.setSelection(i)
+            user_gender.setText(strName)
+            /*for (i in 0 until gender.adapter.count) {
+                if (gender.getItemAtPosition(i).toString() == strName) {
+                    gender.setSelection(i)
                 }
-            }
+            }*/
 
             strName = jsonObject.getString(getString(R.string.save_email))
             user_mail.setText(strName)
@@ -103,7 +103,7 @@ class ShowProfileActivity : AppCompatActivity() {
                 val savedLanguages = jsonObject.getString(getString(R.string.save_languages))
                 user_languages.text = savedLanguages
             }
-
+/*
             if(jsonObject.has(getString(R.string.save_numbersports))){
                 val test = findViewById<LinearLayout>(R.id.sportsContainer)
 
@@ -127,6 +127,7 @@ class ShowProfileActivity : AppCompatActivity() {
                         // Apply the adapter to the spinner
                         sportSpinner.adapter = adapter
                     }
+
 
                     for (j in 0 until sportSpinner.adapter.count) {
                         if (sportSpinner.getItemAtPosition(j).toString() == sportsGames[l]) {
@@ -159,7 +160,7 @@ class ShowProfileActivity : AppCompatActivity() {
                     test.addView(sportList)
 
                 }
-            }
+            }*/
 
         }
 
