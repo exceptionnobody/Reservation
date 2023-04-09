@@ -336,7 +336,7 @@
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
-                <TextView
+                <!--<TextView
                     android:id="@+id/title_games"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -364,7 +364,7 @@
                     android:paddingBottom="@dimen/input_padding_y"
                     android:text="@string/user_games"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16sp" />-->
 
                 <TextView
                     android:id="@+id/title_feedback"

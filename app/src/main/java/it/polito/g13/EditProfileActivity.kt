@@ -136,7 +136,7 @@ class EditProfileActivity : AppCompatActivity() {
         }
 
         //add a new sport
-        val addSportTextContainer = findViewById<RelativeLayout>(R.id.addSportTextContainer)
+        /*val addSportTextContainer = findViewById<RelativeLayout>(R.id.addSportTextContainer)
         val addSportIcon = findViewById<FloatingActionButton>(R.id.addSportIcon)
 
         addSportTextContainer.setOnClickListener {
@@ -144,7 +144,7 @@ class EditProfileActivity : AppCompatActivity() {
         }
         addSportIcon.setOnClickListener {
             handleNewSport()
-        }
+        }*/
 
         //multi selection menu for languages
         languagesView = findViewById(R.id.editLanguages)
@@ -245,7 +245,7 @@ class EditProfileActivity : AppCompatActivity() {
         jsonObject.put(getString(R.string.save_telnumber), user_number.text.toString())
 
 
-        val test = findViewById<LinearLayout>(R.id.sportsContainer)
+        /*val test = findViewById<LinearLayout>(R.id.sportsContainer)
         if(test.childCount > 0) {
             jsonObject.put(getString(R.string.save_numbersports), test.childCount)
             val listOfSports = mutableListOf<String>()
@@ -262,7 +262,7 @@ class EditProfileActivity : AppCompatActivity() {
             jsonObject.put(getString(R.string.save_namesports), listOfSports)
             jsonObject.put(getString(R.string.save_levelsports), listOfLevels)
 
-        }
+        }*/
         editor.putString("profile", jsonObject.toString())
         editor.apply()
         val t = Toast.makeText(this, "Confirmed", Toast.LENGTH_SHORT)
@@ -440,7 +440,7 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
     //handle adding new sport
-    @SuppressLint("InflateParams")
+    /*@SuppressLint("InflateParams")
     private fun handleNewSport() {
         val addSportContainer = findViewById<LinearLayout>(R.id.sportsContainer)
 
@@ -461,7 +461,7 @@ class EditProfileActivity : AppCompatActivity() {
         deleteSportIcon.setOnClickListener {
             addSportContainer.removeView(sportList)
         }
-    }
+    }*/
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getDataFromSharedPref(){
