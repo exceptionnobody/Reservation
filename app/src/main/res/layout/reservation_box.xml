@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_reservation_box"
+        android:elevation="2dp"
+        android:paddingStart="@dimen/padding_reservation_box"
+        android:paddingTop="@dimen/padding_reservation_box"
+        android:paddingEnd="@dimen/padding_reservation_box"
+        android:paddingBottom="@dimen/padding_reservation_box"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.173"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <!--<View
+            android:id="@+id/view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_reservation_box"
+            android:elevation="2dp" />-->
+
+        <TextView
+            android:id="@+id/reservation_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:fontFamily="@font/crete_round"
+            android:text="titolo, sport, hh:mm-hh:mm"
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+
+        <ImageButton
+            android:id="@+id/buttonDeleate"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:padding="5dp"
+            app:srcCompat="@drawable/trash_bin_icon"
+            app:tint="@color/primary_error" />
+
+        <ImageButton
+            android:id="@+id/buttonEdit"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@+id/buttonDeleate"
+            app:srcCompat="@drawable/ic_edit"
+            app:tint="@color/primary_green" />
+
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

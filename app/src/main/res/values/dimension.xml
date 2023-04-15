@@ -14,4 +14,5 @@
     <dimen name="margin_end_content_text">5dp</dimen>
     <dimen name="input_padding_y">12.5dp</dimen>
     <dimen name="input_padding_x">15dp</dimen>
+    <dimen name="padding_reservation_box">15dp</dimen>
 </resources>
