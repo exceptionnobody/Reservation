@@ -51,4 +51,6 @@
     <string name="save_numbersports">NumberSports</string>
     <string name="save_namesports">NameSports</string>
     <string name="save_levelsports">LevelSports</string>
+
+    <string name="book_a_reservation">Book a reservation</string>
 </resources>
