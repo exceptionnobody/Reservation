@@ -5,21 +5,29 @@ package it.polito.g13
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Matrix
 import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.navigation.NavigationView
 import org.json.JSONObject
 import java.util.*
 
-class ShowProfileActivity : AppCompatActivity() {
+
+class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    lateinit var toolbar: androidx.appcompat.widget.Toolbar
+    lateinit var drawerLayout: DrawerLayout
+    lateinit var navView: NavigationView
+
     lateinit var sharedPreference:SharedPreferences
     lateinit var user_image: ImageView
     lateinit var user_name: TextView //= null//: String= ""
@@ -46,6 +54,27 @@ class ShowProfileActivity : AppCompatActivity() {
         context = this.applicationContext
         //getDataFromSharedPref()
         setContentView(R.layout.activity_show_profile)
+
+        toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        drawerLayout = findViewById(R.id.drawer_layout)
+        navView = findViewById(R.id.nav_view)
+
+        val toggle = ActionBarDrawerToggle(
+            this, drawerLayout, toolbar, 0, 0
+        )
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+        navView.setNavigationItemSelectedListener(this)
+
+        val menuItemProfile = navView.menu.findItem(R.id.nav_profile)
+        menuItemProfile.setActionView(R.layout.menu_item_profile)
+
+        val menuItemReservations = navView.menu.findItem(R.id.nav_reservations)
+        menuItemReservations.setActionView(R.layout.menu_item_reservations)
+
         sharedPreference =  getSharedPreferences("preferences", 0) // 0 - for private mode
         this.user_image=findViewById(R.id.user_image)
         this.user_name=findViewById(R.id.user_name)
@@ -59,6 +88,19 @@ class ShowProfileActivity : AppCompatActivity() {
         this.user_city =findViewById(R.id.user_city)
         loadImageFromStorage()
         checkSharedPreference()
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.nav_profile -> {
+                Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show()
+            }
+            R.id.nav_reservations -> {
+                Toast.makeText(this, "Messages clicked", Toast.LENGTH_SHORT).show()
+            }
+        }
+        drawerLayout.closeDrawer(GravityCompat.START)
+        return true
     }
 
     private fun checkSharedPreference() {

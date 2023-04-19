@@ -36,6 +36,9 @@
     <string name="add_time">Add a time slot</string>
     <string name="delete_sport">Delete a sport</string>
 
+    <string name="nav_menu">Menu</string>
+    <string name="nav_profile">Profile</string>
+    <string name="nav_reservations">Your reservations</string>
 
     <string name="emailAddress">Email Address</string>
     <string name="save_username">FullName</string>
