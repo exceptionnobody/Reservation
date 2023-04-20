@@ -1,500 +1,510 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".EditProfileActivity">
+    android:layout_height="match_parent">
 
-    <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <include
+        layout="@layout/navbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_left_grid"
-            android:layout_marginEnd="@dimen/margin_right_grid"
-            android:orientation="vertical"
-            android:paddingTop="40dp">
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".EditProfileActivity">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/user_image"
-                    android:layout_width="180dp"
-                    android:layout_height="180dp"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/user_image"
-                    android:scaleType="centerCrop"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
-                    app:srcCompat="@drawable/user_image" />
-
-                <ImageButton
-                    android:id="@+id/imageButton"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_gravity="bottom"
-                    android:background="@drawable/image_button"
-                    android:contentDescription="@string/edit_image"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/user_image"
-                    app:layout_constraintHorizontal_bias="0.94"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0"
-                    app:srcCompat="@drawable/camera" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
-                android:id="@+id/linearLayout"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="9dp"
-                android:orientation="vertical">
+                android:layout_marginStart="@dimen/margin_left_grid"
+                android:layout_marginEnd="@dimen/margin_right_grid"
+                android:orientation="vertical"
+                android:paddingTop="40dp">
 
-                <TextView
-                    android:id="@+id/title_basic_information"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_start_title_first_level"
-                    android:fontFamily="@font/crete_round"
-                    android:lineSpacingExtra="26sp"
-                    android:text="@string/title_basic_information"
-                    android:textColor="@color/primary_green"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:id="@+id/title_user_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_start_title_second_level"
-                    android:layout_marginTop="@dimen/margin_top_under_first_title"
-                    android:fontFamily="@font/crete_round"
-                    android:text="@string/title_user_name"
-                    android:textColor="@color/primary_green"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editFullName"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="@dimen/margin_start_content_text"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="@dimen/margin_end_content_text"
-                    android:background="@drawable/edit_fields"
-                    android:fontFamily="@font/crete_round"
-                    android:hint="@string/user_name"
-                    android:inputType="textAutoCorrect|textPersonName"
-                    android:paddingStart="@dimen/input_padding_x"
-                    android:paddingTop="@dimen/input_padding_y"
-                    android:paddingEnd="@dimen/input_padding_x"
-                    android:paddingBottom="@dimen/input_padding_y"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/title_nickname"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_start_title_second_level"
-                    android:layout_marginTop="@dimen/margin_top_title_second_level"
-                    android:fontFamily="@font/crete_round"
-                    android:text="@string/title_nickname"
-                    android:textColor="@color/primary_green"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editNickname"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="@dimen/margin_start_content_text"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="@dimen/margin_end_content_text"
-                    android:background="@drawable/edit_fields"
-                    android:fontFamily="@font/crete_round"
-                    android:hint="@string/user_nickname"
-                    android:inputType="textAutoCorrect|text"
-                    android:paddingStart="@dimen/input_padding_x"
-                    android:paddingTop="@dimen/input_padding_y"
-                    android:paddingEnd="@dimen/input_padding_x"
-                    android:paddingBottom="@dimen/input_padding_y"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/title_age"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_start_title_second_level"
-                    android:layout_marginTop="@dimen/margin_top_title_second_level"
-                    android:fontFamily="@font/crete_round"
-                    android:text="@string/title_age"
-                    android:textColor="@color/primary_green"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editAge"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="@dimen/margin_start_content_text"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="@dimen/margin_end_content_text"
-                    android:background="@drawable/edit_fields"
-                    android:fontFamily="@font/crete_round"
-                    android:hint="@string/user_age"
-                    android:inputType="number"
-                    android:paddingStart="@dimen/input_padding_x"
-                    android:paddingTop="@dimen/input_padding_y"
-                    android:paddingEnd="@dimen/input_padding_x"
-                    android:paddingBottom="@dimen/input_padding_y"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/title_gender"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_start_title_second_level"
-                    android:layout_marginTop="@dimen/margin_top_title_second_level"
-                    android:fontFamily="@font/crete_round"
-                    android:text="@string/title_gender"
-                    android:textColor="@color/primary_green"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
-
-                <Spinner
-                    android:id="@+id/editGender"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="@dimen/margin_start_content_text"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="@dimen/margin_end_content_text"
-                    android:background="@drawable/edit_fields"
-                    android:contentDescription="@string/user_gender"
-                    android:fontFamily="@font/crete_round"
-                    android:paddingStart="@dimen/input_padding_x"
-                    android:paddingTop="@dimen/input_padding_y"
-                    android:paddingEnd="@dimen/input_padding_x"
-                    android:paddingBottom="@dimen/input_padding_y"
-                    android:spinnerMode="dropdown"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/title_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_start_title_second_level"
-                    android:layout_marginTop="@dimen/margin_top_title_second_level"
-                    android:fontFamily="@font/crete_round"
-                    android:text="@string/title_email"
-                    android:textColor="@color/primary_green"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editEmail"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="@dimen/margin_start_content_text"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="@dimen/margin_end_content_text"
-                    android:background="@drawable/edit_fields"
-                    android:fontFamily="@font/crete_round"
-                    android:hint="@string/user_email"
-                    android:inputType="textAutoCorrect|textEmailAddress"
-                    android:paddingStart="@dimen/input_padding_x"
-                    android:paddingTop="@dimen/input_padding_y"
-                    android:paddingEnd="@dimen/input_padding_x"
-                    android:paddingBottom="@dimen/input_padding_y"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/title_number"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_start_title_second_level"
-                    android:layout_marginTop="@dimen/margin_top_title_second_level"
-                    android:fontFamily="@font/crete_round"
-                    android:text="@string/title_number"
-                    android:textColor="@color/primary_green"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editNumber"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="@dimen/margin_start_content_text"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="@dimen/margin_end_content_text"
-                    android:background="@drawable/edit_fields"
-                    android:fontFamily="@font/crete_round"
-                    android:hint="@string/user_number"
-                    android:inputType="phone"
-                    android:paddingStart="@dimen/input_padding_x"
-                    android:paddingTop="@dimen/input_padding_y"
-                    android:paddingEnd="@dimen/input_padding_x"
-                    android:paddingBottom="@dimen/input_padding_y"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/title_description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_start_title_second_level"
-                    android:layout_marginTop="@dimen/margin_top_title_second_level"
-                    android:fontFamily="@font/crete_round"
-                    android:text="@string/title_description"
-                    android:textColor="@color/primary_green"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editDescription"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="@dimen/margin_start_content_text"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="@dimen/margin_end_content_text"
-                    android:background="@drawable/edit_fields"
-                    android:fontFamily="@font/crete_round"
-                    android:hint="@string/user_description"
-                    android:inputType="textAutoCorrect|textMultiLine"
-                    android:paddingStart="@dimen/input_padding_x"
-                    android:paddingTop="@dimen/input_padding_y"
-                    android:paddingEnd="@dimen/input_padding_x"
-                    android:paddingBottom="@dimen/input_padding_y"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/title_languages"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_start_title_second_level"
-                    android:layout_marginTop="@dimen/margin_top_title_second_level"
-                    android:fontFamily="@font/crete_round"
-                    android:text="@string/title_languages"
-                    android:textColor="@color/primary_green"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
-
-                <TextView
-                    android:id="@+id/editLanguages"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="@dimen/margin_start_content_text"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="@dimen/margin_end_content_text"
-                    android:background="@drawable/edit_fields"
-                    android:fontFamily="@font/crete_round"
-                    android:hint="@string/user_languages"
-                    android:paddingStart="@dimen/input_padding_x"
-                    android:paddingTop="@dimen/input_padding_y"
-                    android:paddingEnd="@dimen/input_padding_x"
-                    android:paddingBottom="@dimen/input_padding_y"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/title_preferences"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_start_title_first_level"
-                    android:layout_marginTop="@dimen/margin_top_title_first_level"
-                    android:fontFamily="@font/crete_round"
-                    android:lineSpacingExtra="26sp"
-                    android:text="@string/title_preferences"
-                    android:textColor="@color/primary_green"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:id="@+id/title_city"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_start_title_second_level"
-                    android:layout_marginTop="@dimen/margin_top_under_first_title"
-                    android:fontFamily="@font/crete_round"
-                    android:text="@string/title_city"
-                    android:textColor="@color/primary_green"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
-
-                <AutoCompleteTextView
-                    android:id="@+id/editCity"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="@dimen/margin_start_content_text"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="@dimen/margin_end_content_text"
-                    android:background="@drawable/edit_fields"
-                    android:fontFamily="@font/crete_round"
-                    android:hint="@string/user_city"
-                    android:inputType="text"
-                    android:paddingStart="@dimen/input_padding_x"
-                    android:paddingTop="@dimen/input_padding_y"
-                    android:paddingEnd="@dimen/input_padding_x"
-                    android:paddingBottom="@dimen/input_padding_y"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-                <!--<TextView
-                    android:id="@+id/title_games"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_start_title_second_level"
-                    android:layout_marginTop="@dimen/margin_top_title_second_level"
-                    android:fontFamily="@font/crete_round"
-                    android:text="@string/title_games"
-                    android:textColor="@color/primary_green"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
-
-                <LinearLayout
-                    android:id="@+id/sportsContainer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
+                    android:layout_height="match_parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/user_image"
+                        android:layout_width="180dp"
+                        android:layout_height="180dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/user_image"
+                        android:scaleType="centerCrop"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+                        app:srcCompat="@drawable/user_image" />
+
+                    <ImageButton
+                        android:id="@+id/imageButton"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/image_button"
+                        android:contentDescription="@string/edit_image"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/user_image"
+                        app:layout_constraintHorizontal_bias="0.94"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0"
+                        app:srcCompat="@drawable/camera" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/title_basic_information"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_start_title_first_level"
+                        android:fontFamily="@font/crete_round"
+                        android:lineSpacingExtra="26sp"
+                        android:text="@string/title_basic_information"
+                        android:textColor="@color/primary_green"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/title_user_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_start_title_second_level"
+                        android:layout_marginTop="@dimen/margin_top_under_first_title"
+                        android:fontFamily="@font/crete_round"
+                        android:text="@string/title_user_name"
+                        android:textColor="@color/primary_green"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editFullName"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="@dimen/margin_start_content_text"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="@dimen/margin_end_content_text"
+                        android:background="@drawable/edit_fields"
+                        android:fontFamily="@font/crete_round"
+                        android:hint="@string/user_name"
+                        android:inputType="textAutoCorrect|textPersonName"
+                        android:paddingStart="@dimen/input_padding_x"
+                        android:paddingTop="@dimen/input_padding_y"
+                        android:paddingEnd="@dimen/input_padding_x"
+                        android:paddingBottom="@dimen/input_padding_y"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/title_nickname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_start_title_second_level"
+                        android:layout_marginTop="@dimen/margin_top_title_second_level"
+                        android:fontFamily="@font/crete_round"
+                        android:text="@string/title_nickname"
+                        android:textColor="@color/primary_green"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editNickname"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="@dimen/margin_start_content_text"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="@dimen/margin_end_content_text"
+                        android:background="@drawable/edit_fields"
+                        android:fontFamily="@font/crete_round"
+                        android:hint="@string/user_nickname"
+                        android:inputType="textAutoCorrect|text"
+                        android:paddingStart="@dimen/input_padding_x"
+                        android:paddingTop="@dimen/input_padding_y"
+                        android:paddingEnd="@dimen/input_padding_x"
+                        android:paddingBottom="@dimen/input_padding_y"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/title_age"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_start_title_second_level"
+                        android:layout_marginTop="@dimen/margin_top_title_second_level"
+                        android:fontFamily="@font/crete_round"
+                        android:text="@string/title_age"
+                        android:textColor="@color/primary_green"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editAge"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="@dimen/margin_start_content_text"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="@dimen/margin_end_content_text"
+                        android:background="@drawable/edit_fields"
+                        android:fontFamily="@font/crete_round"
+                        android:hint="@string/user_age"
+                        android:inputType="number"
+                        android:paddingStart="@dimen/input_padding_x"
+                        android:paddingTop="@dimen/input_padding_y"
+                        android:paddingEnd="@dimen/input_padding_x"
+                        android:paddingBottom="@dimen/input_padding_y"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/title_gender"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_start_title_second_level"
+                        android:layout_marginTop="@dimen/margin_top_title_second_level"
+                        android:fontFamily="@font/crete_round"
+                        android:text="@string/title_gender"
+                        android:textColor="@color/primary_green"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
+
+                    <Spinner
+                        android:id="@+id/editGender"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="@dimen/margin_start_content_text"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="@dimen/margin_end_content_text"
+                        android:background="@drawable/edit_fields"
+                        android:contentDescription="@string/user_gender"
+                        android:fontFamily="@font/crete_round"
+                        android:paddingStart="@dimen/input_padding_x"
+                        android:paddingTop="@dimen/input_padding_y"
+                        android:paddingEnd="@dimen/input_padding_x"
+                        android:paddingBottom="@dimen/input_padding_y"
+                        android:spinnerMode="dropdown"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/title_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_start_title_second_level"
+                        android:layout_marginTop="@dimen/margin_top_title_second_level"
+                        android:fontFamily="@font/crete_round"
+                        android:text="@string/title_email"
+                        android:textColor="@color/primary_green"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="@dimen/margin_start_content_text"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="@dimen/margin_end_content_text"
+                        android:background="@drawable/edit_fields"
+                        android:fontFamily="@font/crete_round"
+                        android:hint="@string/user_email"
+                        android:inputType="textAutoCorrect|textEmailAddress"
+                        android:paddingStart="@dimen/input_padding_x"
+                        android:paddingTop="@dimen/input_padding_y"
+                        android:paddingEnd="@dimen/input_padding_x"
+                        android:paddingBottom="@dimen/input_padding_y"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/title_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_start_title_second_level"
+                        android:layout_marginTop="@dimen/margin_top_title_second_level"
+                        android:fontFamily="@font/crete_round"
+                        android:text="@string/title_number"
+                        android:textColor="@color/primary_green"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="@dimen/margin_start_content_text"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="@dimen/margin_end_content_text"
+                        android:background="@drawable/edit_fields"
+                        android:fontFamily="@font/crete_round"
+                        android:hint="@string/user_number"
+                        android:inputType="phone"
+                        android:paddingStart="@dimen/input_padding_x"
+                        android:paddingTop="@dimen/input_padding_y"
+                        android:paddingEnd="@dimen/input_padding_x"
+                        android:paddingBottom="@dimen/input_padding_y"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/title_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_start_title_second_level"
+                        android:layout_marginTop="@dimen/margin_top_title_second_level"
+                        android:fontFamily="@font/crete_round"
+                        android:text="@string/title_description"
+                        android:textColor="@color/primary_green"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="@dimen/margin_start_content_text"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="@dimen/margin_end_content_text"
+                        android:background="@drawable/edit_fields"
+                        android:fontFamily="@font/crete_round"
+                        android:hint="@string/user_description"
+                        android:inputType="textAutoCorrect|textMultiLine"
+                        android:paddingStart="@dimen/input_padding_x"
+                        android:paddingTop="@dimen/input_padding_y"
+                        android:paddingEnd="@dimen/input_padding_x"
+                        android:paddingBottom="@dimen/input_padding_y"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/title_languages"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_start_title_second_level"
+                        android:layout_marginTop="@dimen/margin_top_title_second_level"
+                        android:fontFamily="@font/crete_round"
+                        android:text="@string/title_languages"
+                        android:textColor="@color/primary_green"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
+
+                    <TextView
+                        android:id="@+id/editLanguages"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="@dimen/margin_start_content_text"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="@dimen/margin_end_content_text"
+                        android:background="@drawable/edit_fields"
+                        android:fontFamily="@font/crete_round"
+                        android:hint="@string/user_languages"
+                        android:paddingStart="@dimen/input_padding_x"
+                        android:paddingTop="@dimen/input_padding_y"
+                        android:paddingEnd="@dimen/input_padding_x"
+                        android:paddingBottom="@dimen/input_padding_y"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/title_preferences"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_start_title_first_level"
+                        android:layout_marginTop="@dimen/margin_top_title_first_level"
+                        android:fontFamily="@font/crete_round"
+                        android:lineSpacingExtra="26sp"
+                        android:text="@string/title_preferences"
+                        android:textColor="@color/primary_green"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/title_city"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_start_title_second_level"
+                        android:layout_marginTop="@dimen/margin_top_under_first_title"
+                        android:fontFamily="@font/crete_round"
+                        android:text="@string/title_city"
+                        android:textColor="@color/primary_green"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
+
+                    <AutoCompleteTextView
+                        android:id="@+id/editCity"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="@dimen/margin_start_content_text"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="@dimen/margin_end_content_text"
+                        android:background="@drawable/edit_fields"
+                        android:fontFamily="@font/crete_round"
+                        android:hint="@string/user_city"
+                        android:inputType="text"
+                        android:paddingStart="@dimen/input_padding_x"
+                        android:paddingTop="@dimen/input_padding_y"
+                        android:paddingEnd="@dimen/input_padding_x"
+                        android:paddingBottom="@dimen/input_padding_y"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <!--<TextView
+                        android:id="@+id/title_games"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_start_title_second_level"
+                        android:layout_marginTop="@dimen/margin_top_title_second_level"
+                        android:fontFamily="@font/crete_round"
+                        android:text="@string/title_games"
+                        android:textColor="@color/primary_green"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
+
+                    <LinearLayout
+                        android:id="@+id/sportsContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/addSportTextContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/addSportIcon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginTop="10dp"
+                            android:clickable="true"
+                            android:contentDescription="@string/add_sport"
+                            android:focusable="true"
+                            app:backgroundTint="@color/primary_orange"
+                            app:fabCustomSize="20dp"
+                            app:srcCompat="@drawable/plus_icon" />
+
+                        <TextView
+                            android:id="@+id/addSport"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="54dp"
+                            android:layout_marginTop="20dp"
+                            android:fontFamily="@font/crete_round"
+                            android:text="@string/add_sport"
+                            android:textColor="@color/primary_orange"
+                            android:textSize="20sp" />
+                    </RelativeLayout>-->
+
+                    <TextView
+                        android:id="@+id/title_feedback"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_start_title_first_level"
+                        android:layout_marginTop="@dimen/margin_top_title_first_level"
+                        android:fontFamily="@font/crete_round"
+                        android:lineSpacingExtra="26sp"
+                        android:text="@string/title_feedback"
+                        android:textColor="@color/primary_green"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/user_feedback"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_start_content_text"
+                        android:layout_marginTop="@dimen/margin_top_under_first_title"
+                        android:layout_marginEnd="@dimen/margin_end_content_text"
+                        android:fontFamily="@font/crete_round"
+                        android:paddingStart="@dimen/input_padding_x"
+                        android:paddingTop="@dimen/input_padding_y"
+                        android:paddingEnd="@dimen/input_padding_x"
+                        android:paddingBottom="@dimen/input_padding_y"
+                        android:text="@string/user_feedback"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
                 </LinearLayout>
 
                 <RelativeLayout
-                    android:id="@+id/addSportTextContainer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/addSportIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginTop="10dp"
-                        android:clickable="true"
-                        android:contentDescription="@string/add_sport"
-                        android:focusable="true"
-                        app:backgroundTint="@color/primary_orange"
-                        app:fabCustomSize="20dp"
-                        app:srcCompat="@drawable/plus_icon" />
-
-                    <TextView
-                        android:id="@+id/addSport"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="54dp"
-                        android:layout_marginTop="20dp"
-                        android:fontFamily="@font/crete_round"
-                        android:text="@string/add_sport"
-                        android:textColor="@color/primary_orange"
-                        android:textSize="20sp" />
-                </RelativeLayout>-->
-
-                <TextView
-                    android:id="@+id/title_feedback"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_start_title_first_level"
-                    android:layout_marginTop="@dimen/margin_top_title_first_level"
-                    android:fontFamily="@font/crete_round"
-                    android:lineSpacingExtra="26sp"
-                    android:text="@string/title_feedback"
-                    android:textColor="@color/primary_green"
-                    android:textSize="20sp" />
+                    android:layout_height="99dp">
 
-                <TextView
-                    android:id="@+id/user_feedback"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_start_content_text"
-                    android:layout_marginTop="@dimen/margin_top_under_first_title"
-                    android:layout_marginEnd="@dimen/margin_end_content_text"
-                    android:fontFamily="@font/crete_round"
-                    android:paddingStart="@dimen/input_padding_x"
-                    android:paddingTop="@dimen/input_padding_y"
-                    android:paddingEnd="@dimen/input_padding_x"
-                    android:paddingBottom="@dimen/input_padding_y"
-                    android:text="@string/user_feedback"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/confirm_button"
+                        android:layout_width="140dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginStart="27dp"
+                        android:layout_marginTop="30dp"
+                        android:layout_marginBottom="21dp"
+                        android:background="@drawable/confirm_button"
+                        android:text="@string/confirm_button"
+                        android:textColor="@color/white" />
 
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/cancel_button"
+                        android:layout_width="140dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginTop="30dp"
+                        android:layout_marginEnd="27dp"
+                        android:layout_marginBottom="21dp"
+                        android:background="@drawable/cancel_button"
+                        android:text="@string/cancel_button"
+                        android:textColor="@color/primary_green" />
+                </RelativeLayout>
             </LinearLayout>
+        </ScrollView>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="99dp">
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/confirm_button"
-                    android:layout_width="140dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="27dp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginBottom="21dp"
-                    android:background="@drawable/confirm_button"
-                    android:text="@string/confirm_button"
-                    android:textColor="@color/white" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/cancel_button"
-                    android:layout_width="140dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginEnd="27dp"
-                    android:layout_marginBottom="21dp"
-                    android:background="@drawable/cancel_button"
-                    android:text="@string/cancel_button"
-                    android:textColor="@color/primary_green" />
-            </RelativeLayout>
-        </LinearLayout>
-    </ScrollView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

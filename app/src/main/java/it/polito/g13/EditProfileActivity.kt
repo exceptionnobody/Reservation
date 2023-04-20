@@ -79,6 +79,7 @@ class EditProfileActivity : AppCompatActivity() {
 
 //gender=spinner no edit view
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,6 +98,10 @@ class EditProfileActivity : AppCompatActivity() {
         this.user_description=findViewById(R.id.editDescription)
         this.user_city =findViewById(R.id.editCity)
 
+        //set text navbar
+        val navbarText = findViewById<TextView>(R.id.navbar_text)
+        navbarText.text = "Edit profile"
+        
         val confirmButton =findViewById<Button>(R.id.confirm_button)
         confirmButton.setOnClickListener{
             saveDataToPref()
