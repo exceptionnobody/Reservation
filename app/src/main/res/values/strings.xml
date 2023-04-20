@@ -40,6 +40,8 @@
     <string name="nav_profile">Profile</string>
     <string name="nav_reservations">Your reservations</string>
 
+    <string name="bar_profile">Your profile</string>
+
     <string name="emailAddress">Email Address</string>
     <string name="save_username">FullName</string>
     <string name="save_nickname">Nickname</string>
