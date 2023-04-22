@@ -55,6 +55,7 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         //getDataFromSharedPref()
         setContentView(R.layout.activity_show_profile)
 
+        //toolbar instantiation
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -90,13 +91,16 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         checkSharedPreference()
     }
 
+    //handle toolbar items
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_profile -> {
-                Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, ShowProfileActivity::class.java)
+                startActivity(intent)
             }
             R.id.nav_reservations -> {
-                Toast.makeText(this, "Messages clicked", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, ReservationActivity::class.java)
+                startActivity(intent)
             }
         }
         drawerLayout.closeDrawer(GravityCompat.START)
@@ -278,5 +282,4 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
 
          // user_games= //view?.findViewById(R.id.)
     }
-
 }

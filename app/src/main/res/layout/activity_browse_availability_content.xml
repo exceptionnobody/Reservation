@@ -11,13 +11,13 @@
         android:layout_height="wrap_content"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/container"
+        android:id="@+id/containerBookReservation"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ReservationActivity">
+        tools:context=".BrowseAvailabilityActivity">
 
         <com.stacktips.view.CustomCalendarView
-            android:id="@+id/calendar_view"
+            android:id="@+id/book_reservation_calendar_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:calendarTitleTextColor="@color/black"
@@ -27,7 +27,7 @@
             app:disabledDayBackgroundColor="@color/white"
             app:disabledDayTextColor="@color/primary_gray"
 
-            app:layout_constraintBottom_toTopOf="@+id/contentContainer"
+            app:layout_constraintBottom_toTopOf="@+id/bookReservationContentContainer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -38,47 +38,22 @@
             app:weekLayoutBackgroundColor="@color/white" />
 
         <ScrollView
-            android:id="@+id/contentContainer"
+            android:id="@+id/bookReservationContentContainer"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/calendar_view">
+            app:layout_constraintTop_toBottomOf="@+id/book_reservation_calendar_view">
 
             <LinearLayout
-                android:id="@+id/reservationContainer"
+                android:id="@+id/bookReservationContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_left_grid"
                 android:layout_marginTop="@dimen/margin_top_reservation_container"
                 android:layout_marginEnd="@dimen/margin_right_grid"
                 android:orientation="vertical">
-
-                <LinearLayout
-                    android:id="@+id/select_sport_reservation_container"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <Button
-                            android:id="@+id/button"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:fontFamily="@font/crete_round"
-                            android:text="@string/book_a_reservation"
-                            android:textAllCaps="false"
-                            android:textSize="16sp" />
-                    </RelativeLayout>
-                </LinearLayout>
 
             </LinearLayout>
         </ScrollView>

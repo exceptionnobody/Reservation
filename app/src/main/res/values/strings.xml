@@ -42,6 +42,9 @@
 
     <string name="bar_profile">Your profile</string>
 
+    <string name="select_sport_reservation">Select a sport</string>
+    <string name="check_availability_button">Check availability</string>
+
     <string name="emailAddress">Email Address</string>
     <string name="save_username">FullName</string>
     <string name="save_nickname">Nickname</string>
