@@ -32,19 +32,6 @@ class ReservationActivity : AppCompatActivity() {
                 .commitNow()
         }
 
-        calendarView.setCalendarListener(object : CalendarListener {
-            override fun onDateSelected(date: Date) {
-                val reservationContainer = findViewById<LinearLayout>(R.id.select_sport_reservation_container)
-
-                //clean the view removing previously showed reservations for another date
-                reservationContainer.removeAllViews()
-            }
-
-            override fun onMonthChanged(date: Date) {
-                //do nothing
-            }
-        })
-
         val reservationButton = findViewById<Button>(R.id.button)
 
         reservationButton.setOnClickListener {
