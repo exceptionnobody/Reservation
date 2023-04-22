@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="5dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="25dp"
             android:clickable="true"
             android:fontFamily="@font/crete_round"
             android:text="@string/check_availability_button"
