@@ -23,7 +23,7 @@ import java.util.*
 
 
 class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-
+    //initialize toolbar variables
     lateinit var toolbar: androidx.appcompat.widget.Toolbar
     lateinit var drawerLayout: DrawerLayout
     lateinit var navView: NavigationView

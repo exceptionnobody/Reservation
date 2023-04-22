@@ -17,6 +17,7 @@ import java.util.*
 
 
 class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+    //initialize toolbar variables
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navView: NavigationView
