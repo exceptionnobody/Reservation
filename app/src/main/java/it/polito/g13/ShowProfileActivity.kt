@@ -290,5 +290,4 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
 
          // user_games= //view?.findViewById(R.id.)
     }
-
 }
