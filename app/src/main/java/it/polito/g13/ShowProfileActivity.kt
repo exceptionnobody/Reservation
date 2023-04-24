@@ -22,12 +22,20 @@ import dagger.hilt.android.AndroidEntryPoint
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import it.polito.g13.businesslogic.BusinessClass
+import it.polito.g13.entities.Reservation
 import org.json.JSONObject
+import java.time.Instant
 import java.util.*
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+    @Inject
+    lateinit var  repository: BusinessClass
+
+
     //initialize toolbar variables
     lateinit var toolbar: androidx.appcompat.widget.Toolbar
     lateinit var drawerLayout: DrawerLayout
@@ -60,6 +68,7 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         Log.d("HiltApplication", this.applicationContext.toString())
         context = this.applicationContext
         //getDataFromSharedPref()
+        repository.saveReservation(Reservation(1, Date(), "ciao"))
 
         setContentView(R.layout.activity_show_profile)
 
@@ -290,4 +299,5 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
 
          // user_games= //view?.findViewById(R.id.)
     }
+
 }
