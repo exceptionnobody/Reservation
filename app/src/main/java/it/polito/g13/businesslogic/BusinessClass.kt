@@ -9,5 +9,16 @@ class BusinessClass
     private val dao: ReservationDao,
 ) {
 
-    fun saveReservation(reservation: Reservation) = dao.inserReservation(reservation)
+    fun inserReservation(reservation: Reservation) = dao.inserReservation(reservation)
+    fun getAllReservations() = dao.gettAllReservations()
+    fun getSingleReservation(id:Long) = dao.getSingleReservation(id)
+
+    fun getASingleReservation(id:Long) = dao.getASingleReservation(id)
+    fun isAReservationPresent(id:Long) : Boolean {
+
+        return dao.isPresentAReservation(id) != 0
+    }
+
+    fun changeReservation( reservation: Reservation) = dao.updateReservation( reservation)
+
 }

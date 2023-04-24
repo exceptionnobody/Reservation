@@ -19,7 +19,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.businesslogic.BusinessClass
 import it.polito.g13.entities.Reservation
 import org.json.JSONObject
-import java.time.Instant
+import java.text.SimpleDateFormat
+
 import java.util.*
 import javax.inject.Inject
 
@@ -57,7 +58,7 @@ class ShowProfileActivity : AppCompatActivity() {
         Log.d("HiltApplication", this.applicationContext.toString())
         context = this.applicationContext
         //getDataFromSharedPref()
-        repository.saveReservation(Reservation(1, Date(), "ciao"))
+
         setContentView(R.layout.activity_show_profile)
         sharedPreference =  getSharedPreferences("preferences", 0) // 0 - for private mode
         this.user_image=findViewById(R.id.user_image)
@@ -70,6 +71,26 @@ class ShowProfileActivity : AppCompatActivity() {
         this.user_languages=findViewById(R.id.user_languages)
         this.user_description=findViewById(R.id.user_description)
         this.user_city =findViewById(R.id.user_city)
+        val l = repository.getAllReservations()
+
+        l.observe(this){
+            user_name.setText(it.toString())
+        }
+
+       if (repository.isAReservationPresent(2))
+           repository.inserReservation(Reservation(5, Date(), "altro sport"))
+
+       if (repository.isAReservationPresent(7)){
+           repository.inserReservation(Reservation(7, Date(), "terzo_sport" ))
+       }
+
+        if (!repository.isAReservationPresent(7)){
+            repository.inserReservation(Reservation(7, Date(), "quarto_sport" ))
+        }else {
+            val l = SimpleDateFormat("dd-MM-yyyy").parse("27-01-1999")
+            repository.changeReservation(Reservation(7, l, "modifica_strana"))
+        }
+
         loadImageFromStorage()
         checkSharedPreference()
     }
