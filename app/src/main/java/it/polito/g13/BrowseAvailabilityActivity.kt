@@ -19,11 +19,12 @@ import com.stacktips.view.CustomCalendarView
 import com.stacktips.view.DayDecorator
 import com.stacktips.view.DayView
 import com.stacktips.view.utils.CalendarUtils
+import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.ui.main.ReservationFragment
 import java.text.SimpleDateFormat
 import java.util.*
 
-
+@AndroidEntryPoint
 class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     //initialize toolbar variables
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
