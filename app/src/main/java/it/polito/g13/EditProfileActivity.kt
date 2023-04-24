@@ -17,7 +17,6 @@ import android.view.*
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-
 import androidx.exifinterface.media.ExifInterface
 import java.io.ByteArrayOutputStream
 import dagger.hilt.android.AndroidEntryPoint
