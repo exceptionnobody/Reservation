@@ -16,12 +16,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.toDrawable
 import dagger.hilt.android.AndroidEntryPoint
+import it.polito.g13.businesslogic.BusinessClass
+import it.polito.g13.entities.Reservation
 import org.json.JSONObject
+import java.time.Instant
 import java.util.*
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class ShowProfileActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var  repository: BusinessClass
+
     lateinit var sharedPreference:SharedPreferences
     lateinit var user_image: ImageView
     lateinit var user_name: TextView //= null//: String= ""
@@ -49,7 +57,7 @@ class ShowProfileActivity : AppCompatActivity() {
         Log.d("HiltApplication", this.applicationContext.toString())
         context = this.applicationContext
         //getDataFromSharedPref()
-
+        repository.saveReservation(Reservation(1, Date(), "ciao"))
         setContentView(R.layout.activity_show_profile)
         sharedPreference =  getSharedPreferences("preferences", 0) // 0 - for private mode
         this.user_image=findViewById(R.id.user_image)
