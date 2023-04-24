@@ -3,9 +3,11 @@ package it.polito.g13
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.stacktips.view.CustomCalendarView
+import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.ui.main.ReservationFragment
 import java.util.*
 
+@AndroidEntryPoint
 class ReservationActivity : AppCompatActivity() {
     lateinit var calendarView: CustomCalendarView
 

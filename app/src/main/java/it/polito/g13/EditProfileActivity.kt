@@ -8,24 +8,19 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
-import android.graphics.drawable.VectorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.graphics.drawable.toDrawable
-import androidx.core.view.get
+
 import androidx.exifinterface.media.ExifInterface
-import kotlinx.serialization.encodeToString
 import java.io.ByteArrayOutputStream
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
 import java.io.FileDescriptor
 import java.io.IOException
@@ -48,6 +43,8 @@ val sportLevels = listOf("Beginner", "Intermediate", "Professional")
 val languages = arrayOf("English", "Italian", "French", "German", "Spanish", "Arabic", "Chinese")
 var glist= mutableListOf<String>()
 const val filename = "myPhoto"
+
+@AndroidEntryPoint
 class EditProfileActivity : AppCompatActivity() {
 
     lateinit var sharedPreference:SharedPreferences
@@ -295,7 +292,7 @@ class EditProfileActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        Log.d("lifecyclePause","onPause invoked");
+        Log.d("lifecyclePause","onPause invoked")
     }
 
     //option selected to edit profile picture

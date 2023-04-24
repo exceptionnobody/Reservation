@@ -5,20 +5,22 @@ package it.polito.g13
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Matrix
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.toDrawable
+import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
 import java.util.*
 
+
+@AndroidEntryPoint
 class ShowProfileActivity : AppCompatActivity() {
     lateinit var sharedPreference:SharedPreferences
     lateinit var user_image: ImageView
@@ -43,8 +45,11 @@ class ShowProfileActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Log.d("HiltApplication", this.applicationContext.toString())
         context = this.applicationContext
         //getDataFromSharedPref()
+
         setContentView(R.layout.activity_show_profile)
         sharedPreference =  getSharedPreferences("preferences", 0) // 0 - for private mode
         this.user_image=findViewById(R.id.user_image)
