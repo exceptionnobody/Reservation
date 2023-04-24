@@ -4,10 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
 import it.polito.g13.entities.Reservation
+import java.util.Date
 
 @Dao
 interface ReservationDao {
 
     @Query("SELECT * FROM reservations")
     fun gettAllReservations() : LiveData<List<Reservation>>
+
+    @Query("SELECT * FROM reservations WHERE date = :targetDate")
+    fun findReservationsOnDate(targetDate: Date): List<Reservation>
 }

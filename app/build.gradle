@@ -52,6 +52,9 @@ dependencies {
     kapt 'androidx.room:room-compiler:2.5.1'
     androidTestImplementation 'androidx.room:room-testing:2.5.1'
 
+    //Hilt
+    implementation 'com.google.dagger:hilt-android:2.44'
+    kapt 'com.google.dagger:hilt-compiler:2.44'
 
 
     testImplementation 'junit:junit:4.13.2'
