@@ -12,9 +12,12 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import com.stacktips.view.CalendarListener
 import com.stacktips.view.CustomCalendarView
+import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.ui.main.ReservationFragment
 import java.util.*
 
+@AndroidEntryPoint
+class ReservationActivity : AppCompatActivity() {
 class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     //initialize toolbar variables
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
