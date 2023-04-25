@@ -48,6 +48,9 @@ class ReservationActivity : AppCompatActivity() {
                     val bookedReservation = layoutInflater.inflate(R.layout.reservation_box, reservationBoxContainer, false)
 
                     reservationBoxContainer.addView(bookedReservation)
+                } else {
+                    val noReservationFounded = layoutInflater.inflate(R.layout.no_reservation, reservationBoxContainer, false)
+                    reservationBoxContainer.addView(noReservationFounded)
                 }
 
             }

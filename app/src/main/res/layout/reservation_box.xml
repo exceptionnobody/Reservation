@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:layout_marginBottom="20dp">
+    android:layout_marginBottom="@dimen/margin_bottom_reservation_item">
 
     <RelativeLayout
         android:layout_width="0dp"
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:contentDescription="info icon"
-            app:srcCompat="@drawable/info_icon"/>
+            app:srcCompat="@drawable/info_icon" />
 
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
