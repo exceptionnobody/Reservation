@@ -131,7 +131,7 @@ class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigat
         return true
     }
 
-    private class DisabledColorDecorator : DayDecorator {
+    open class DisabledColorDecorator : DayDecorator {
         override fun decorate(dayView: DayView) {
             if (CalendarUtils.isPastDay(dayView.date)) {
                 dayView.setTextColor(Color.GRAY)

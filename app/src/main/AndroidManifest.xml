@@ -21,6 +21,9 @@
         android:theme="@style/Theme.Mad"
         tools:targetApi="31">
         <activity
+            android:name=".EditReservationDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".ShowReservationDetailActivity"
             android:exported="false" />
         <activity

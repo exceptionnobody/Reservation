@@ -3,6 +3,8 @@ package it.polito.g13
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -60,5 +62,21 @@ class ShowReservationDetailActivity : AppCompatActivity(), NavigationView.OnNavi
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.menu_profile, menu)
+        super.onCreateOptionsMenu(menu)
+        return true
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id=item.itemId
+        if (id==R.id.action_edit) {
+            val intent = Intent(this, EditReservationDetailActivity::class.java)
+            startActivity(intent)
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
