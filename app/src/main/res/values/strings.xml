@@ -61,4 +61,5 @@
     <string name="save_levelsports">LevelSports</string>
 
     <string name="book_a_reservation">Book a reservation</string>
+    <string name="no_reservation">No reservation for today</string>
 </resources>
