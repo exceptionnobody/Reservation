@@ -23,109 +23,109 @@
         tools:context=".ShowReservationDetailActivity">
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_bottom_reservation_info"
-            android:orientation="horizontal">
+            android:layout_marginRight="@dimen/margin_right_label_reservation_info"
+            android:fontFamily="@font/crete_round"
+            android:text="@string/label_reservation_number"
+            android:textSize="16sp"
+            android:layout_marginStart="@dimen/margin_start_title_first_level"
+            android:textColor="@color/primary_green" />
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/margin_right_label_reservation_info"
-                android:fontFamily="@font/crete_round"
-                android:text="@string/label_reservation_number"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/content_reservation_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/crete_round"
-                android:text="@string/content_reservation_number"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/content_reservation_number"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/crete_round"
+            android:text="@string/content_reservation_number"
+            android:textColor="@color/black"
+            android:textSize="16sp"
             android:layout_marginBottom="@dimen/margin_bottom_reservation_info"
-            android:orientation="horizontal">
+            android:layout_marginTop="4dp"
+            android:paddingStart="@dimen/input_padding_x"
+            android:paddingTop="@dimen/input_padding_y"
+            android:paddingEnd="@dimen/input_padding_x"
+            android:paddingBottom="@dimen/input_padding_y" />
 
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/margin_right_label_reservation_info"
-                android:fontFamily="@font/crete_round"
-                android:text="@string/label_sport_typology"
-                android:textColor="@color/black"
-                android:textSize="@dimen/font_size_info_reservation" />
-
-            <TextView
-                android:id="@+id/content_sport_typology"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/crete_round"
-                android:text="@string/content_sport_typology"
-                android:textColor="@color/black"
-                android:textSize="@dimen/font_size_info_reservation" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_bottom_reservation_info"
-            android:orientation="horizontal">
+            android:layout_marginRight="@dimen/margin_right_label_reservation_info"
+            android:fontFamily="@font/crete_round"
+            android:text="@string/label_sport_typology"
+            android:layout_marginStart="@dimen/margin_start_title_first_level"
+            android:textColor="@color/primary_green"
+            android:textSize="@dimen/font_size_info_reservation" />
 
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/margin_right_label_reservation_info"
-                android:fontFamily="@font/crete_round"
-                android:text="@string/label_place"
-                android:textColor="@color/black"
-                android:textSize="@dimen/font_size_info_reservation" />
-
-            <TextView
-                android:id="@+id/content_place"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/crete_round"
-                android:text="@string/content_place"
-                android:textColor="@color/black"
-                android:textSize="@dimen/font_size_info_reservation" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/content_sport_typology"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/crete_round"
+            android:text="@string/content_sport_typology"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_size_info_reservation"
             android:layout_marginBottom="@dimen/margin_bottom_reservation_info"
-            android:orientation="horizontal">
+            android:layout_marginTop="4dp"
+            android:paddingStart="@dimen/input_padding_x"
+            android:paddingTop="@dimen/input_padding_y"
+            android:paddingEnd="@dimen/input_padding_x"
+            android:paddingBottom="@dimen/input_padding_y" />
 
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/margin_right_label_reservation_info"
-                android:fontFamily="@font/crete_round"
-                android:text="@string/label_date_time"
-                android:textColor="@color/black"
-                android:textSize="@dimen/font_size_info_reservation" />
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/margin_right_label_reservation_info"
+            android:fontFamily="@font/crete_round"
+            android:text="@string/label_place"
+            android:layout_marginStart="@dimen/margin_start_title_first_level"
+            android:textColor="@color/primary_green"
+            android:textSize="@dimen/font_size_info_reservation" />
 
-            <TextView
-                android:id="@+id/content_date_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/crete_round"
-                android:text="@string/content_date_time"
-                android:textColor="@color/black"
-                android:textSize="@dimen/font_size_info_reservation" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/content_place"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/crete_round"
+            android:text="@string/content_place"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_size_info_reservation"
+            android:layout_marginBottom="@dimen/margin_bottom_reservation_info"
+            android:layout_marginTop="4dp"
+            android:paddingStart="@dimen/input_padding_x"
+            android:paddingTop="@dimen/input_padding_y"
+            android:paddingEnd="@dimen/input_padding_x"
+            android:paddingBottom="@dimen/input_padding_y" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/margin_right_label_reservation_info"
+            android:fontFamily="@font/crete_round"
+            android:text="@string/label_date_time"
+            android:layout_marginStart="@dimen/margin_start_title_first_level"
+            android:textColor="@color/primary_green"
+            android:textSize="@dimen/font_size_info_reservation" />
+
+        <TextView
+            android:id="@+id/content_date_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/crete_round"
+            android:text="@string/content_date_time"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_size_info_reservation"
+            android:layout_marginBottom="@dimen/margin_bottom_reservation_info"
+            android:layout_marginTop="4dp"
+            android:paddingStart="@dimen/input_padding_x"
+            android:paddingTop="@dimen/input_padding_y"
+            android:paddingEnd="@dimen/input_padding_x"
+            android:paddingBottom="@dimen/input_padding_y" />
 
     </LinearLayout>
 </LinearLayout>
