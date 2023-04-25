@@ -17,4 +17,5 @@
     <dimen name="padding_reservation_box">15dp</dimen>
     <dimen name="margin_top_reservation_container">35dp</dimen>
     <dimen name="margin_bottom_reservation_item">20dp</dimen>
+    <dimen name="menu_item_font">20sp</dimen>
 </resources>
