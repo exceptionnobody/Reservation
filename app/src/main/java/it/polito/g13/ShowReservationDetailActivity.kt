@@ -1,16 +1,19 @@
 package it.polito.g13
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
+import android.view.*
+import android.view.View.OnClickListener
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+
 
 class ShowReservationDetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -47,6 +50,15 @@ class ShowReservationDetailActivity : AppCompatActivity(), NavigationView.OnNavi
         //set text navbar
         val navbarText = findViewById<TextView>(R.id.navbar_text)
         navbarText.text = "Your reservation detail"
+
+        val buttonOpenPopupDelete = findViewById<Button>(R.id.open_popup_delete)
+        buttonOpenPopupDelete.setOnClickListener(object : OnClickListener {
+                override fun onClick(v: View) {
+                    showPopupWindow(v)
+                }
+            }
+        )
+
     }
     //handle toolbar items
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -78,5 +90,42 @@ class ShowReservationDetailActivity : AppCompatActivity(), NavigationView.OnNavi
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    fun showPopupWindow(view: View) {
+
+        //Create a View object yourself through inflater
+        val popupView: View = layoutInflater.inflate(R.layout.popup_deleate_reservation, null)
+
+        //Specify the length and width through constants
+        val width = LinearLayout.LayoutParams.MATCH_PARENT
+        val height = LinearLayout.LayoutParams.MATCH_PARENT
+
+        //Make Inactive Items Outside Of PopupWindow
+        val focusable = true
+
+        //Create a window with our parameters
+        val popupWindow = PopupWindow(popupView, width, height, focusable)
+
+        //Set the location of the window on the screen
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
+
+        //Initialize the elements of our window, install the handler
+        val buttonDelete = popupView.findViewById<Button>(R.id.delete_button)
+        buttonDelete.setOnClickListener {
+            // elimina reservation
+        }
+
+        val buttonCancel = popupView.findViewById<Button>(R.id.close_popup_delete)
+        buttonCancel.setOnClickListener {
+            popupWindow.dismiss()
+        }
+
+
+        //Handler for clicking on the inactive zone of the window
+        popupView.setOnTouchListener { v, event -> //Close the window when clicked
+            popupWindow.dismiss()
+            true
+        }
     }
 }

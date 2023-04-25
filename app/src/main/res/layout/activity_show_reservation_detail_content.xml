@@ -127,5 +127,27 @@
             android:paddingEnd="@dimen/input_padding_x"
             android:paddingBottom="@dimen/input_padding_y" />
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="99dp">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/open_popup_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="21dp"
+                android:background="@drawable/delete_button"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="@string/delete_reservation_button"
+                android:textColor="@color/white" />
+
+        </RelativeLayout>
+
     </LinearLayout>
 </LinearLayout>
