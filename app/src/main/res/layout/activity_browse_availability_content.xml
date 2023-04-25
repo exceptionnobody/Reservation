@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        layout="@layout/navbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/containerBookReservation"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".BrowseAvailabilityActivity">
+
+        <com.stacktips.view.CustomCalendarView
+            android:id="@+id/book_reservation_calendar_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:calendarTitleTextColor="@color/black"
+            app:currentDayOfMonthColor="@color/primary_green"
+            app:dayOfMonthTextColor="@color/black"
+            app:dayOfWeekTextColor="@color/black"
+            app:disabledDayBackgroundColor="@color/white"
+            app:disabledDayTextColor="@color/primary_gray"
+
+            app:layout_constraintBottom_toTopOf="@+id/bookReservationContentContainer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:selectedDayBackgroundColor="@color/primary_green"
+            app:selectedDayTextColor="@color/white"
+            app:titleLayoutBackgroundColor="@color/white"
+            app:weekLayoutBackgroundColor="@color/white" />
+
+        <ScrollView
+            android:id="@+id/bookReservationContentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/book_reservation_calendar_view">
+
+            <LinearLayout
+                android:id="@+id/bookReservationContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_left_grid"
+                android:layout_marginTop="@dimen/margin_top_reservation_container"
+                android:layout_marginEnd="@dimen/margin_right_grid"
+                android:orientation="vertical">
+
+            </LinearLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

@@ -1,72 +1,25 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start"
     tools:context=".ReservationActivity">
 
-    <com.stacktips.view.CustomCalendarView
-        android:id="@+id/calendar_view"
+    <include
+        layout="@layout/activity_reservation_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:calendarTitleTextColor="@color/black"
-        app:currentDayOfMonthColor="@color/primary_green"
-        app:dayOfMonthTextColor="@color/black"
-        app:dayOfWeekTextColor="@color/black"
-        app:disabledDayBackgroundColor="@color/white"
-        app:disabledDayTextColor="@color/primary_gray"
+        android:layout_height="match_parent"/>
 
-        app:layout_constraintBottom_toTopOf="@+id/contentContainer"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:selectedDayBackgroundColor="@color/primary_green"
-        app:selectedDayTextColor="@color/white"
-        app:titleLayoutBackgroundColor="@color/white"
-        app:weekLayoutBackgroundColor="@color/white" />
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/menu_header"
+        app:menu="@menu/nav_menu"/>
 
-    <ScrollView
-        android:id="@+id/contentContainer"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/calendar_view">
-
-        <LinearLayout
-            android:id="@+id/reservationContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_left_grid"
-            android:layout_marginTop="@dimen/margin_top_reservation_container"
-            android:layout_marginEnd="@dimen/margin_right_grid"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:id="@+id/reservationBoxContainer"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"></LinearLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <Button
-                    android:id="@+id/button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:fontFamily="@font/crete_round"
-                    android:text="@string/book_a_reservation"
-                    android:textAllCaps="false"
-                    android:textSize="16sp" />
-            </RelativeLayout>
-
-        </LinearLayout>
-    </ScrollView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.drawerlayout.widget.DrawerLayout>

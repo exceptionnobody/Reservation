@@ -10,16 +10,37 @@ import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.toDrawable
+import dagger.hilt.android.AndroidEntryPoint
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.navigation.NavigationView
+import it.polito.g13.businesslogic.BusinessClass
+import it.polito.g13.entities.Reservation
 import org.json.JSONObject
+import java.time.Instant
 import java.util.*
+import javax.inject.Inject
 
-class ShowProfileActivity : AppCompatActivity() {
+
+@AndroidEntryPoint
+class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+    @Inject
+    lateinit var  repository: BusinessClass
+
+
+    //initialize toolbar variables
+    lateinit var toolbar: androidx.appcompat.widget.Toolbar
+    lateinit var drawerLayout: DrawerLayout
+    lateinit var navView: NavigationView
+
     lateinit var sharedPreference:SharedPreferences
     lateinit var user_image: ImageView
     lateinit var user_name: TextView //= null//: String= ""
@@ -43,9 +64,35 @@ class ShowProfileActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Log.d("HiltApplication", this.applicationContext.toString())
         context = this.applicationContext
         //getDataFromSharedPref()
+        repository.saveReservation(Reservation(1, Date(), "ciao"))
+
         setContentView(R.layout.activity_show_profile)
+
+        //toolbar instantiation
+        toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        drawerLayout = findViewById(R.id.drawer_layout)
+        navView = findViewById(R.id.nav_view)
+
+        val toggle = ActionBarDrawerToggle(
+            this, drawerLayout, toolbar, 0, 0
+        )
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+        navView.setNavigationItemSelectedListener(this)
+
+        val menuItemProfile = navView.menu.findItem(R.id.nav_profile)
+        menuItemProfile.setActionView(R.layout.menu_item_profile)
+
+        val menuItemReservations = navView.menu.findItem(R.id.nav_reservations)
+        menuItemReservations.setActionView(R.layout.menu_item_reservations)
+
         sharedPreference =  getSharedPreferences("preferences", 0) // 0 - for private mode
         this.user_image=findViewById(R.id.user_image)
         this.user_name=findViewById(R.id.user_name)
@@ -59,6 +106,22 @@ class ShowProfileActivity : AppCompatActivity() {
         this.user_city =findViewById(R.id.user_city)
         loadImageFromStorage()
         checkSharedPreference()
+    }
+
+    //handle toolbar items
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.nav_profile -> {
+                val intent = Intent(this, ShowProfileActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.nav_reservations -> {
+                val intent = Intent(this, ReservationActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        drawerLayout.closeDrawer(GravityCompat.START)
+        return true
     }
 
     private fun checkSharedPreference() {

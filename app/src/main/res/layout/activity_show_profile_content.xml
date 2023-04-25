@@ -10,10 +10,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".EditProfileActivity">
+        tools:context=".ShowProfileActivity">
 
         <ScrollView
             android:layout_width="0dp"
@@ -29,52 +30,27 @@
                 android:layout_marginStart="@dimen/margin_left_grid"
                 android:layout_marginEnd="@dimen/margin_right_grid"
                 android:orientation="vertical"
-                android:paddingTop="40dp">
+                android:paddingTop="40dp"
+                android:paddingBottom="40dp"
+                android:weightSum="3">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/user_image"
-                        android:layout_width="180dp"
-                        android:layout_height="180dp"
-                        android:layout_gravity="center"
-                        android:contentDescription="@string/user_image"
-                        android:scaleType="centerCrop"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
-                        app:srcCompat="@drawable/user_image" />
-
-                    <ImageButton
-                        android:id="@+id/imageButton"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_gravity="bottom"
-                        android:background="@drawable/image_button"
-                        android:contentDescription="@string/edit_image"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/user_image"
-                        app:layout_constraintHorizontal_bias="0.94"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.0"
-                        app:srcCompat="@drawable/camera" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/user_image"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/user_image"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+                    app:srcCompat="@drawable/user_image" />
 
                 <LinearLayout
                     android:id="@+id/linearLayout"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="9dp"
+                    android:layout_weight="2"
                     android:orientation="vertical">
 
                     <TextView
@@ -102,21 +78,19 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editFullName"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                    <TextView
+                        android:id="@+id/user_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_start_content_text"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="@dimen/margin_top_under_second_title"
                         android:layout_marginEnd="@dimen/margin_end_content_text"
-                        android:background="@drawable/edit_fields"
                         android:fontFamily="@font/crete_round"
-                        android:hint="@string/user_name"
-                        android:inputType="textAutoCorrect|textPersonName"
                         android:paddingStart="@dimen/input_padding_x"
                         android:paddingTop="@dimen/input_padding_y"
                         android:paddingEnd="@dimen/input_padding_x"
                         android:paddingBottom="@dimen/input_padding_y"
+                        android:text="@string/user_name"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
@@ -134,21 +108,19 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editNickname"
+                    <TextView
+                        android:id="@+id/user_nickname"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_start_content_text"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="@dimen/margin_top_under_second_title"
                         android:layout_marginEnd="@dimen/margin_end_content_text"
-                        android:background="@drawable/edit_fields"
                         android:fontFamily="@font/crete_round"
-                        android:hint="@string/user_nickname"
-                        android:inputType="textAutoCorrect|text"
                         android:paddingStart="@dimen/input_padding_x"
                         android:paddingTop="@dimen/input_padding_y"
                         android:paddingEnd="@dimen/input_padding_x"
                         android:paddingBottom="@dimen/input_padding_y"
+                        android:text="@string/user_nickname"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
@@ -166,21 +138,19 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editAge"
+                    <TextView
+                        android:id="@+id/user_age"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_start_content_text"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="@dimen/margin_top_under_second_title"
                         android:layout_marginEnd="@dimen/margin_end_content_text"
-                        android:background="@drawable/edit_fields"
                         android:fontFamily="@font/crete_round"
-                        android:hint="@string/user_age"
-                        android:inputType="number"
                         android:paddingStart="@dimen/input_padding_x"
                         android:paddingTop="@dimen/input_padding_y"
                         android:paddingEnd="@dimen/input_padding_x"
                         android:paddingBottom="@dimen/input_padding_y"
+                        android:text="@string/user_age"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
@@ -198,21 +168,19 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
 
-                    <Spinner
-                        android:id="@+id/editGender"
+                    <TextView
+                        android:id="@+id/user_gender"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_start_content_text"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="@dimen/margin_top_under_second_title"
                         android:layout_marginEnd="@dimen/margin_end_content_text"
-                        android:background="@drawable/edit_fields"
-                        android:contentDescription="@string/user_gender"
                         android:fontFamily="@font/crete_round"
                         android:paddingStart="@dimen/input_padding_x"
                         android:paddingTop="@dimen/input_padding_y"
                         android:paddingEnd="@dimen/input_padding_x"
                         android:paddingBottom="@dimen/input_padding_y"
-                        android:spinnerMode="dropdown"
+                        android:text="@string/user_gender"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
@@ -230,21 +198,19 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editEmail"
+                    <TextView
+                        android:id="@+id/user_email"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_start_content_text"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="@dimen/margin_top_under_second_title"
                         android:layout_marginEnd="@dimen/margin_end_content_text"
-                        android:background="@drawable/edit_fields"
                         android:fontFamily="@font/crete_round"
-                        android:hint="@string/user_email"
-                        android:inputType="textAutoCorrect|textEmailAddress"
                         android:paddingStart="@dimen/input_padding_x"
                         android:paddingTop="@dimen/input_padding_y"
                         android:paddingEnd="@dimen/input_padding_x"
                         android:paddingBottom="@dimen/input_padding_y"
+                        android:text="@string/user_email"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
@@ -262,21 +228,19 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editNumber"
+                    <TextView
+                        android:id="@+id/user_number"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_start_content_text"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="@dimen/margin_top_under_second_title"
                         android:layout_marginEnd="@dimen/margin_end_content_text"
-                        android:background="@drawable/edit_fields"
                         android:fontFamily="@font/crete_round"
-                        android:hint="@string/user_number"
-                        android:inputType="phone"
                         android:paddingStart="@dimen/input_padding_x"
                         android:paddingTop="@dimen/input_padding_y"
                         android:paddingEnd="@dimen/input_padding_x"
                         android:paddingBottom="@dimen/input_padding_y"
+                        android:text="@string/user_number"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
@@ -294,21 +258,19 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editDescription"
+                    <TextView
+                        android:id="@+id/user_description"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_start_content_text"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="@dimen/margin_top_under_second_title"
                         android:layout_marginEnd="@dimen/margin_end_content_text"
-                        android:background="@drawable/edit_fields"
                         android:fontFamily="@font/crete_round"
-                        android:hint="@string/user_description"
-                        android:inputType="textAutoCorrect|textMultiLine"
                         android:paddingStart="@dimen/input_padding_x"
                         android:paddingTop="@dimen/input_padding_y"
                         android:paddingEnd="@dimen/input_padding_x"
                         android:paddingBottom="@dimen/input_padding_y"
+                        android:text="@string/user_description"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
@@ -327,19 +289,18 @@
                         app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
 
                     <TextView
-                        android:id="@+id/editLanguages"
+                        android:id="@+id/user_languages"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_start_content_text"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="@dimen/margin_top_under_second_title"
                         android:layout_marginEnd="@dimen/margin_end_content_text"
-                        android:background="@drawable/edit_fields"
                         android:fontFamily="@font/crete_round"
-                        android:hint="@string/user_languages"
                         android:paddingStart="@dimen/input_padding_x"
                         android:paddingTop="@dimen/input_padding_y"
                         android:paddingEnd="@dimen/input_padding_x"
                         android:paddingBottom="@dimen/input_padding_y"
+                        android:text="@string/user_languages"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
@@ -369,21 +330,19 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
 
-                    <AutoCompleteTextView
-                        android:id="@+id/editCity"
+                    <TextView
+                        android:id="@+id/user_city"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_start_content_text"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="@dimen/margin_top_under_second_title"
                         android:layout_marginEnd="@dimen/margin_end_content_text"
-                        android:background="@drawable/edit_fields"
                         android:fontFamily="@font/crete_round"
-                        android:hint="@string/user_city"
-                        android:inputType="text"
                         android:paddingStart="@dimen/input_padding_x"
                         android:paddingTop="@dimen/input_padding_y"
                         android:paddingEnd="@dimen/input_padding_x"
                         android:paddingBottom="@dimen/input_padding_y"
+                        android:text="@string/user_city"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
@@ -401,45 +360,21 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
 
-                    <LinearLayout
-                        android:id="@+id/sportsContainer"
-                        android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/user_games"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-                    </LinearLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/addSportTextContainer"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/addSportIcon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:layout_marginTop="10dp"
-                            android:clickable="true"
-                            android:contentDescription="@string/add_sport"
-                            android:focusable="true"
-                            app:backgroundTint="@color/primary_orange"
-                            app:fabCustomSize="20dp"
-                            app:srcCompat="@drawable/plus_icon" />
-
-                        <TextView
-                            android:id="@+id/addSport"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="54dp"
-                            android:layout_marginTop="20dp"
-                            android:fontFamily="@font/crete_round"
-                            android:text="@string/add_sport"
-                            android:textColor="@color/primary_orange"
-                            android:textSize="20sp" />
-                    </RelativeLayout>-->
+                        android:layout_marginStart="@dimen/margin_start_content_text"
+                        android:layout_marginTop="@dimen/margin_top_under_second_title"
+                        android:layout_marginEnd="@dimen/margin_end_content_text"
+                        android:fontFamily="@font/crete_round"
+                        android:paddingStart="@dimen/input_padding_x"
+                        android:paddingTop="@dimen/input_padding_y"
+                        android:paddingEnd="@dimen/input_padding_x"
+                        android:paddingBottom="@dimen/input_padding_y"
+                        android:text="@string/user_games"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />-->
 
                     <TextView
                         android:id="@+id/title_feedback"
@@ -470,41 +405,9 @@
                         android:textSize="16sp" />
 
                 </LinearLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="99dp">
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/confirm_button"
-                        android:layout_width="140dp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginStart="27dp"
-                        android:layout_marginTop="30dp"
-                        android:layout_marginBottom="21dp"
-                        android:background="@drawable/confirm_button"
-                        android:text="@string/confirm_button"
-                        android:textColor="@color/white" />
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/cancel_button"
-                        android:layout_width="140dp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginTop="30dp"
-                        android:layout_marginEnd="27dp"
-                        android:layout_marginBottom="21dp"
-                        android:background="@drawable/cancel_button"
-                        android:text="@string/cancel_button"
-                        android:textColor="@color/primary_green" />
-                </RelativeLayout>
             </LinearLayout>
         </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </LinearLayout>
