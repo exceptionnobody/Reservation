@@ -89,6 +89,12 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
                     val bookedReservation = layoutInflater.inflate(R.layout.reservation_box, reservationBoxContainer, false)
 
                     reservationBoxContainer.addView(bookedReservation)
+
+                    val reservationBox = findViewById<RelativeLayout>(R.id.reservation_box)
+                    reservationBox.setOnClickListener {
+                        val intent = Intent(context, ShowReservationDetailActivity::class.java)
+                        startActivity(intent)
+                    }
                 } else {
                     val noReservationFounded = layoutInflater.inflate(R.layout.no_reservation, reservationBoxContainer, false)
                     reservationBoxContainer.addView(noReservationFounded)

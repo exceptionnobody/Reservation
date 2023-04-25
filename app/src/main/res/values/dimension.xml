@@ -18,4 +18,7 @@
     <dimen name="margin_top_reservation_container">35dp</dimen>
     <dimen name="margin_bottom_reservation_item">20dp</dimen>
     <dimen name="menu_item_font">20sp</dimen>
+    <dimen name="margin_bottom_reservation_info">25dp</dimen>
+    <dimen name="margin_right_label_reservation_info">5dp</dimen>
+    <dimen name="font_size_info_reservation">20sp</dimen>
 </resources>

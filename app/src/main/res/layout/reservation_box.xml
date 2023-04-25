@@ -7,6 +7,7 @@
     android:layout_marginBottom="@dimen/margin_bottom_reservation_item">
 
     <RelativeLayout
+        android:id="@+id/reservation_box"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_reservation_box"

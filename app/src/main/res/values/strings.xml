@@ -62,4 +62,13 @@
 
     <string name="book_a_reservation">Book a reservation</string>
     <string name="no_reservation">No reservation for today</string>
+
+    <string name="label_reservation_number">Reservation number: </string>
+    <string name="content_reservation_number">#00000</string>
+    <string name="label_sport_typology">Sport type: </string>
+    <string name="content_sport_typology">placeholder sport</string>
+    <string name="label_place">Structure: </string>
+    <string name="content_place">placeholder structure</string>
+    <string name="label_date_time">Date and time: </string>
+    <string name="content_date_time">DD-MM-YY HH:mm</string>
 </resources>
