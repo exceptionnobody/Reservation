@@ -3,18 +3,23 @@ package it.polito.g13.ui.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import it.polito.g13.dao.ReservationDao
+import dagger.hilt.android.lifecycle.HiltViewModel
+import it.polito.g13.businesslogic.BusinessClass
 import it.polito.g13.entities.Reservation
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import java.util.Date
 
-class MainViewModel(private val reservationDao: ReservationDao) : ViewModel() {
+import javax.inject.Inject
+
+
+@HiltViewModel
+class MainViewModel @Inject constructor (private val businessLogic: BusinessClass): ViewModel() {
+
+
     private val _reservations = MutableLiveData<List<Reservation>>()
 
-    val reservations: LiveData<List<Reservation>> = _reservations
+    val reservations: LiveData<List<Reservation>> = businessLogic.getAllReservations()
 
-    fun getAllReservations() {
-        _reservations.postValue(reservationDao.gettAllReservations())
+    fun changeReservation(id: Int, date: Date, sport: String) {
+        businessLogic.changeReservation(Reservation(id, date, sport))
     }
 }

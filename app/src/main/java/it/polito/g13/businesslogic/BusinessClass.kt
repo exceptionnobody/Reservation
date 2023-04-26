@@ -3,7 +3,9 @@ package it.polito.g13.businesslogic
 import it.polito.g13.dao.ReservationDao
 import it.polito.g13.entities.Reservation
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class BusinessClass
 @Inject constructor(
     private val dao: ReservationDao,

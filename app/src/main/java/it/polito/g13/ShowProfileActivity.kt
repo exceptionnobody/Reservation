@@ -5,15 +5,12 @@ package it.polito.g13
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Matrix
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.*
-import androidx.annotation.RequiresApi
+import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
@@ -22,19 +19,16 @@ import dagger.hilt.android.AndroidEntryPoint
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
-import it.polito.g13.businesslogic.BusinessClass
-import it.polito.g13.entities.Reservation
-import org.json.JSONObject
-import java.text.SimpleDateFormat
 
-import java.util.*
-import javax.inject.Inject
+import it.polito.g13.ui.main.MainViewModel
+import org.json.JSONObject
+import java.util.Date
 
 
 @AndroidEntryPoint
 class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-    @Inject
-    lateinit var  repository: BusinessClass
+
+    private val mainViewModel: MainViewModel by viewModels()
 
 
     //initialize toolbar variables
@@ -104,12 +98,17 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         this.user_languages=findViewById(R.id.user_languages)
         this.user_description=findViewById(R.id.user_description)
         this.user_city =findViewById(R.id.user_city)
-        val l = repository.getAllReservations()
 
-        l.observe(this){
-            user_name.setText(it.toString())
+        /* Activity/Fragment observes viewModel */
+        mainViewModel.reservations.observe(this){
+            if(it != null) {
+                user_name.setText(it.toString())
+            }
         }
 
+        /* if Activity change the data */
+        mainViewModel.changeReservation(2, Date(), "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+        /*
        if (repository.isAReservationPresent(2))
            repository.inserReservation(Reservation(5, Date(), "altro sport"))
 
@@ -123,7 +122,7 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             val l = SimpleDateFormat("dd-MM-yyyy").parse("27-01-1999")
             repository.changeReservation(Reservation(7, l, "modifica_strana"))
         }
-
+*/
         loadImageFromStorage()
         checkSharedPreference()
     }
@@ -281,7 +280,7 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         }
         return super.onOptionsItemSelected(item)
     }
-
+/*
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onResume() {
         super.onResume()
@@ -319,5 +318,5 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
 
          // user_games= //view?.findViewById(R.id.)
     }
-
+*/
 }
