@@ -20,7 +20,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 
-import it.polito.g13.ui.main.MainViewModel
+import it.polito.g13.vieModel.MainViewModel
 import org.json.JSONObject
 import java.util.Date
 

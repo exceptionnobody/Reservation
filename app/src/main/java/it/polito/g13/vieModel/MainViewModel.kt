@@ -1,4 +1,4 @@
-package it.polito.g13.ui.main
+package it.polito.g13.vieModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
