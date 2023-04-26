@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.R
+import it.polito.g13.vieModel.MainViewModel
+
 @AndroidEntryPoint
 class ReservationFragment : Fragment() {
 

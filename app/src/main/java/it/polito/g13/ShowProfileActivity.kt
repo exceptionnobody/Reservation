@@ -5,9 +5,7 @@ package it.polito.g13
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Matrix
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -25,11 +23,10 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import it.polito.g13.businesslogic.BusinessClass
 import it.polito.g13.entities.Reservation
-import it.polito.g13.ui.main.MainViewModel
+import it.polito.g13.vieModel.MainViewModel
 import org.json.JSONObject
-import java.text.SimpleDateFormat
 import java.util.*
-import javax.inject.Inject
+import java.util.Date
 
 
 @AndroidEntryPoint
@@ -43,6 +40,8 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
     /* TEST VIEWMODEL
     val vm by viewModels<MainViewModel>()
      */
+
+    private val mainViewModel: MainViewModel by viewModels()
 
 
     //initialize toolbar variables
@@ -113,31 +112,16 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         this.user_description=findViewById(R.id.user_description)
         this.user_city =findViewById(R.id.user_city)
 
-        /*TEST VIEW MODEL
-
-        vm.reservations.observe(this) {
-            user_name.setText(it.toString())
+        /* Activity/Fragment observes viewModel */
+        mainViewModel.reservations.observe(this){
+            if(it != null) {
+                user_name.setText(it.toString())
+            }
         }
 
-        if(!vm.reservationIsPresent(16)) {
-            vm.insertReservation(Reservation(16, Date(), "testing"))
-            vm.getAllReservations()
-        }
-        else {
-            vm.updateReservation(Reservation(16, Date(), "upd_testing"))
-            vm.getAllReservations()
-        }
-
-        */
-
-        /* TEST REPOSITORY
-
-        val l = repository.getAllReservations()
-
-        l.observe(this){
-            user_name.setText(it.toString())
-        }
-
+        /* if Activity change the data */
+        mainViewModel.changeReservation(2, Date(), "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+        /*
        if (repository.isAReservationPresent(2))
            repository.inserReservation(Reservation(5, Date(), "altro sport"))
 
@@ -151,8 +135,8 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             val l = SimpleDateFormat("dd-MM-yyyy").parse("27-01-1999")
             repository.changeReservation(Reservation(7, l, "modifica_strana"))
         }
+*/
 
-         */
 
         loadImageFromStorage()
         checkSharedPreference()

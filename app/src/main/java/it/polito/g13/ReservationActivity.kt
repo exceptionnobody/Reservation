@@ -20,6 +20,7 @@ import com.stacktips.view.DayDecorator
 import com.stacktips.view.DayView
 import com.stacktips.view.utils.CalendarUtils
 import dagger.hilt.android.AndroidEntryPoint
+
 import it.polito.g13.ui.main.ReservationFragment
 import java.util.*
 
