@@ -134,6 +134,13 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             reservationButton.isClickable = false
             reservationButton.setBackgroundColor(Color.GRAY)
         }
+
+        val showReservationDetail = findViewById<RelativeLayout>(R.id.reservation_box)
+
+        showReservationDetail?.setOnClickListener {
+            val intent = Intent(this, ShowReservationDetailActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     //handle toolbar items
