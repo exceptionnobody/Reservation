@@ -21,8 +21,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
-import it.polito.g13.businesslogic.BusinessClass
-import it.polito.g13.entities.Reservation
 import it.polito.g13.vieModel.MainViewModel
 import org.json.JSONObject
 import java.util.*
@@ -308,6 +306,7 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
 
     }
 
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getDataFromSharedPref() {
         val x:String ?= sharedPreference.getString("user_image",null)
@@ -321,7 +320,7 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         else{
             user_image.setImageResource(R.drawable.user_image)
         }
-        user_name.text = sharedPreference.getString("user_name",getString(R.string.user_name))//?.text=sharedPreference.getString("user_name",R.string.user_name.toString())!!//view?.findViewById(R.id.)
+     //   user_name.text = sharedPreference.getString("user_name",getString(R.string.user_name))//?.text=sharedPreference.getString("user_name",R.string.user_name.toString())!!//view?.findViewById(R.id.)
         user_nickname.text= sharedPreference.getString("user_nickname",getString(R.string.user_nickname))!!//view?.findViewById(R.id.)
         user_age.text = sharedPreference.getString("user_age",getString(R.string.user_age))//view?.findViewById(R.id.)
         user_gender.text= sharedPreference.getString("user_gender",getString(R.string.user_gender))!!//view?.findViewById(R.id.)
