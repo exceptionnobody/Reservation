@@ -14,9 +14,6 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor (private val businessLogic: BusinessClass): ViewModel() {
 
-
-    private val _reservations = MutableLiveData<List<Reservation>>()
-
     val reservations: LiveData<List<Reservation>> = businessLogic.getAllReservations()
 
     fun changeReservation(id: Int, date: Date, sport: String) {
