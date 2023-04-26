@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.*
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +25,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import it.polito.g13.businesslogic.BusinessClass
 import it.polito.g13.entities.Reservation
+import it.polito.g13.ui.main.MainViewModel
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
@@ -32,8 +34,15 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    /* TEST REPOSITORY
     @Inject
     lateinit var  repository: BusinessClass
+     */
+
+    /* TEST VIEWMODEL
+    val vm by viewModels<MainViewModel>()
+     */
 
 
     //initialize toolbar variables
@@ -104,7 +113,24 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         this.user_description=findViewById(R.id.user_description)
         this.user_city =findViewById(R.id.user_city)
 
-        /* TEST DATABASE
+        /*TEST VIEW MODEL
+
+        vm.reservations.observe(this) {
+            user_name.setText(it.toString())
+        }
+
+        if(!vm.reservationIsPresent(16)) {
+            vm.insertReservation(Reservation(16, Date(), "testing"))
+            vm.getAllReservations()
+        }
+        else {
+            vm.updateReservation(Reservation(16, Date(), "upd_testing"))
+            vm.getAllReservations()
+        }
+
+        */
+
+        /* TEST REPOSITORY
 
         val l = repository.getAllReservations()
 
