@@ -104,6 +104,8 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         this.user_description=findViewById(R.id.user_description)
         this.user_city =findViewById(R.id.user_city)
 
+        /* TEST DATABASE
+
         val l = repository.getAllReservations()
 
         l.observe(this){
@@ -123,6 +125,8 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             val l = SimpleDateFormat("dd-MM-yyyy").parse("27-01-1999")
             repository.changeReservation(Reservation(7, l, "modifica_strana"))
         }
+
+         */
 
         loadImageFromStorage()
         checkSharedPreference()
