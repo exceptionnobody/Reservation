@@ -21,7 +21,7 @@ interface ReservationDao {
     fun getSingleReservation(id: Long) : Reservation
 
     @Query("SELECT * FROM $RESERVATION_TABLE where id == :id")
-    fun getASingleReservation(id: Long) : Reservation
+    fun getASingleReservation(id: Int) : Reservation
 
     @Query("SELECT * FROM $RESERVATION_TABLE")
     fun gettAllReservations() : LiveData<List<Reservation>>

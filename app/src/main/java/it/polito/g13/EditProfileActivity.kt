@@ -15,18 +15,18 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.*
 import android.widget.*
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.exifinterface.media.ExifInterface
 import java.io.ByteArrayOutputStream
 import dagger.hilt.android.AndroidEntryPoint
-import it.polito.g13.businesslogic.BusinessClass
+import it.polito.g13.vieModel.MainViewModel
 import org.json.JSONObject
 import java.io.FileDescriptor
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
-import javax.inject.Inject
 
 val cities = listOf(
     "Agrigento", "Alessandria", "Ancona", "Aosta", "Arezzo", "Ascoli Piceno", "Asti", "Avellino", "Bari", "Barletta-Andria-Trani", "Belluno", "Benevento",
@@ -49,8 +49,8 @@ const val filename = "myPhoto"
 @AndroidEntryPoint
 class EditProfileActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var bl: BusinessClass
+    private val mainViewModel: MainViewModel by viewModels()
+
 
     lateinit var sharedPreference:SharedPreferences
     //selected languages saved after device rotation
@@ -114,7 +114,7 @@ class EditProfileActivity : AppCompatActivity() {
         val cancelButton =findViewById<Button>(R.id.cancel_button)
         cancelButton.setOnClickListener {
             val ll = SimpleDateFormat("dd-MM-yyyy").parse("27-01-1999")
-            bl.updateDatePosRes(77, ll)
+            mainViewModel.updateReservation(3, ll)
             this.finish()
         }
 

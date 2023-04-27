@@ -62,16 +62,21 @@ class BusinessClass
         return reservationDao.isPresentAReservation(id)
     }
 
-    private fun getASingleReservation(id:Long) : Reservation {
+    private fun getASingleReservation(id:Int) : Reservation {
        return reservationDao.getASingleReservation(id)
     }
 
-     fun changeReservation( reservation: Reservation) {
-         updateReservation(reservation)
+     fun changeReservation( idReservation: Int, newData: Date) {
+         updateReservation(idReservation, newData)
     }
 
-    private fun updateReservation( reservation: Reservation) {
-        return reservationDao.updateReservation( reservation)
+    private fun updateReservation(idReservation: Int, newData: Date) {
+        if(reservationDao.isPresentAReservation(idReservation)){
+            val old_res = reservationDao.getASingleReservation(idReservation)
+            old_res.data = newData
+             reservationDao.updateReservation(old_res)
+
+        }
     }
 
 

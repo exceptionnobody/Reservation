@@ -24,7 +24,7 @@ data class Reservation(
     val sport: String = "",
 
     @ColumnInfo(name = "date")
-    val data: Date? = null,
+    var data: Date? = null,
 
     @ColumnInfo(name = "note")
     val note: String = "",
