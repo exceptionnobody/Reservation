@@ -11,9 +11,25 @@ data class Reservation(
     @PrimaryKey(autoGenerate = true)
     val id: Int=0,
 
+    @ColumnInfo(name = "idslot")
+    val idsl: Int = 0,
+
+    @ColumnInfo(name = "iduser")
+    val iduser: Int = 0,
+
+    @ColumnInfo(name = "struttura")
+    val strut: String = "",
+
+    @ColumnInfo(name = "sport")
+    val sport: String = "",
+
     @ColumnInfo(name = "date")
     val data: Date? = null,
 
-    @ColumnInfo(name = "sport")
-val sport: String = "",
-)
+    @ColumnInfo(name = "note")
+    val note: String = "",
+
+    @ColumnInfo(name = "flag")
+    val flag:Boolean=false
+    )
+

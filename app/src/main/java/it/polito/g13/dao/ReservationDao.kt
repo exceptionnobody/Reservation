@@ -13,7 +13,7 @@ import java.util.Date
 @Dao
 interface ReservationDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.ABORT)
     fun inserReservation(noteEntity: Reservation)
 
     @Query("SELECT * FROM $RESERVATION_TABLE where id == :id")
@@ -21,16 +21,18 @@ interface ReservationDao {
 
     @Query("SELECT * FROM $RESERVATION_TABLE where id == :id")
     fun getASingleReservation(id: Long) : Reservation
+
     @Query("SELECT * FROM $RESERVATION_TABLE")
     fun gettAllReservations() : LiveData<List<Reservation>>
 
     @Query("SELECT * FROM $RESERVATION_TABLE WHERE date = :targetDate")
     fun findReservationsOnDate(targetDate: Date): List<Reservation>
 
-@Query("SELECT 1 FROM $RESERVATION_TABLE WHERE id == :id")
-fun isPresentAReservation(id: Long) : Int
+    @Query("SELECT count(1) FROM $RESERVATION_TABLE WHERE id == :id")
+    fun isPresentAReservation(id: Int) : Boolean
 
     @Update
     fun updateReservation(reservation: Reservation)
+
 
 }
