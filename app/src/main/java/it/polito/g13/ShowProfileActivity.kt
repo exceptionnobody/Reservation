@@ -77,19 +77,20 @@ class ShowProfileActivity : AppCompatActivity() {
             user_name.setText(it.toString())
         }
 
-       if (repository.isAReservationPresent(2))
-           repository.inserReservation(Reservation(5, Date(), "altro sport"))
+       if (!repository.isAReservationPresent(1))
+           repository.inserReservation(Reservation(1, 1, 1, "Racconigi", "calcio",Date(),"Need a ball",true))
 
-       if (repository.isAReservationPresent(7)){
-           repository.inserReservation(Reservation(7, Date(), "terzo_sport" ))
+       if (!repository.isAReservationPresent(2)){
+           repository.inserReservation(Reservation(2, 3, 1, "Vinzaglio", "baseball",Date(),"Need a ball",true))
        }
 
-        if (!repository.isAReservationPresent(7)){
-            repository.inserReservation(Reservation(7, Date(), "quarto_sport" ))
-        }else {
-            val l = SimpleDateFormat("dd-MM-yyyy").parse("27-01-1999")
-            repository.changeReservation(Reservation(7, l, "modifica_strana"))
+        if (!repository.isAReservationPresent(3)){
+            repository.inserReservation(Reservation(3, 5, 1,"Lingotto","Basket",Date() ,"non so giocare",true))
         }
+        //else {
+            //val ll = SimpleDateFormat("dd-MM-yyyy").parse("27-01-1999")
+            //repository.changeReservation(Reservation(4, 5, 1,"Lingotto","Basket",ll,"non so giocare",true))
+        //}
 
         loadImageFromStorage()
         checkSharedPreference()

@@ -9,6 +9,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 
 import it.polito.g13.db.ReservationDatabase
+import it.polito.g13.entities.PosRes
 import it.polito.g13.entities.Reservation
 import it.polito.g13.utils.Constants.RESERVATION_DATABASE
 import javax.inject.Singleton
@@ -31,6 +32,9 @@ object DbModule {
 
     @Provides
     fun provideEntity() = Reservation()
+
+    @Provides
+    fun provideEntity1()=PosRes()
 
 
 }
