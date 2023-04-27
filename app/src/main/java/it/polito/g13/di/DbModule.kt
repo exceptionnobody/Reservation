@@ -12,6 +12,7 @@ import it.polito.g13.db.ReservationDatabase
 import it.polito.g13.entities.PosRes
 import it.polito.g13.entities.Reservation
 import it.polito.g13.utils.Constants.RESERVATION_DATABASE
+import java.util.Date
 import javax.inject.Singleton
 
 @Module
@@ -28,13 +29,17 @@ object DbModule {
 
     @Provides
     @Singleton
-    fun provideDao(db: ReservationDatabase) = db.reservationDao()
+    fun provideReservationDao(db: ReservationDatabase) = db.reservationDao()
 
     @Provides
-    fun provideEntity() = Reservation()
+    @Singleton
+    fun providePosResDao(db: ReservationDatabase) = db.posresDao()
 
     @Provides
-    fun provideEntity1()=PosRes()
+    fun provideReservationEntity() = Reservation()
+
+    @Provides
+    fun providePosResEntity() = PosRes(data = Date())
 
 
 }

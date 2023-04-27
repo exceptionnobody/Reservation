@@ -19,7 +19,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.businesslogic.BusinessClass
 import it.polito.g13.entities.Reservation
 import org.json.JSONObject
-import java.text.SimpleDateFormat
 
 import java.util.*
 import javax.inject.Inject
@@ -77,20 +76,30 @@ class ShowProfileActivity : AppCompatActivity() {
             user_name.setText(it.toString())
         }
 
-       if (!repository.isAReservationPresent(1))
            repository.inserReservation(Reservation(1, 1, 1, "Racconigi", "calcio",Date(),"Need a ball",true))
 
-       if (!repository.isAReservationPresent(2)){
            repository.inserReservation(Reservation(2, 3, 1, "Vinzaglio", "baseball",Date(),"Need a ball",true))
-       }
 
-        if (!repository.isAReservationPresent(3)){
             repository.inserReservation(Reservation(3, 5, 1,"Lingotto","Basket",Date() ,"non so giocare",true))
-        }
+
         //else {
             //val ll = SimpleDateFormat("dd-MM-yyyy").parse("27-01-1999")
             //repository.changeReservation(Reservation(4, 5, 1,"Lingotto","Basket",ll,"non so giocare",true))
         //}
+
+        repository.getAllPosRes().observe(this){
+            if(it != null)
+                user_nickname.setText(it.toString())
+            else
+                user_nickname.setText("")
+        }
+        /* insertion should go well */
+        repository.insertNewPos(1, "nome_1")
+        /* there is already a posres with this id */
+        repository.insertNewPos(1, "Nome____NEW")
+        /* allowed */
+        repository.insertNewPos(77, "Nome____NEW___77")
+
 
         loadImageFromStorage()
         checkSharedPreference()
@@ -111,8 +120,8 @@ class ShowProfileActivity : AppCompatActivity() {
             strName = jsonObject.getString(getString(R.string.save_description))
             user_description.setText(strName)
 
-            strName = jsonObject.getString(getString(R.string.save_nickname))
-            user_nickname.setText(strName)
+           // strName = jsonObject.getString(getString(R.string.save_nickname))
+           // user_nickname.setText(strName)
 
             strName = jsonObject.getString(getString(R.string.save_gender))
             user_gender.setText(strName)
@@ -259,8 +268,8 @@ class ShowProfileActivity : AppCompatActivity() {
         else{
             user_image.setImageResource(R.drawable.user_image)
         }
-        user_name.text = sharedPreference.getString("user_name",getString(R.string.user_name))//?.text=sharedPreference.getString("user_name",R.string.user_name.toString())!!//view?.findViewById(R.id.)
-        user_nickname.text= sharedPreference.getString("user_nickname",getString(R.string.user_nickname))!!//view?.findViewById(R.id.)
+       // user_name.text = sharedPreference.getString("user_name",getString(R.string.user_name))//?.text=sharedPreference.getString("user_name",R.string.user_name.toString())!!//view?.findViewById(R.id.)
+       // user_nickname.text= sharedPreference.getString("user_nickname",getString(R.string.user_nickname))!!//view?.findViewById(R.id.)
         user_age.text = sharedPreference.getString("user_age",getString(R.string.user_age))//view?.findViewById(R.id.)
         user_gender.text= sharedPreference.getString("user_gender",getString(R.string.user_gender))!!//view?.findViewById(R.id.)
         user_mail.text= sharedPreference.getString("user_mail",getString(R.string.user_email))!!//view?.findViewById(R.id.)
