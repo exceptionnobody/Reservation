@@ -5,9 +5,12 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -20,12 +23,17 @@ import com.stacktips.view.DayDecorator
 import com.stacktips.view.DayView
 import com.stacktips.view.utils.CalendarUtils
 import dagger.hilt.android.AndroidEntryPoint
+import it.polito.g13.entities.PosRes
 import it.polito.g13.ui.main.ReservationFragment
+import it.polito.g13.viewModel.PosResViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 @AndroidEntryPoint
 class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    private val posResViewModel by viewModels<PosResViewModel>()
+
     //initialize toolbar variables
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
     private lateinit var drawerLayout: DrawerLayout
@@ -75,27 +83,37 @@ class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigat
                 .commitNow()
         }
 
+        //get selected sport
+        val selectedSport = intent.getStringExtra("selectedSport")
+
         calendarView.setCalendarListener(object : CalendarListener {
             @SuppressLint("SimpleDateFormat")
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onDateSelected(date: Date) {
+                //select LinearLayout to be inflated
+                val bookReservationContainer = findViewById<LinearLayout>(R.id.bookReservationContainer)
+
+                //clean the view removing previously showed reservations for another date
+                bookReservationContainer.removeAllViews()
+
                 val today = Calendar.getInstance().time
 
                 val sdf = SimpleDateFormat("yyyy-MM-dd")
                 val formattedDate = sdf.parse(sdf.format(date))
                 val formattedToday = sdf.parse(sdf.format(today))
 
-                //select LinearLayout to be inflated
-                val bookReservationContainer = findViewById<LinearLayout>(R.id.bookReservationContainer)
-
                 if(formattedDate >= formattedToday) {
-                    //get available reservations for this specific date
-                    val availableReservations = layoutInflater.inflate(R.layout.availability_box, bookReservationContainer, false)
+                    posResViewModel.getPosRes(selectedSport!!, formattedDate!!)
 
-                    //clean the view removing previously showed reservations for another date
-                    bookReservationContainer.removeAllViews()
-                    //show available reservations for this date
-                    bookReservationContainer.addView(availableReservations)
+                    posResViewModel.listPosRes.observe(this@BrowseAvailabilityActivity) {
+                        if (it != null) {
+                            for (posRes in it) {
+                                val res = layoutInflater.inflate(R.layout.availability_box, bookReservationContainer, false)
+                                res.findViewById<TextView>(R.id.book_reservation_title).setText(posRes.strut + ", " + posRes.sport)
+                                bookReservationContainer.addView(res)
+                            }
+                        }
+                    }
                 }
                 else {
                     //clean the view removing previously showed reservations for another date

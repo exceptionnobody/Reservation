@@ -8,6 +8,7 @@ import androidx.room.Query
 import androidx.room.Update
 import it.polito.g13.entities.PosRes
 import it.polito.g13.utils.Constants.POSRES
+import java.util.Date
 
 @Dao
 interface PosresDao {
@@ -29,4 +30,6 @@ interface PosresDao {
     @Query("SELECT * FROM $POSRES WHERE id == :id")
     fun getSinglePosRes(id: Int) : PosRes
 
+    @Query("SELECT * FROM $POSRES WHERE sport == :sport AND date == :date AND flag == 1")
+    fun getPosResSportDate(sport: String, date: Date) : List<PosRes>
 }

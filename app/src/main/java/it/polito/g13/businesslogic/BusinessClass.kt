@@ -79,7 +79,7 @@ class BusinessClass
         }
     }
 
-
-
-
+    fun getPosResSportDate(sport: String, date: Date) : List<PosRes> {
+        return posresDao.getPosResSportDate(sport, date)
+    }
 }
