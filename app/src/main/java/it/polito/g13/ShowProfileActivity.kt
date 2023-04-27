@@ -21,8 +21,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import it.polito.g13.entities.PosRes
 import it.polito.g13.entities.Reservation
-import it.polito.g13.vieModel.MainViewModel
+import it.polito.g13.viewModel.PosResViewModel
+import it.polito.g13.viewModel.ReservationsViewModel
 import org.json.JSONObject
 import java.util.*
 import java.util.Date
@@ -31,17 +33,11 @@ import java.util.Date
 @AndroidEntryPoint
 class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    /* TEST REPOSITORY
-    @Inject
-    lateinit var  repository: BusinessClass
-     */
+    // TEST VIEWMODEL RESERVATIONS
+    //private val resViewModel: ReservationsViewModel by viewModels()
 
-    /* TEST VIEWMODEL
-    val vm by viewModels<MainViewModel>()
-     */
-
-    private val mainViewModel: MainViewModel by viewModels()
-
+    // TEST VIEWMODEL POSRES
+    //private val posResViewModel by viewModels<PosResViewModel>()
 
     //initialize toolbar variables
     lateinit var toolbar: androidx.appcompat.widget.Toolbar
@@ -111,20 +107,43 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         this.user_description=findViewById(R.id.user_description)
         this.user_city =findViewById(R.id.user_city)
 
-        /* Activity/Fragment observes viewModel */
-        mainViewModel.reservations.observe(this){
+        // TEST VIEWMODEL RESERVATIONS
+        /* Activity/Fragment observes viewModel
+        resViewModel.reservations.observe(this){
             if(it != null) {
                 user_name.setText(it.toString())
             }
         }
 
-            mainViewModel.insertReservation(Reservation(3, 5, 1,"Lingotto","Basket",Date() ,"non so giocare",true))
-        mainViewModel.reservations.observe(this){
+        resViewModel.insertReservation(Reservation(3, 5, 1,"Lingotto","Basket",Date() ,"non so giocare",true))
+        resViewModel.reservations.observe(this){
             if(it != null)
                 user_nickname.setText(it.toString())
             else
                 user_nickname.setText("")
         }
+
+        resViewModel.singleReservation.observe(this) {
+            if(it != null) {
+                user_description.setText(it.toString())
+            }
+        }
+
+        resViewModel.getSingleReservation(3)
+
+         */
+
+        // TEST VIEWMODEL POSRES
+        /*
+        posResViewModel.posRes.observe(this) {
+            if (it != null) {
+                user_name.setText(it.toString())
+            }
+        }
+
+        posResViewModel.insertPosRes(PosRes(1, "Lingotto", 1, "Basket", Date(), true))
+
+         */
 
         loadImageFromStorage()
         checkSharedPreference()

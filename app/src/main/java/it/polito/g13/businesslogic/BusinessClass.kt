@@ -19,12 +19,12 @@ class BusinessClass
 
     /* For the viewModel */
     fun getAllReservations() : LiveData<List<Reservation>> {
-        return reservationDao.gettAllReservations()
+        return reservationDao.getAllReservations()
     }
 
-    fun inserReservation(reservation: Reservation) {
+    fun insertReservation(reservation: Reservation) {
         if(!reservationDao.isPresentAReservation(reservation.id))
-            reservationDao.inserReservation(reservation)
+            reservationDao.insertReservation(reservation)
     }
 
 
@@ -40,9 +40,9 @@ class BusinessClass
         posresDao.updatePosRes(pos)
     }
 
-    fun insertNewPos(id: Int, name: String){
-        if(!posresDao.isPresent(id))
-            posresDao.insertPosRes(PosRes(id, name, 1,"calcio", Date(), true))
+    fun insertNewPos(posRes: PosRes){
+        if(!posresDao.isPresent(posRes.id))
+            posresDao.insertPosRes(posRes)
     }
 
     fun updateDatePosRes(id: Int, newdate: Date ){
@@ -62,7 +62,7 @@ class BusinessClass
         return reservationDao.isPresentAReservation(id)
     }
 
-    private fun getASingleReservation(id:Int) : Reservation {
+    fun getASingleReservation(id:Int) : Reservation {
        return reservationDao.getASingleReservation(id)
     }
 

@@ -21,7 +21,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.exifinterface.media.ExifInterface
 import java.io.ByteArrayOutputStream
 import dagger.hilt.android.AndroidEntryPoint
-import it.polito.g13.vieModel.MainViewModel
+import it.polito.g13.entities.PosRes
+import it.polito.g13.viewModel.PosResViewModel
+import it.polito.g13.viewModel.ReservationsViewModel
 import org.json.JSONObject
 import java.io.FileDescriptor
 import java.io.IOException
@@ -49,8 +51,11 @@ const val filename = "myPhoto"
 @AndroidEntryPoint
 class EditProfileActivity : AppCompatActivity() {
 
-    private val mainViewModel: MainViewModel by viewModels()
+    // TEST VIEWMODEL RESERVATIONS
+    //private val resViewModel: ReservationsViewModel by viewModels()
 
+    //TEST VIEWMODEL POSRES
+    //private val posResViewModel by viewModels<PosResViewModel>()
 
     lateinit var sharedPreference:SharedPreferences
     //selected languages saved after device rotation
@@ -111,12 +116,31 @@ class EditProfileActivity : AppCompatActivity() {
             this.finish()
         }
 
+        // TEST VIEWMODEL RESERVATIONS
+        /*
+
         val cancelButton =findViewById<Button>(R.id.cancel_button)
         cancelButton.setOnClickListener {
             val ll = SimpleDateFormat("dd-MM-yyyy").parse("27-01-1999")
-            mainViewModel.updateReservation(3, ll)
+            resViewModel.updateReservation(3, ll)
             this.finish()
         }
+
+         */
+
+        // TEST VIEWMODEL POSRES
+        /*
+
+        val cancelButton = findViewById<Button>(R.id.cancel_button)
+        cancelButton.setOnClickListener {
+            posResViewModel.updatePosRes(PosRes(1, "Lingotto", 1, "Basket", Date(), false))
+            this.finish()
+        }
+
+         */
+
+        val cancelButton =findViewById<Button>(R.id.cancel_button)
+        cancelButton.setOnClickListener { this.finish() }
 
         //change profile picture
 

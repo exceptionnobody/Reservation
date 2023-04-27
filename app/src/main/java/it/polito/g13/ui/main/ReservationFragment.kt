@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.R
-import it.polito.g13.vieModel.MainViewModel
+import it.polito.g13.viewModel.ReservationsViewModel
 
 @AndroidEntryPoint
 class ReservationFragment : Fragment() {
@@ -17,11 +17,11 @@ class ReservationFragment : Fragment() {
         fun newInstance() = ReservationFragment()
     }
 
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: ReservationsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(ReservationsViewModel::class.java)
         // TODO: Use the ViewModel
     }
 

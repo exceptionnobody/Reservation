@@ -1,6 +1,7 @@
-package it.polito.g13.vieModel
+package it.polito.g13.viewModel
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import it.polito.g13.businesslogic.BusinessClass
@@ -11,12 +12,15 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class MainViewModel @Inject constructor (private val businessLogic: BusinessClass): ViewModel() {
+class ReservationsViewModel @Inject constructor (private val businessLogic: BusinessClass): ViewModel() {
 
     val reservations: LiveData<List<Reservation>> = businessLogic.getAllReservations()
 
+    private val _singleReservation = MutableLiveData<Reservation>()
+    val singleReservation: LiveData<Reservation> = _singleReservation
+
     fun insertReservation(reservation: Reservation) {
-        businessLogic.inserReservation(reservation)
+        businessLogic.insertReservation(reservation)
     }
 
     fun updateReservation(idReservation: Int, newData: Date) {
@@ -27,4 +31,7 @@ class MainViewModel @Inject constructor (private val businessLogic: BusinessClas
         businessLogic.deleteReservation(reservation)
     }
 
+    fun getSingleReservation(idReservation: Int) {
+        _singleReservation.postValue(businessLogic.getASingleReservation(idReservation))
+    }
 }

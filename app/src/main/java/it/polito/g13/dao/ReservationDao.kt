@@ -15,7 +15,7 @@ import java.util.Date
 interface ReservationDao {
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    fun inserReservation(noteEntity: Reservation)
+    fun insertReservation(noteEntity: Reservation)
 
     @Query("SELECT * FROM $RESERVATION_TABLE where id == :id")
     fun getSingleReservation(id: Long) : Reservation
@@ -24,7 +24,7 @@ interface ReservationDao {
     fun getASingleReservation(id: Int) : Reservation
 
     @Query("SELECT * FROM $RESERVATION_TABLE")
-    fun gettAllReservations() : LiveData<List<Reservation>>
+    fun getAllReservations() : LiveData<List<Reservation>>
 
     @Query("SELECT * FROM $RESERVATION_TABLE WHERE date = :targetDate")
     fun findReservationsOnDate(targetDate: Date): List<Reservation>
