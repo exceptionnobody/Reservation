@@ -1,6 +1,5 @@
 package it.polito.g13.businesslogic
 
-import androidx.lifecycle.liveData
 import androidx.lifecycle.LiveData
 import it.polito.g13.dao.PosresDao
 import it.polito.g13.dao.ReservationDao
@@ -29,7 +28,7 @@ class BusinessClass
     }
 
 
-    fun getSingleReservation(id:Long) : LiveData<Reservation> {
+    fun getSingleReservation(id:Long) : Reservation {
        return reservationDao.getSingleReservation(id)
     }
 
@@ -54,6 +53,11 @@ class BusinessClass
         }
     }
 
+    fun deleteReservation(reservation: Reservation) {
+        if(reservationDao.isPresentAReservation(reservation.id))
+            reservationDao.removeReservation(reservation)
+    }
+
     private fun isAReservationPresent(id:Int) : Boolean {
         return reservationDao.isPresentAReservation(id)
     }
@@ -62,9 +66,15 @@ class BusinessClass
        return reservationDao.getASingleReservation(id)
     }
 
-     private fun changeReservation( reservation: Reservation) {
+     fun changeReservation( reservation: Reservation) {
+         updateReservation(reservation)
+    }
+
+    private fun updateReservation( reservation: Reservation) {
         return reservationDao.updateReservation( reservation)
     }
+
+
 
 
 }

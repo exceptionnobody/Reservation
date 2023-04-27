@@ -21,6 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import it.polito.g13.entities.Reservation
 import it.polito.g13.vieModel.MainViewModel
 import org.json.JSONObject
 import java.util.*
@@ -117,35 +118,13 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             }
         }
 
-           repository.inserReservation(Reservation(1, 1, 1, "Racconigi", "calcio",Date(),"Need a ball",true))
-        /* if Activity change the data */
-        mainViewModel.changeReservation(2, Date(), "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-        /*
-       if (repository.isAReservationPresent(2))
-           repository.inserReservation(Reservation(5, Date(), "altro sport"))
-
-           repository.inserReservation(Reservation(2, 3, 1, "Vinzaglio", "baseball",Date(),"Need a ball",true))
-
-            repository.inserReservation(Reservation(3, 5, 1,"Lingotto","Basket",Date() ,"non so giocare",true))
-
-        //else {
-            //val ll = SimpleDateFormat("dd-MM-yyyy").parse("27-01-1999")
-            //repository.changeReservation(Reservation(4, 5, 1,"Lingotto","Basket",ll,"non so giocare",true))
-        //}
-
-        repository.getAllPosRes().observe(this){
+            mainViewModel.insertReservation(Reservation(3, 5, 1,"Lingotto","Basket",Date() ,"non so giocare",true))
+        mainViewModel.reservations.observe(this){
             if(it != null)
                 user_nickname.setText(it.toString())
             else
                 user_nickname.setText("")
         }
-        /* insertion should go well */
-        repository.insertNewPos(1, "nome_1")
-        /* there is already a posres with this id */
-        repository.insertNewPos(1, "Nome____NEW")
-        /* allowed */
-        repository.insertNewPos(77, "Nome____NEW___77")
-
 
         loadImageFromStorage()
         checkSharedPreference()
