@@ -48,7 +48,8 @@
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:text="@string/confirm_button_popup_reservation"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/close_popup_delete"
