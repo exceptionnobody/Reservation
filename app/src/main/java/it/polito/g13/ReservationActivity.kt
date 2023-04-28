@@ -49,6 +49,8 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         posResViewModel.insertPosRes(PosRes(1, "Centro sportivo Robilant", 1, "Football", SimpleDateFormat("yyyy-MM-dd").parse("2023-04-30")!!, true))
         posResViewModel.insertPosRes(PosRes(2, "Sporting Dora", 1, "Football", SimpleDateFormat("yyyy-MM-dd").parse("2023-04-30")!!, true))
         posResViewModel.insertPosRes(PosRes(3, "Centro sportivo Carmagnola", 1, "Tennis", SimpleDateFormat("yyyy-MM-dd").parse("2023-04-30")!!, true))
+        posResViewModel.insertPosRes(PosRes(4, "Sporting Dora", 1, "Basket", SimpleDateFormat("yyyy-MM-dd").parse("2023-05-05")!!, true))
+        posResViewModel.insertPosRes(PosRes(5, "Centro sportivo Carmagnola", 1, "Volleyball", SimpleDateFormat("yyyy-MM-dd").parse("2023-05-06")!!, true))
 
 
         //toolbar instantiation

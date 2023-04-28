@@ -6,8 +6,10 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.viewModels
@@ -16,6 +18,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import com.stacktips.view.CalendarListener
 import com.stacktips.view.CustomCalendarView
@@ -26,12 +30,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.entities.PosRes
 import it.polito.g13.ui.main.ReservationFragment
 import it.polito.g13.viewModel.PosResViewModel
+import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.util.*
 
 @AndroidEntryPoint
 class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
+    //instantiate viewModel
     private val posResViewModel by viewModels<PosResViewModel>()
 
     //initialize toolbar variables
@@ -66,9 +72,12 @@ class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigat
         val menuItemReservations = navView.menu.findItem(R.id.nav_reservations)
         menuItemReservations.setActionView(R.layout.menu_item_reservations)
 
+        //get selected sport
+        val selectedSport = intent.getStringExtra("selectedSport")
+
         //set text navbar
         val navbarText = findViewById<TextView>(R.id.navbar_text)
-        navbarText.text = "Book a reservation"
+        navbarText.text = "Book a $selectedSport court"
 
         calendarView = findViewById(R.id.book_reservation_calendar_view)
 
@@ -83,41 +92,23 @@ class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigat
                 .commitNow()
         }
 
-        //get selected sport
-        val selectedSport = intent.getStringExtra("selectedSport")
-
         calendarView.setCalendarListener(object : CalendarListener {
             @SuppressLint("SimpleDateFormat")
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onDateSelected(date: Date) {
-                //select LinearLayout to be inflated
-                val bookReservationContainer = findViewById<LinearLayout>(R.id.bookReservationContainer)
-
-                //clean the view removing previously showed reservations for another date
-                bookReservationContainer.removeAllViews()
-
-                val today = Calendar.getInstance().time
 
                 val sdf = SimpleDateFormat("yyyy-MM-dd")
                 val formattedDate = sdf.parse(sdf.format(date))
-                val formattedToday = sdf.parse(sdf.format(today))
 
-                if(formattedDate >= formattedToday) {
-                    posResViewModel.getPosRes(selectedSport!!, formattedDate!!)
-
-                    posResViewModel.listPosRes.observe(this@BrowseAvailabilityActivity) {
-                        if (it != null) {
-                            for (posRes in it) {
-                                val res = layoutInflater.inflate(R.layout.availability_box, bookReservationContainer, false)
-                                res.findViewById<TextView>(R.id.book_reservation_title).setText(posRes.strut + ", " + posRes.sport)
-                                bookReservationContainer.addView(res)
-                            }
-                        }
+                //retrieve available possible reservations
+                posResViewModel.getPosRes(selectedSport!!, formattedDate!!)
+                //show them in the recycler view
+                posResViewModel.listPosRes.observe(this@BrowseAvailabilityActivity) {
+                    if (it != null) {
+                        val recyclerView = findViewById<RecyclerView>(R.id.bookReservationContainer)
+                        recyclerView.adapter = PosResAdapter(it)
+                        recyclerView.layoutManager = LinearLayoutManager(this@BrowseAvailabilityActivity)
                     }
-                }
-                else {
-                    //clean the view removing previously showed reservations for another date
-                    bookReservationContainer.removeAllViews()
                 }
             }
 
@@ -155,5 +146,29 @@ class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigat
                 dayView.setTextColor(Color.GRAY)
             }
         }
+    }
+}
+
+//define recycler view for possible reservations
+class PosResViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+    val tv = v.findViewById<TextView>(R.id.book_reservation_title)
+}
+
+class PosResAdapter(val listPosRes: List<PosRes>): RecyclerView.Adapter<PosResViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PosResViewHolder {
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.availability_box, parent, false)
+
+        return PosResViewHolder(v)
+    }
+
+    override fun getItemCount(): Int {
+        return listPosRes.size
+    }
+
+    override fun onBindViewHolder(holder: PosResViewHolder, position: Int) {
+        val posRes = listPosRes[position]
+        val txt = posRes.strut + ", " + posRes.sport
+
+        holder.tv.text = txt
     }
 }

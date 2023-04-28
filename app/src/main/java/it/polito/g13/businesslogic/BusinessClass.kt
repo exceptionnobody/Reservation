@@ -1,11 +1,13 @@
 package it.polito.g13.businesslogic
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import it.polito.g13.dao.PosresDao
 import it.polito.g13.dao.ReservationDao
 import it.polito.g13.entities.PosRes
 import it.polito.g13.entities.Reservation
-import java.util.Date
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
