@@ -30,6 +30,6 @@ interface PosresDao {
     @Query("SELECT * FROM $POSRES WHERE id == :id")
     fun getSinglePosRes(id: Int) : PosRes
 
-    @Query("SELECT * FROM $POSRES WHERE sport == :sport AND date == :date AND flag == 1")
-    fun getPosResSportDate(sport: String, date: Date) : List<PosRes>
+    @Query("SELECT * FROM $POSRES WHERE sport == :sport AND date LIKE :date AND flag == 1")
+    fun getPosResSportDate(sport: String, date: String) : List<PosRes>
 }

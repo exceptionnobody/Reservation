@@ -82,6 +82,7 @@ class BusinessClass
     }
 
     fun getPosResSportDate(sport: String, date: Date) : List<PosRes> {
-        return posresDao.getPosResSportDate(sport, date)
+        val formattedDate = SimpleDateFormat("yyyy-mm-dd").format(date)
+        return posresDao.getPosResSportDate(sport, formattedDate + "%")
     }
 }

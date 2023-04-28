@@ -167,7 +167,12 @@ class PosResAdapter(val listPosRes: List<PosRes>): RecyclerView.Adapter<PosResVi
 
     override fun onBindViewHolder(holder: PosResViewHolder, position: Int) {
         val posRes = listPosRes[position]
-        val txt = posRes.strut + ", " + posRes.sport
+
+        val formattedDate = SimpleDateFormat("yyyy-mm-dd HH:mm").format(posRes.data).split(" ")
+        val hour1 = formattedDate[1]
+        val hour2 = (hour1.split(":")[0].toInt() + 1).toString() + ":" + hour1.split(":")[1]
+
+        val txt = posRes.strut + ", " + hour1 + "-" + hour2
 
         holder.tv.text = txt
     }
