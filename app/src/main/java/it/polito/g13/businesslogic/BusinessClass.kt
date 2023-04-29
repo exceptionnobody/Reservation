@@ -90,4 +90,13 @@ class BusinessClass
         val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.UK).format(date)
         return posresDao.getPosResSportDate(sport, formattedDate)
     }
+
+    fun getPosResSportById(posResId: Int) : PosRes {
+        return posresDao.getSinglePosRes(posResId)
+    }
+
+    fun getPosResSportDateAndStruct(sport: String, date: Date, struct: String) : List<PosRes> {
+        val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.UK).format(date)
+        return posresDao.getPosResSportDateAndStruct(sport, formattedDate, struct)
+    }
 }

@@ -64,7 +64,7 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         posResViewModel.insertPosRes(PosRes(5, "Centro sportivo Carmagnola", 1, "Volleyball", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-05-06 19:00")!!, true))
 
         //creating some data for reservation table
-        reservationViewModel.insertReservation(Reservation(1, 19405, 1, "Centro sportivo Robilant", "Footbal", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-05-06 14:00")!!, "Need a ball", true ))
+        reservationViewModel.insertReservation(Reservation(1, 19405, 1, "Centro sportivo Robilant", "Football", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-05-06 14:00")!!, "Need a ball", true ))
         reservationViewModel.insertReservation(Reservation(2, 19406, 1, "Sporting Dora", "Volleyball", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-05-06 15:00")!!, "", true ))
 
         reservationViewModel.insertReservation(Reservation(3, 19407, 1, "Sporting Dora", "Volleyball", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-05-07 19:00")!!, "open field", true ))

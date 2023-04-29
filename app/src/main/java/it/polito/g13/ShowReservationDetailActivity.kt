@@ -27,6 +27,7 @@ class ShowReservationDetailActivity : AppCompatActivity(), NavigationView.OnNavi
     private lateinit var navView: NavigationView
 
     private val reservationViewModel by viewModels<ReservationsViewModel> ()
+    private var selectedReservationId: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +67,7 @@ class ShowReservationDetailActivity : AppCompatActivity(), NavigationView.OnNavi
         )
 
         //get selected reservation
-        val selectedReservationId = intent.getIntExtra("selectedReservationId", 0)
+        selectedReservationId = intent.getIntExtra("selectedReservationId", 0)
         reservationViewModel.getSingleReservation(selectedReservationId);
         reservationViewModel.singleReservation.observe(this@ShowReservationDetailActivity) {
             val codeText = findViewById<TextView>(R.id.content_reservation_number)
@@ -119,6 +120,7 @@ class ShowReservationDetailActivity : AppCompatActivity(), NavigationView.OnNavi
         val id=item.itemId
         if (id==R.id.action_edit) {
             val intent = Intent(this, EditReservationDetailActivity::class.java)
+            intent.putExtra("selectedReservationId", selectedReservationId)
             startActivity(intent)
             return true
         }

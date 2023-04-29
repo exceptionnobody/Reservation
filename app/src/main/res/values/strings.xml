@@ -62,6 +62,7 @@
 
     <string name="book_a_reservation">Book a reservation</string>
     <string name="no_reservation">No reservation for today</string>
+    <string name="no_availability">No availability founded</string>
 
     <string name="label_reservation_number">Reservation number</string>
     <string name="content_reservation_number">#00000</string>
@@ -79,4 +80,5 @@
     <string name="title_popup_delete_reservation">Do you want to delete the reservation?</string>
     <string name="confirm_button_popup_reservation">Delete reservation</string>
     <string name="cancel_button_popup_reservation">Cancel</string>
+    <string name="text_select_date_and_time">Select a date to view availability, then choose a slot</string>
 </resources>

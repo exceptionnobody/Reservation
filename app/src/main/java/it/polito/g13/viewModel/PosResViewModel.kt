@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import it.polito.g13.businesslogic.BusinessClass
 import it.polito.g13.entities.PosRes
+import it.polito.g13.entities.Reservation
 import java.util.*
 import javax.inject.Inject
 
@@ -17,6 +18,9 @@ class PosResViewModel @Inject constructor (private val businessLogic: BusinessCl
 
     private val _listPosRes = MutableLiveData<List<PosRes>>()
     val listPosRes: LiveData<List<PosRes>> = _listPosRes
+
+    private val _singlePosRes = MutableLiveData<PosRes>()
+    val singlePosRes: LiveData<PosRes> = _singlePosRes
 
     fun insertPosRes(posRes: PosRes) {
         businessLogic.insertNewPos(posRes)
@@ -32,5 +36,13 @@ class PosResViewModel @Inject constructor (private val businessLogic: BusinessCl
 
     fun getPosRes(sport: String, date: Date) {
         _listPosRes.postValue(businessLogic.getPosResSportDate(sport, date))
+    }
+
+    fun getPosResById(posResId: Int) {
+        _singlePosRes.postValue(businessLogic.getPosResSportById(posResId))
+    }
+
+    fun getPosResByStructure(sport: String, date: Date, struct: String) {
+        _listPosRes.postValue(businessLogic.getPosResSportDateAndStruct(sport, date, struct))
     }
 }

@@ -66,7 +66,7 @@
                 android:textColor="@color/primary_green"
                 android:textSize="@dimen/font_size_info_reservation_label" />
 
-            <Spinner
+            <!--<Spinner
                 android:id="@+id/content_sport_typology"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
@@ -80,7 +80,22 @@
                 android:paddingBottom="@dimen/input_padding_y"
                 android:spinnerMode="dropdown"
                 android:textColor="@color/black"
-                android:textSize="@dimen/font_size_info_reservation_content" />
+                android:textSize="@dimen/font_size_info_reservation_content" />-->
+
+            <TextView
+                android:id="@+id/content_sport_typology"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/crete_round"
+                android:text="@string/content_sport_typology"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_size_info_reservation_content"
+                android:layout_marginBottom="@dimen/margin_bottom_reservation_info"
+                android:layout_marginTop="4dp"
+                android:paddingStart="@dimen/input_padding_x"
+                android:paddingTop="@dimen/input_padding_y"
+                android:paddingEnd="@dimen/input_padding_x"
+                android:paddingBottom="@dimen/input_padding_y" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -93,7 +108,7 @@
                 android:textColor="@color/primary_green"
                 android:textSize="@dimen/font_size_info_reservation_label" />
 
-            <Spinner
+            <!--<Spinner
                 android:id="@+id/content_place"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
@@ -107,7 +122,22 @@
                 android:paddingBottom="@dimen/input_padding_y"
                 android:spinnerMode="dropdown"
                 android:textColor="@color/black"
-                android:textSize="@dimen/font_size_info_reservation_content" />
+                android:textSize="@dimen/font_size_info_reservation_content" />-->
+
+            <TextView
+                android:id="@+id/content_place"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/crete_round"
+                android:text="@string/content_place"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_size_info_reservation_content"
+                android:layout_marginBottom="@dimen/margin_bottom_reservation_info"
+                android:layout_marginTop="4dp"
+                android:paddingStart="@dimen/input_padding_x"
+                android:paddingTop="@dimen/input_padding_y"
+                android:paddingEnd="@dimen/input_padding_x"
+                android:paddingBottom="@dimen/input_padding_y" />
 
             <TextView
                 android:id="@+id/textView3"
@@ -120,17 +150,34 @@
                 android:textColor="@color/primary_green"
                 android:textSize="@dimen/font_size_info_reservation_label" />
 
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="@dimen/margin_bottom_reservation_info"
+                android:fontFamily="@font/crete_round"
+                android:minHeight="48dp"
+                android:paddingStart="@dimen/input_padding_x"
+                android:paddingTop="@dimen/input_padding_y"
+                android:paddingEnd="@dimen/input_padding_x"
+                android:paddingBottom="@dimen/input_padding_y"
+                android:text="@string/text_select_date_and_time"
+                android:textColor="@color/black"
+                android:textSize="16dp" />
+
             <com.stacktips.view.CustomCalendarView
                 android:id="@+id/content_date_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_bottom_reservation_info"
                 app:calendarTitleTextColor="@color/black"
                 app:currentDayOfMonthColor="@color/primary_green"
                 app:dayOfMonthTextColor="@color/black"
                 app:dayOfWeekTextColor="@color/black"
                 app:disabledDayBackgroundColor="@color/white"
-                app:disabledDayTextColor="@color/primary_gray"
 
+                app:disabledDayTextColor="@color/primary_gray"
                 app:layout_constraintBottom_toTopOf="@+id/bookReservationContentContainer"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -142,6 +189,26 @@
                 app:weekLayoutBackgroundColor="@color/white">
 
             </com.stacktips.view.CustomCalendarView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/no_availability"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/availability_recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/margin_bottom_reservation_info" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/textView7"
