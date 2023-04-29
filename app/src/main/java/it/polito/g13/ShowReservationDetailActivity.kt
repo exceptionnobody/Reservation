@@ -149,6 +149,12 @@ class ShowReservationDetailActivity : AppCompatActivity(), NavigationView.OnNavi
         val buttonDelete = popupView.findViewById<Button>(R.id.delete_button)
         buttonDelete.setOnClickListener {
             // elimina reservation
+            reservationViewModel.getSingleReservation(selectedReservationId)
+            reservationViewModel.singleReservation.observe(this@ShowReservationDetailActivity) {
+                reservationViewModel.deleteReservation(it)
+                val intent = Intent(this, ReservationActivity::class.java)
+                startActivity(intent)
+            }
         }
 
         val buttonCancel = popupView.findViewById<Button>(R.id.close_popup_delete)
