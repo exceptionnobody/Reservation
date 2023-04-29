@@ -14,8 +14,10 @@ import javax.inject.Inject
 @HiltViewModel
 class ReservationsViewModel @Inject constructor (private val businessLogic: BusinessClass): ViewModel() {
 
-    val _listReservations = MutableLiveData<List<Reservation>>()
-    val listReservations: LiveData<List<Reservation>> = _listReservations
+    val reservations: LiveData<List<Reservation>> = businessLogic.getAllReservations()
+
+    private val _listReservationsByDate = MutableLiveData<List<Reservation>>()
+    val listReservationsByDate: LiveData<List<Reservation>> = _listReservationsByDate
 
     private val _singleReservation = MutableLiveData<Reservation>()
     val singleReservation: LiveData<Reservation> = _singleReservation
@@ -37,6 +39,6 @@ class ReservationsViewModel @Inject constructor (private val businessLogic: Busi
     }
 
     fun getReservationsByDate(date: Date) {
-        _listReservations.postValue(businessLogic.getReservationsByDate(date))
+        _listReservationsByDate.postValue(businessLogic.getReservationsByDate(date))
     }
 }

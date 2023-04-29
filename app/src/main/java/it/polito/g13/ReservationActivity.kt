@@ -7,13 +7,18 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import com.stacktips.view.CalendarListener
 import com.stacktips.view.CustomCalendarView
@@ -35,7 +40,8 @@ private lateinit var context : Context
 class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     val posResViewModel by viewModels<PosResViewModel>()
-    val reservationsViewModel by viewModels<ReservationsViewModel>()
+
+    val reservationViewModel by viewModels<ReservationsViewModel> ()
 
     //initialize toolbar variables
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
@@ -56,22 +62,11 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         posResViewModel.insertPosRes(PosRes(4, "Sporting Dora", 1, "Basket", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-05-05 18:00")!!, true))
         posResViewModel.insertPosRes(PosRes(5, "Centro sportivo Carmagnola", 1, "Volleyball", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-05-06 19:00")!!, true))
 
-        //creating some data for reservations table
-        reservationsViewModel.insertReservation(Reservation(1, 1, 1, "Centro sportivo Robilant", "Football", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-04-30 15:00")!!, "Need a ball", true))
+        //creating some data for reservation table
+        reservationViewModel.insertReservation(Reservation(1, 19405, 1, "Centro sportivo Robilant", "Footbal", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-05-06 14:00")!!, "Need a ball", true ))
+        reservationViewModel.insertReservation(Reservation(2, 19406, 1, "Sporting Dora", "Volleyball", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-05-06 15:00")!!, "", true ))
 
-        /* TEST IF IT WORKS
-        reservationsViewModel.getSingleReservation(1)
-
-        reservationsViewModel.singleReservation.observe(this) {
-            Log.d("RES", it.toString())
-        }
-
-        reservationsViewModel.getReservationsByDate(SimpleDateFormat("yyyy-MM-dd", Locale.UK).parse("2023-04-30")!!)
-
-        reservationsViewModel.listReservations.observe(this) {
-            Log.d("LISTRES", it.toString())
-        }
-         */
+        reservationViewModel.insertReservation(Reservation(3, 19407, 1, "Sporting Dora", "Volleyball", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-05-07 19:00")!!, "open field", true ))
 
         //toolbar instantiation
         toolbar = findViewById(R.id.toolbar)
@@ -104,34 +99,34 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         calendarView.setShowOverflowDate(true);
         calendarView.refreshCalendar(currentCalendar);
 
-        val decorators : MutableList<DayDecorator> = mutableListOf<DayDecorator>()
-        decorators.add(DaysWithReservations())
+        reservationViewModel.reservations.observe(this@ReservationActivity) {
+            val decorators : MutableList<DayDecorator> = mutableListOf<DayDecorator>()
+            decorators.add(DaysWithReservations(it))
 
-        calendarView.decorators = decorators
-        calendarView.refreshCalendar(currentCalendar);
+            calendarView.decorators = decorators
+            calendarView.refreshCalendar(currentCalendar);
+        }
 
         calendarView.setCalendarListener(object : CalendarListener {
             override fun onDateSelected(date: Date) {
 
-                val reservationBoxContainer = findViewById<LinearLayout>(R.id.reservationBoxContainer)
+                val noReservationBoxContainer = findViewById<LinearLayout>(R.id.noReservationBoxContainer)
 
-                reservationBoxContainer.removeAllViews()
+                noReservationBoxContainer.removeAllViews()
 
-                // fare for che inserisce le n prenotzioni per la data selezionata
-                // se ho una prenotazione
-                if(CalendarUtils.isPastDay(date)) {
-                    val bookedReservation = layoutInflater.inflate(R.layout.reservation_box, reservationBoxContainer, false)
+                val sdf = SimpleDateFormat("yyyy-MM-dd")
+                val formattedDate = sdf.parse(sdf.format(date))
 
-                    reservationBoxContainer.addView(bookedReservation)
-
-                    val reservationBox = findViewById<RelativeLayout>(R.id.reservation_box)
-                    reservationBox.setOnClickListener {
-                        val intent = Intent(context, ShowReservationDetailActivity::class.java)
-                        startActivity(intent)
+                //show them in the recycler view
+                reservationViewModel.reservations.observe(this@ReservationActivity) {
+                    val reservationInDate = it.filter { res -> sdf.parse(sdf.format(res.data)) == formattedDate}
+                    val recyclerView = findViewById<RecyclerView>(R.id.reservationBoxContainer)
+                    recyclerView.adapter = ReservationAdapter(reservationInDate)
+                    recyclerView.layoutManager = LinearLayoutManager(this@ReservationActivity)
+                    if (reservationInDate.isEmpty()) {
+                        val noReservationFounded = layoutInflater.inflate(R.layout.no_reservation, noReservationBoxContainer, false)
+                        noReservationBoxContainer.addView(noReservationFounded)
                     }
-                } else {
-                    val noReservationFounded = layoutInflater.inflate(R.layout.no_reservation, reservationBoxContainer, false)
-                    reservationBoxContainer.addView(noReservationFounded)
                 }
 
             }
@@ -197,13 +192,58 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
     }
 }
 
-class DaysWithReservations() : DayDecorator {
+class DaysWithReservations(reservationList: List<Reservation>) : DayDecorator {
+    val reservationToShow = reservationList
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun decorate(dayView: DayView) {
-        // invece di past day vedere se ha una reservation
-        if (CalendarUtils.isPastDay(dayView.date)) {
-            val image : Drawable? = context.getDrawable(R.drawable.bg_calendar_reservation)
-            dayView.background = image
+        reservationToShow.forEach{reserv -> run {
+
+                val formattedDate1 = SimpleDateFormat("yyyy-MM-dd").format(reserv.data)
+                val formattedDate2 = SimpleDateFormat("yyyy-MM-dd").format(dayView.date)
+
+                val date1 = SimpleDateFormat("yyyy-MM-dd").parse(formattedDate1)
+                val date2 = SimpleDateFormat("yyyy-MM-dd").parse(formattedDate2)
+
+                if (date1 == date2 && !CalendarUtils.isPastDay(dayView.date)) {
+                    val image : Drawable? = context.getDrawable(R.drawable.bg_calendar_reservation)
+                    dayView.background = image
+                }
+            }
+
         }
+    }
+}
+
+//define recycler view for reservations
+class ReservationViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+    val tv = v.findViewById<TextView>(R.id.reservation_title)
+}
+
+class ReservationAdapter(val listReservation: List<Reservation> ): RecyclerView.Adapter<ReservationViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReservationViewHolder {
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.reservation_box, parent, false)
+
+        v.setOnClickListener {
+            val intent = Intent(parent.context, ShowReservationDetailActivity::class.java)
+            parent.context.startActivity(intent)
+        }
+
+        return ReservationViewHolder(v)
+    }
+
+    override fun getItemCount(): Int {
+        return listReservation.size
+    }
+
+    override fun onBindViewHolder(holder: ReservationViewHolder, position: Int) {
+        val reservation = listReservation[position]
+
+        val formattedDate = SimpleDateFormat("yyyy-mm-dd HH:mm").format(reservation.data).split(" ")
+        val hour1 = formattedDate[1]
+        val hour2 = (hour1.split(":")[0].toInt() + 1).toString() + ":" + hour1.split(":")[1]
+
+        val txt = reservation.strut + ", " + reservation.sport + ", " + hour1 + "-" + hour2
+
+        holder.tv.text = txt
     }
 }
