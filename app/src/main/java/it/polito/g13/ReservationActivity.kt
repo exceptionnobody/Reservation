@@ -3,10 +3,10 @@ package it.polito.g13
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -19,6 +19,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
 import com.google.android.material.navigation.NavigationView
 import com.stacktips.view.CalendarListener
 import com.stacktips.view.CustomCalendarView
@@ -121,7 +122,7 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
                 reservationViewModel.reservations.observe(this@ReservationActivity) {
                     val reservationInDate = it.filter { res -> sdf.parse(sdf.format(res.data)) == formattedDate}
                     val recyclerView = findViewById<RecyclerView>(R.id.reservationBoxContainer)
-                    recyclerView.adapter = ReservationAdapter(reservationInDate)
+                    recyclerView.adapter = ReservationAdapter(reservationInDate, this@ReservationActivity)
                     recyclerView.layoutManager = LinearLayoutManager(this@ReservationActivity)
                     if (reservationInDate.isEmpty()) {
                         val noReservationFounded = layoutInflater.inflate(R.layout.no_reservation, noReservationBoxContainer, false)
@@ -215,18 +216,13 @@ class DaysWithReservations(reservationList: List<Reservation>) : DayDecorator {
 }
 
 //define recycler view for reservations
-class ReservationViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+class ReservationViewHolder(v: View) : RecyclerView.ViewHolder(v){
     val tv = v.findViewById<TextView>(R.id.reservation_title)
 }
 
-class ReservationAdapter(val listReservation: List<Reservation> ): RecyclerView.Adapter<ReservationViewHolder>() {
+class ReservationAdapter(val listReservation: List<Reservation>, context: Context ): RecyclerView.Adapter<ReservationViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReservationViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.reservation_box, parent, false)
-
-        v.setOnClickListener {
-            val intent = Intent(parent.context, ShowReservationDetailActivity::class.java)
-            parent.context.startActivity(intent)
-        }
 
         return ReservationViewHolder(v)
     }
@@ -245,5 +241,12 @@ class ReservationAdapter(val listReservation: List<Reservation> ): RecyclerView.
         val txt = reservation.strut + ", " + reservation.sport + ", " + hour1 + "-" + hour2
 
         holder.tv.text = txt
+
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, ShowReservationDetailActivity::class.java)
+            intent.putExtra("selectedReservationId", reservation.id)
+            intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(intent)
+        }
     }
 }

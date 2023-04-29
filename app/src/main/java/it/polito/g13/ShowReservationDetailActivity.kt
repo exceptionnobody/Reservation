@@ -8,19 +8,25 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import dagger.hilt.android.AndroidEntryPoint
+import it.polito.g13.viewModel.ReservationsViewModel
+import java.text.SimpleDateFormat
 
-
+@AndroidEntryPoint
 class ShowReservationDetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     //initialize toolbar variables
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navView: NavigationView
+
+    private val reservationViewModel by viewModels<ReservationsViewModel> ()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +64,33 @@ class ShowReservationDetailActivity : AppCompatActivity(), NavigationView.OnNavi
                 }
             }
         )
+
+        //get selected reservation
+        val selectedReservationId = intent.getIntExtra("selectedReservationId", 0)
+        reservationViewModel.getSingleReservation(selectedReservationId);
+        reservationViewModel.singleReservation.observe(this@ShowReservationDetailActivity) {
+            val codeText = findViewById<TextView>(R.id.content_reservation_number)
+            codeText.text = it.idsl.toString()
+
+            val sportType = findViewById<TextView>(R.id.content_sport_typology)
+            sportType.text = it.sport
+
+            val place = findViewById<TextView>(R.id.content_place)
+            place.text = it.strut
+
+            val formattedDate = SimpleDateFormat("dd-MM-yyyy HH:mm").format(it.data).split(" ")
+            val date = formattedDate[0]
+            val hour1 = formattedDate[1]
+            val hour2 = (hour1.split(":")[0].toInt() + 1).toString() + ":" + hour1.split(":")[1]
+
+            val date_time = findViewById<TextView>(R.id.content_date_time)
+            date_time.text = date + ", " + hour1 + "-" + hour2
+
+            if (it.note.isNotEmpty() && it.note != R.string.content_notes.toString()) {
+                val notes = findViewById<TextView>(R.id.content_notes)
+                notes.text = it.note
+            }
+        }
 
     }
     //handle toolbar items

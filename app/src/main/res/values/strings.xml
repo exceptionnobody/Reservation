@@ -71,6 +71,9 @@
     <string name="content_place">Chose a structure</string>
     <string name="label_date_time">Date and time</string>
     <string name="content_date_time">DD-MM-YY HH:mm</string>
+    <string name="label_notes">Notes</string>
+    <string name="content_notes">No notes inserted</string>
+    <string name="int_content_notes">Do you need something special? Put here your requests!</string>
 
     <string name="delete_reservation_button">Delete reservation</string>
     <string name="title_popup_delete_reservation">Do you want to delete the reservation?</string>

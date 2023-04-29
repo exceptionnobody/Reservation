@@ -143,6 +143,34 @@
 
             </com.stacktips.view.CustomCalendarView>
 
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_start_title_first_level"
+                android:layout_marginRight="@dimen/margin_right_label_reservation_info"
+                android:fontFamily="@font/crete_round"
+                android:text="@string/label_notes"
+                android:textColor="@color/primary_green"
+                android:textSize="@dimen/font_size_info_reservation_label" />
+
+            <EditText
+                android:id="@+id/content_notes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="@dimen/margin_bottom_reservation_info"
+                android:background="@drawable/edit_fields"
+                android:fontFamily="@font/crete_round"
+                android:hint="@string/int_content_notes"
+                android:minHeight="48dp"
+                android:paddingStart="@dimen/input_padding_x"
+                android:paddingTop="@dimen/input_padding_y"
+                android:paddingEnd="@dimen/input_padding_x"
+                android:paddingBottom="@dimen/input_padding_y"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_size_info_reservation_content" />
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="99dp">
