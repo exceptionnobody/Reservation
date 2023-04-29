@@ -26,8 +26,8 @@ interface ReservationDao {
     @Query("SELECT * FROM $RESERVATION_TABLE")
     fun getAllReservations() : LiveData<List<Reservation>>
 
-    @Query("SELECT * FROM $RESERVATION_TABLE WHERE date = :targetDate")
-    fun findReservationsOnDate(targetDate: Date): List<Reservation>
+    @Query("SELECT * FROM $RESERVATION_TABLE WHERE strftime('%Y-%m-%d', date) = strftime('%Y-%m-%d', :targetDate)")
+    fun findReservationsOnDate(targetDate: String): List<Reservation>
 
     @Query("SELECT count(1) FROM $RESERVATION_TABLE WHERE id == :id")
     fun isPresentAReservation(id: Int) : Boolean

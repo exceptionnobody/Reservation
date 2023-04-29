@@ -3,10 +3,13 @@ package it.polito.g13.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import it.polito.g13.converter.DataConverter
 import it.polito.g13.utils.Constants.RESERVATION_TABLE
 import java.util.Date
 
 @Entity(tableName = RESERVATION_TABLE)
+@TypeConverters(DataConverter::class)
 data class Reservation(
     @PrimaryKey(autoGenerate = true)
     val id: Int=0,

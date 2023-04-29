@@ -68,6 +68,11 @@ class BusinessClass
        return reservationDao.getASingleReservation(id)
     }
 
+    fun getReservationsByDate(date: Date) : List<Reservation> {
+        val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.UK).format(date)
+        return reservationDao.findReservationsOnDate(formattedDate)
+    }
+
      fun changeReservation( idReservation: Int, newData: Date) {
          updateReservation(idReservation, newData)
     }
@@ -82,7 +87,7 @@ class BusinessClass
     }
 
     fun getPosResSportDate(sport: String, date: Date) : List<PosRes> {
-        val formattedDate = SimpleDateFormat("yyyy-mm-dd").format(date)
-        return posresDao.getPosResSportDate(sport, formattedDate + "%")
+        val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.UK).format(date)
+        return posresDao.getPosResSportDate(sport, formattedDate)
     }
 }

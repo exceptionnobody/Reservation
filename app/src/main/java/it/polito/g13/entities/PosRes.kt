@@ -1,12 +1,12 @@
 package it.polito.g13.entities
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
+import it.polito.g13.converter.DataConverter
 import it.polito.g13.utils.Constants.POSRES
 import java.util.Date
 
 @Entity(tableName = POSRES)
+@TypeConverters(DataConverter::class)
 data class PosRes(
     @PrimaryKey(autoGenerate = true)
     val id: Int=0,

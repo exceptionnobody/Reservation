@@ -8,7 +8,8 @@ class DataConverter {
     @TypeConverter
     fun fromString(value: String?): Date? {
         if (value != null) {
-            return SimpleDateFormat("yyyy-mm-dd HH:mm", Locale.UK).parse(value)
+            val d = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse(value)
+            return d
         }
         else {
             return null
@@ -17,12 +18,6 @@ class DataConverter {
 
     @TypeConverter
     fun dateToString(date: Date?): String? {
-        if (date != null) {
-            val dateFormat = SimpleDateFormat("yyyy-mm-dd HH:mm", Locale.UK)
-            return dateFormat.format(date)
-        }
-        else {
-            return null
-        }
+        return date?.let { SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).format(date) }
     }
 }

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.widget.*
 import androidx.activity.viewModels
@@ -21,8 +22,10 @@ import com.stacktips.view.DayView
 import com.stacktips.view.utils.CalendarUtils
 import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.entities.PosRes
+import it.polito.g13.entities.Reservation
 import it.polito.g13.ui.main.ReservationFragment
 import it.polito.g13.viewModel.PosResViewModel
+import it.polito.g13.viewModel.ReservationsViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -32,6 +35,7 @@ private lateinit var context : Context
 class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     val posResViewModel by viewModels<PosResViewModel>()
+    val reservationsViewModel by viewModels<ReservationsViewModel>()
 
     //initialize toolbar variables
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
@@ -46,12 +50,28 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         setContentView(R.layout.activity_reservation)
 
         //creating some data for posRes table
-        posResViewModel.insertPosRes(PosRes(1, "Centro sportivo Robilant", 1, "Football", SimpleDateFormat("yyyy-mm-dd HH:mm", Locale.UK).parse("2023-04-30 15:00")!!, true))
-        posResViewModel.insertPosRes(PosRes(2, "Sporting Dora", 1, "Football", SimpleDateFormat("yyyy-mm-dd HH:mm", Locale.UK).parse("2023-04-30 17:00")!!, true))
-        posResViewModel.insertPosRes(PosRes(3, "Centro sportivo Carmagnola", 1, "Tennis", SimpleDateFormat("yyyy-mm-dd HH:mm", Locale.UK).parse("2023-04-30 12:00")!!, true))
-        posResViewModel.insertPosRes(PosRes(4, "Sporting Dora", 1, "Basket", SimpleDateFormat("yyyy-mm-dd HH:mm", Locale.UK).parse("2023-05-05 18:00")!!, true))
-        posResViewModel.insertPosRes(PosRes(5, "Centro sportivo Carmagnola", 1, "Volleyball", SimpleDateFormat("yyyy-mm-dd HH:mm", Locale.UK).parse("2023-05-06 19:00")!!, true))
+        posResViewModel.insertPosRes(PosRes(1, "Centro sportivo Robilant", 1, "Football", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-04-30 15:00")!!, true))
+        posResViewModel.insertPosRes(PosRes(2, "Sporting Dora", 1, "Football", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-04-30 17:00")!!, true))
+        posResViewModel.insertPosRes(PosRes(3, "Centro sportivo Carmagnola", 1, "Tennis", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-04-30 12:00")!!, true))
+        posResViewModel.insertPosRes(PosRes(4, "Sporting Dora", 1, "Basket", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-05-05 18:00")!!, true))
+        posResViewModel.insertPosRes(PosRes(5, "Centro sportivo Carmagnola", 1, "Volleyball", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-05-06 19:00")!!, true))
 
+        //creating some data for reservations table
+        reservationsViewModel.insertReservation(Reservation(1, 1, 1, "Centro sportivo Robilant", "Football", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-04-30 15:00")!!, "Need a ball", true))
+
+        /* TEST IF IT WORKS
+        reservationsViewModel.getSingleReservation(1)
+
+        reservationsViewModel.singleReservation.observe(this) {
+            Log.d("RES", it.toString())
+        }
+
+        reservationsViewModel.getReservationsByDate(SimpleDateFormat("yyyy-MM-dd", Locale.UK).parse("2023-04-30")!!)
+
+        reservationsViewModel.listReservations.observe(this) {
+            Log.d("LISTRES", it.toString())
+        }
+         */
 
         //toolbar instantiation
         toolbar = findViewById(R.id.toolbar)
