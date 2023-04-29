@@ -103,7 +103,7 @@ class EditReservationDetailActivity : AppCompatActivity() {
                 posResViewModel.getPosResById(newPosResId!!)
                 posResViewModel.singlePosRes.observe(this@EditReservationDetailActivity) {
                     if (it != null) {
-                        reservationViewModel.updateReservation(selectedReservationId, it.data)
+                        reservationViewModel.updateReservation(selectedReservationId, it.data, notesInput.text.toString() )
                         val intent = Intent(this, ShowReservationDetailActivity::class.java)
                         startActivity(intent)
                     }

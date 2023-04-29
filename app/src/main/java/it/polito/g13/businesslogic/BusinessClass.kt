@@ -73,14 +73,15 @@ class BusinessClass
         return reservationDao.findReservationsOnDate(formattedDate)
     }
 
-     fun changeReservation( idReservation: Int, newData: Date) {
-         updateReservation(idReservation, newData)
+     fun changeReservation( idReservation: Int, newData: Date, notes: String) {
+         updateReservation(idReservation, newData, notes)
     }
 
-    private fun updateReservation(idReservation: Int, newData: Date) {
+    private fun updateReservation(idReservation: Int, newData: Date, notes: String) {
         if(reservationDao.isPresentAReservation(idReservation)){
             val old_res = reservationDao.getASingleReservation(idReservation)
             old_res.data = newData
+            old_res.note = notes
              reservationDao.updateReservation(old_res)
 
         }

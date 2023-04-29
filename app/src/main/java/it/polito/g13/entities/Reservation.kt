@@ -30,7 +30,7 @@ data class Reservation(
     var data: Date? = null,
 
     @ColumnInfo(name = "note")
-    val note: String = "",
+    var note: String = "",
 
     @ColumnInfo(name = "flag")
     val flag:Boolean=false

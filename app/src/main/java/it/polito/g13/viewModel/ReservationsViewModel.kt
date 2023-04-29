@@ -26,8 +26,8 @@ class ReservationsViewModel @Inject constructor (private val businessLogic: Busi
         businessLogic.insertReservation(reservation)
     }
 
-    fun updateReservation(idReservation: Int, newData: Date) {
-        businessLogic.changeReservation(idReservation, newData)
+    fun updateReservation(idReservation: Int, newData: Date, notes: String) {
+        businessLogic.changeReservation(idReservation, newData, notes)
     }
 
     fun deleteReservation(reservation: Reservation) {
