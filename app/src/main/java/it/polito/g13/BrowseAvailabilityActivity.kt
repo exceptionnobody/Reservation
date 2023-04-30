@@ -1,6 +1,7 @@
 package it.polito.g13
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -34,6 +35,7 @@ import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.util.*
 
+private lateinit var context : Context
 @AndroidEntryPoint
 class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -49,6 +51,7 @@ class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigat
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        context = this.applicationContext
         setContentView(R.layout.activity_browse_availability)
 
         //toolbar instantiation
@@ -175,5 +178,12 @@ class PosResAdapter(val listPosRes: List<PosRes>): RecyclerView.Adapter<PosResVi
         val txt = posRes.strut + ", " + hour1 + "-" + hour2
 
         holder.tv.text = txt
+
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, ShowPosResDetailActivity::class.java)
+            intent.putExtra("selectedPosResId", posRes.id)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(intent)
+        }
     }
 }

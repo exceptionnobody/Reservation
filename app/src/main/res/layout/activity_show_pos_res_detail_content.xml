@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/navbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:id="@+id/containerPosRes"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/margin_left_grid"
+            android:layout_marginTop="@dimen/margin_top_grid"
+            android:layout_marginEnd="@dimen/margin_right_grid"
+            android:layout_marginBottom="@dimen/margin_bottom_grid"
+            android:orientation="vertical"
+            tools:context=".ShowPosResDetailActivity">
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_start_title_first_level"
+                android:layout_marginRight="@dimen/margin_right_label_reservation_info"
+                android:fontFamily="@font/crete_round"
+                android:text="@string/label_sport_typology"
+                android:textColor="@color/primary_green"
+                android:textSize="@dimen/font_size_info_reservation_label" />
+
+            <TextView
+                android:id="@+id/content_sport_typology_posres"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/crete_round"
+                android:text="Your sport"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_size_info_reservation_content"
+                android:layout_marginBottom="@dimen/margin_bottom_reservation_info"
+                android:layout_marginTop="4dp"
+                android:paddingStart="@dimen/input_padding_x"
+                android:paddingTop="@dimen/input_padding_y"
+                android:paddingEnd="@dimen/input_padding_x"
+                android:paddingBottom="@dimen/input_padding_y" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_start_title_first_level"
+                android:layout_marginRight="@dimen/margin_right_label_reservation_info"
+                android:fontFamily="@font/crete_round"
+                android:text="@string/label_place"
+                android:textColor="@color/primary_green"
+                android:textSize="@dimen/font_size_info_reservation_label" />
+
+            <TextView
+                android:id="@+id/content_place_posres"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/crete_round"
+                android:text="Your structure"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_size_info_reservation_content"
+                android:layout_marginBottom="@dimen/margin_bottom_reservation_info"
+                android:layout_marginTop="4dp"
+                android:paddingStart="@dimen/input_padding_x"
+                android:paddingTop="@dimen/input_padding_y"
+                android:paddingEnd="@dimen/input_padding_x"
+                android:paddingBottom="@dimen/input_padding_y" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_start_title_first_level"
+                android:layout_marginRight="@dimen/margin_right_label_reservation_info"
+                android:fontFamily="@font/crete_round"
+                android:text="@string/label_date_time"
+                android:textColor="@color/primary_green"
+                android:textSize="@dimen/font_size_info_reservation_label" />
+
+            <TextView
+                android:id="@+id/content_date_time_posres"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="@dimen/margin_bottom_reservation_info"
+                android:fontFamily="@font/crete_round"
+                android:minHeight="48dp"
+                android:paddingStart="@dimen/input_padding_x"
+                android:paddingTop="@dimen/input_padding_y"
+                android:paddingEnd="@dimen/input_padding_x"
+                android:paddingBottom="@dimen/input_padding_y"
+                android:text="Your date and time"
+                android:textColor="@color/black"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_start_title_first_level"
+                android:layout_marginRight="@dimen/margin_right_label_reservation_info"
+                android:fontFamily="@font/crete_round"
+                android:text="@string/label_notes"
+                android:textColor="@color/primary_green"
+                android:textSize="@dimen/font_size_info_reservation_label" />
+
+            <EditText
+                android:id="@+id/content_notes_posres"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="@dimen/margin_bottom_reservation_info"
+                android:background="@drawable/edit_fields"
+                android:fontFamily="@font/crete_round"
+                android:hint="@string/int_content_notes"
+                android:minHeight="48dp"
+                android:paddingStart="@dimen/input_padding_x"
+                android:paddingTop="@dimen/input_padding_y"
+                android:paddingEnd="@dimen/input_padding_x"
+                android:paddingBottom="@dimen/input_padding_y"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_size_info_reservation_content" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="99dp">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/confirm_button_posres"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="27dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="21dp"
+                    android:background="@drawable/confirm_button"
+                    android:text="@string/confirm_button"
+                    android:textColor="@color/white" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/cancel_button_posres"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginEnd="27dp"
+                    android:layout_marginBottom="21dp"
+                    android:background="@drawable/cancel_button"
+                    android:text="@string/cancel_button"
+                    android:textColor="@color/primary_green" />
+            </RelativeLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
