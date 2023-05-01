@@ -23,6 +23,8 @@ import it.polito.g13.viewModel.ReservationsViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
+private var selectedSport: String? = null
+
 @AndroidEntryPoint
 class ShowPosResDetailActivity : AppCompatActivity() {
     private lateinit var notesInput: EditText
@@ -36,6 +38,9 @@ class ShowPosResDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_pos_res_detail)
+
+        //get selected sport
+        selectedSport = intent.getStringExtra("selectedSport")
 
         //set text navbar
         val navbarText = findViewById<TextView>(R.id.navbar_text)
@@ -79,6 +84,7 @@ class ShowPosResDetailActivity : AppCompatActivity() {
 
         cancelButton.setOnClickListener {
             val intent = Intent(this, BrowseAvailabilityActivity::class.java)
+            intent.putExtra("selectedSport", selectedSport)
             startActivity(intent)
         }
     }

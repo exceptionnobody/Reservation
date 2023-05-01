@@ -36,6 +36,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 private lateinit var context : Context
+private var selectedSport: String? = null
+
 @AndroidEntryPoint
 class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -76,7 +78,7 @@ class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigat
         menuItemReservations.setActionView(R.layout.menu_item_reservations)
 
         //get selected sport
-        val selectedSport = intent.getStringExtra("selectedSport")
+        selectedSport = intent.getStringExtra("selectedSport")
 
         //set text navbar
         val navbarText = findViewById<TextView>(R.id.navbar_text)
@@ -102,15 +104,21 @@ class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigat
 
                 val sdf = SimpleDateFormat("yyyy-MM-dd")
                 val formattedDate = sdf.parse(sdf.format(date))
+                val today = Calendar.getInstance().time
+                val formattedToday = sdf.parse(sdf.format(today))
 
-                //retrieve available possible reservations
-                posResViewModel.getPosRes(selectedSport!!, formattedDate!!)
-                //show them in the recycler view
-                posResViewModel.listPosRes.observe(this@BrowseAvailabilityActivity) {
-                    if (it != null) {
-                        val recyclerView = findViewById<RecyclerView>(R.id.bookReservationContainer)
-                        recyclerView.adapter = PosResAdapter(it)
-                        recyclerView.layoutManager = LinearLayoutManager(this@BrowseAvailabilityActivity)
+                if(formattedDate >= formattedToday) {
+                    //retrieve available possible reservations
+                    posResViewModel.getPosRes(selectedSport!!, formattedDate!!)
+                    //show them in the recycler view
+                    posResViewModel.listPosRes.observe(this@BrowseAvailabilityActivity) {
+                        if (it != null) {
+                            val recyclerView =
+                                findViewById<RecyclerView>(R.id.bookReservationContainer)
+                            recyclerView.adapter = PosResAdapter(it)
+                            recyclerView.layoutManager =
+                                LinearLayoutManager(this@BrowseAvailabilityActivity)
+                        }
                     }
                 }
             }
@@ -182,6 +190,7 @@ class PosResAdapter(val listPosRes: List<PosRes>): RecyclerView.Adapter<PosResVi
         holder.itemView.setOnClickListener {
             val intent = Intent(context, ShowPosResDetailActivity::class.java)
             intent.putExtra("selectedPosResId", posRes.id)
+            intent.putExtra("selectedSport", selectedSport)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
         }
