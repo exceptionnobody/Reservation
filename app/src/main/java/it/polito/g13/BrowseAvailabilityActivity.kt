@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -29,6 +30,7 @@ import com.stacktips.view.DayView
 import com.stacktips.view.utils.CalendarUtils
 import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.entities.PosRes
+import it.polito.g13.entities.Reservation
 import it.polito.g13.ui.main.ReservationFragment
 import it.polito.g13.viewModel.PosResViewModel
 import org.w3c.dom.Text
@@ -97,11 +99,46 @@ class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigat
                 .commitNow()
         }
 
+        posResViewModel.getPosResBySport(selectedSport!!)
+
+        posResViewModel.listPosRes.observe(this) {
+            val decorators : MutableList<DayDecorator> = mutableListOf()
+            decorators.add(DaysWithPosRes(it))
+
+            calendarView.decorators = decorators
+            calendarView.refreshCalendar(currentCalendar)
+        }
+
         calendarView.setCalendarListener(object : CalendarListener {
             @SuppressLint("SimpleDateFormat")
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onDateSelected(date: Date) {
 
+                val noPosResBoxContainer = findViewById<LinearLayout>(R.id.noPosResBoxContainer)
+
+                noPosResBoxContainer.removeAllViews()
+
+                val sdf = SimpleDateFormat("yyyy-MM-dd")
+                val formattedDate = sdf.parse(sdf.format(date))
+                val today = Calendar.getInstance().time
+                val formattedToday = sdf.parse(sdf.format(today))
+
+                if (formattedDate >= formattedToday) {
+                    //show them in the recycler view
+                    posResViewModel.listPosRes.observe(this@BrowseAvailabilityActivity) {
+                        val posResInDate = it.filter { posRes -> sdf.parse(sdf.format(posRes.data)) == formattedDate}
+                        val recyclerView = findViewById<RecyclerView>(R.id.bookReservationContainer)
+                        recyclerView.adapter = PosResAdapter(posResInDate)
+                        recyclerView.layoutManager = LinearLayoutManager(this@BrowseAvailabilityActivity)
+                        if (posResInDate.isEmpty()) {
+                            val noReservationFounded = layoutInflater.inflate(R.layout.no_reservation, noPosResBoxContainer, false)
+                            noReservationFounded.findViewById<TextView>(R.id.textView).text = "No possible reservation for today"
+                            noPosResBoxContainer.addView(noReservationFounded)
+                        }
+                    }
+                }
+
+                /*
                 val sdf = SimpleDateFormat("yyyy-MM-dd")
                 val formattedDate = sdf.parse(sdf.format(date))
                 val today = Calendar.getInstance().time
@@ -121,6 +158,7 @@ class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigat
                         }
                     }
                 }
+                */
             }
 
             override fun onMonthChanged(date: Date) {
@@ -193,6 +231,28 @@ class PosResAdapter(val listPosRes: List<PosRes>): RecyclerView.Adapter<PosResVi
             intent.putExtra("selectedSport", selectedSport)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
+        }
+    }
+}
+
+class DaysWithPosRes(posResList: List<PosRes>) : DayDecorator {
+    val posResToShow = posResList
+    @SuppressLint("UseCompatLoadingForDrawables")
+    override fun decorate(dayView: DayView) {
+        posResToShow.forEach{posRes -> run {
+
+            val formattedDate1 = SimpleDateFormat("yyyy-MM-dd").format(posRes.data)
+            val formattedDate2 = SimpleDateFormat("yyyy-MM-dd").format(dayView.date)
+
+            val date1 = SimpleDateFormat("yyyy-MM-dd").parse(formattedDate1)
+            val date2 = SimpleDateFormat("yyyy-MM-dd").parse(formattedDate2)
+
+            if (date1 == date2 && !CalendarUtils.isPastDay(dayView.date)) {
+                val image : Drawable? = context.getDrawable(R.drawable.bg_calendar_reservation)
+                dayView.background = image
+            }
+        }
+
         }
     }
 }
