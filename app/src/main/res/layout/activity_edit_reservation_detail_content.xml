@@ -155,9 +155,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:layout_marginBottom="@dimen/margin_bottom_reservation_info"
                 android:fontFamily="@font/crete_round"
-                android:minHeight="48dp"
                 android:paddingStart="@dimen/input_padding_x"
                 android:paddingTop="@dimen/input_padding_y"
                 android:paddingEnd="@dimen/input_padding_x"
@@ -165,6 +163,78 @@
                 android:text="@string/text_select_date_and_time"
                 android:textColor="@color/black"
                 android:textSize="16dp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_bottom_reservation_info">
+
+                <TextView
+                    android:id="@+id/from_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/crete_round"
+                    android:paddingStart="@dimen/input_padding_x"
+                    android:paddingTop="@dimen/input_padding_y"
+                    android:paddingEnd="@dimen/input_padding_x"
+                    android:paddingBottom="@dimen/input_padding_y"
+                    android:text="@string/content_from_time"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/font_size_info_reservation_content" />
+
+                <TextView
+                    android:id="@+id/select_from_time"
+                    android:layout_width="100dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@+id/from_time"
+                    android:background="@drawable/edit_fields"
+                    android:contentDescription="@string/content_description_from"
+                    android:fontFamily="@font/crete_round"
+                    android:paddingStart="@dimen/input_padding_x"
+                    android:paddingTop="@dimen/input_padding_y"
+                    android:paddingEnd="@dimen/input_padding_x"
+                    android:paddingBottom="@dimen/input_padding_y"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/font_size_info_reservation_content" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_bottom_reservation_info">
+
+                <TextView
+                    android:id="@+id/to_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/crete_round"
+                    android:paddingStart="@dimen/input_padding_x"
+                    android:paddingTop="@dimen/input_padding_y"
+                    android:paddingEnd="@dimen/input_padding_x"
+                    android:paddingBottom="@dimen/input_padding_y"
+                    android:text="@string/content_to_time"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/font_size_info_reservation_content" />
+
+                <TextView
+                    android:id="@+id/select_to_time"
+                    android:layout_width="100dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="33dp"
+                    android:layout_toEndOf="@+id/to_time"
+                    android:background="@drawable/edit_fields"
+                    android:contentDescription="@string/content_to_time"
+                    android:fontFamily="@font/crete_round"
+                    android:paddingStart="@dimen/input_padding_x"
+                    android:paddingTop="@dimen/input_padding_y"
+                    android:paddingEnd="@dimen/input_padding_x"
+                    android:paddingBottom="@dimen/input_padding_y"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/font_size_info_reservation_content" />
+            </RelativeLayout>
 
             <com.stacktips.view.CustomCalendarView
                 android:id="@+id/content_date_time"

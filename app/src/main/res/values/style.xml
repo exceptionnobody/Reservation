@@ -14,4 +14,9 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="CustomTimePickerDialogTheme" parent="android:Theme.Material.Light.Dialog">
+        <item name="colorOnPrimary">@color/black</item>
+    </style>
+
+
 </resources>
