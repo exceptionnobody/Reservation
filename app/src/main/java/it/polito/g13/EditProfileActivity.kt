@@ -19,6 +19,7 @@ import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.exifinterface.media.ExifInterface
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.io.ByteArrayOutputStream
 import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.entities.PosRes
@@ -171,7 +172,7 @@ class EditProfileActivity : AppCompatActivity() {
         }
 
         //add a new sport
-        /*val addSportTextContainer = findViewById<RelativeLayout>(R.id.addSportTextContainer)
+        val addSportTextContainer = findViewById<RelativeLayout>(R.id.addSportTextContainer)
         val addSportIcon = findViewById<FloatingActionButton>(R.id.addSportIcon)
 
         addSportTextContainer.setOnClickListener {
@@ -179,7 +180,7 @@ class EditProfileActivity : AppCompatActivity() {
         }
         addSportIcon.setOnClickListener {
             handleNewSport()
-        }*/
+        }
 
         //multi selection menu for languages
         languagesView = findViewById(R.id.editLanguages)
@@ -475,7 +476,7 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
     //handle adding new sport
-    /*@SuppressLint("InflateParams")
+    @SuppressLint("InflateParams")
     private fun handleNewSport() {
         val addSportContainer = findViewById<LinearLayout>(R.id.sportsContainer)
 
@@ -496,7 +497,7 @@ class EditProfileActivity : AppCompatActivity() {
         deleteSportIcon.setOnClickListener {
             addSportContainer.removeView(sportList)
         }
-    }*/
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getDataFromSharedPref(){

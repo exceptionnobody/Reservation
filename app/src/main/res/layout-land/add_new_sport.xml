@@ -6,7 +6,7 @@
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -16,7 +16,7 @@
             android:layout_width="155dp"
             android:layout_height="48dp"
             android:layout_marginStart="@dimen/margin_start_content_text"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/edit_fields"
             android:contentDescription="@string/user_games"
             android:fontFamily="@font/crete_round"
@@ -31,7 +31,7 @@
             android:layout_width="155dp"
             android:layout_height="48dp"
             android:layout_marginStart="100dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="10dp"
             android:layout_toEndOf="@+id/editGames"
             android:background="@drawable/edit_fields"
             android:contentDescription="@string/user_time"
@@ -42,18 +42,42 @@
             android:textColor="@color/black"
             android:textSize="16sp" />
 
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editDescription"
+            android:layout_width="410dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="70dp"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/edit_fields"
+            android:fontFamily="@font/crete_round"
+            android:hint="@string/sport_achievements"
+            android:inputType="textAutoCorrect|textMultiLine"
+            android:paddingStart="@dimen/input_padding_x"
+            android:paddingTop="@dimen/input_padding_y"
+            android:paddingEnd="@dimen/input_padding_x"
+            android:paddingBottom="@dimen/input_padding_y"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/delete_sport"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:layout_marginTop="40dp"
             android:layout_marginEnd="@dimen/margin_start_content_text"
             android:clickable="true"
             android:contentDescription="@string/delete_sport"
             android:focusable="true"
             app:backgroundTint="@color/primary_orange"
-            app:fabCustomSize="35dp"
+            app:fabCustomSize="55dp"
             app:srcCompat="@drawable/trash_bin_icon" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            app:dividerColor="@color/primary_green"
+            android:layout_marginTop="125dp"/>
     </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

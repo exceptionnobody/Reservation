@@ -31,6 +31,7 @@
     <string name="confirm_button">Confirm</string>
     <string name="cancel_button">Cancel</string>
     <string name="add_sport">Add a sport</string>
+    <string name="sport_achievements">Write your achievements</string>
     <string name="image_from_gallery">Select an image from the phone gallery</string>
     <string name="take_picture">Use the camera to take a picture</string>
     <string name="add_time">Add a time slot</string>
