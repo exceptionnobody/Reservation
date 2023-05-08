@@ -54,6 +54,9 @@ class ShowReservationDetailActivity : AppCompatActivity(), NavigationView.OnNavi
         val menuItemReservations = navView.menu.findItem(R.id.nav_reservations)
         menuItemReservations.setActionView(R.layout.menu_item_reservations)
 
+        val menuItemBookReservation = navView.menu.findItem(R.id.nav_book_reservation)
+        menuItemBookReservation.setActionView(R.layout.menu_item_book_reservation)
+
         //set text navbar
         val navbarText = findViewById<TextView>(R.id.navbar_text)
         navbarText.text = "Your reservation detail"
@@ -103,6 +106,10 @@ class ShowReservationDetailActivity : AppCompatActivity(), NavigationView.OnNavi
             }
             R.id.nav_reservations -> {
                 val intent = Intent(this, ReservationActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.nav_book_reservation -> {
+                val intent = Intent(this, BrowseAvailabilityActivity::class.java)
                 startActivity(intent)
             }
         }

@@ -17,6 +17,57 @@
         android:layout_height="match_parent"
         tools:context=".BrowseAvailabilityActivity">
 
+        <RelativeLayout
+            android:id="@+id/sport_availability_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.173"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/title_basic_information"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:fontFamily="@font/crete_round"
+                android:lineSpacingExtra="26sp"
+                android:text="@string/select_sport_reservation"
+                android:textColor="@color/primary_green"
+                android:textSize="20sp" />
+
+            <Spinner
+                android:id="@+id/selectSport"
+                android:layout_width="160dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/edit_fields"
+                android:contentDescription="@string/user_games"
+                android:fontFamily="@font/crete_round"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:spinnerMode="dropdown"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/checkAvailabilityButton"
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="25dp"
+                android:clickable="true"
+                android:fontFamily="@font/crete_round"
+                android:text="@string/check_availability_button"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                android:focusable="true" />
+        </RelativeLayout>
+
         <com.stacktips.view.CustomCalendarView
             android:id="@+id/book_reservation_calendar_view"
             android:layout_width="match_parent"
@@ -27,12 +78,13 @@
             app:dayOfWeekTextColor="@color/black"
             app:disabledDayBackgroundColor="@color/white"
             app:disabledDayTextColor="@color/primary_gray"
+            android:layout_marginTop="5dp"
 
             app:layout_constraintBottom_toTopOf="@+id/bookReservationContentContainer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sport_availability_container"
             app:selectedDayBackgroundColor="@color/primary_green"
             app:selectedDayTextColor="@color/white"
             app:titleLayoutBackgroundColor="@color/white"

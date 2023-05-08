@@ -5,13 +5,18 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.viewModels
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.navigation.NavigationView
 import com.stacktips.view.CalendarListener
 import com.stacktips.view.CustomCalendarView
 import com.stacktips.view.DayDecorator
@@ -26,7 +31,13 @@ import java.util.*
 private var selectedSport: String? = null
 
 @AndroidEntryPoint
-class ShowPosResDetailActivity : AppCompatActivity() {
+class ShowPosResDetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    //initialize toolbar variables
+    private lateinit var toolbar: androidx.appcompat.widget.Toolbar
+    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var navView: NavigationView
+
     private lateinit var notesInput: EditText
 
     private val posResViewModel by viewModels<PosResViewModel>()
@@ -41,6 +52,30 @@ class ShowPosResDetailActivity : AppCompatActivity() {
 
         //get selected sport
         selectedSport = intent.getStringExtra("selectedSport")
+
+        //toolbar instantiation
+        toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        drawerLayout = findViewById(R.id.drawer_layout)
+        navView = findViewById(R.id.nav_view)
+
+        val toggle = ActionBarDrawerToggle(
+            this, drawerLayout, toolbar, 0, 0
+        )
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+        navView.setNavigationItemSelectedListener(this)
+
+        val menuItemProfile = navView.menu.findItem(R.id.nav_profile)
+        menuItemProfile.setActionView(R.layout.menu_item_profile)
+
+        val menuItemReservations = navView.menu.findItem(R.id.nav_reservations)
+        menuItemReservations.setActionView(R.layout.menu_item_reservations)
+
+        val menuItemBookReservation = navView.menu.findItem(R.id.nav_book_reservation)
+        menuItemBookReservation.setActionView(R.layout.menu_item_book_reservation)
 
         //set text navbar
         val navbarText = findViewById<TextView>(R.id.navbar_text)
@@ -84,8 +119,27 @@ class ShowPosResDetailActivity : AppCompatActivity() {
 
         cancelButton.setOnClickListener {
             val intent = Intent(this, BrowseAvailabilityActivity::class.java)
-            intent.putExtra("selectedSport", selectedSport)
             startActivity(intent)
         }
+    }
+
+    //handle toolbar items
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.nav_profile -> {
+                val intent = Intent(this, ShowProfileActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.nav_reservations -> {
+                val intent = Intent(this, ReservationActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.nav_book_reservation -> {
+                val intent = Intent(this, BrowseAvailabilityActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        drawerLayout.closeDrawer(GravityCompat.START)
+        return true
     }
 }

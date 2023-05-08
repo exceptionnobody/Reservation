@@ -95,6 +95,9 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         val menuItemReservations = navView.menu.findItem(R.id.nav_reservations)
         menuItemReservations.setActionView(R.layout.menu_item_reservations)
 
+        val menuItemBookReservation = navView.menu.findItem(R.id.nav_book_reservation)
+        menuItemBookReservation.setActionView(R.layout.menu_item_book_reservation)
+
         sharedPreference =  getSharedPreferences("preferences", 0) // 0 - for private mode
         this.user_image=findViewById(R.id.user_image)
         this.user_name=findViewById(R.id.user_name)
@@ -158,6 +161,10 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             }
             R.id.nav_reservations -> {
                 val intent = Intent(this, ReservationActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.nav_book_reservation -> {
+                val intent = Intent(this, BrowseAvailabilityActivity::class.java)
                 startActivity(intent)
             }
         }

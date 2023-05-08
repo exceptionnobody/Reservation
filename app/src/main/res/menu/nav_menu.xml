@@ -8,4 +8,8 @@
     <item
         android:id="@+id/nav_reservations"
         android:title=""/>
+
+    <item
+        android:id="@+id/nav_book_reservation"
+        android:title=""/>
 </menu>

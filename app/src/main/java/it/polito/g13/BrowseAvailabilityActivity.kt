@@ -12,7 +12,10 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
@@ -79,12 +82,12 @@ class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigat
         val menuItemReservations = navView.menu.findItem(R.id.nav_reservations)
         menuItemReservations.setActionView(R.layout.menu_item_reservations)
 
-        //get selected sport
-        selectedSport = intent.getStringExtra("selectedSport")
+        val menuItemBookReservation = navView.menu.findItem(R.id.nav_book_reservation)
+        menuItemBookReservation.setActionView(R.layout.menu_item_book_reservation)
 
         //set text navbar
         val navbarText = findViewById<TextView>(R.id.navbar_text)
-        navbarText.text = "Book a $selectedSport court"
+        navbarText.text = "Book your reservation"
 
         calendarView = findViewById(R.id.book_reservation_calendar_view)
 
@@ -99,7 +102,17 @@ class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigat
                 .commitNow()
         }
 
-        posResViewModel.getPosResBySport(selectedSport!!)
+        //spinner for sport
+        val sportSpinner = findViewById<Spinner>(R.id.selectSport)
+        sportSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, sports)
+
+        val checkAvailability = findViewById<Button>(R.id.checkAvailabilityButton)
+
+        checkAvailability.setOnClickListener {
+            selectedSport = sportSpinner.selectedItem.toString()
+
+            posResViewModel.getPosResBySport(selectedSport!!)
+        }
 
         posResViewModel.listPosRes.observe(this) {
             val decorators : MutableList<DayDecorator> = mutableListOf()
@@ -182,6 +195,10 @@ class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigat
             }
             R.id.nav_reservations -> {
                 val intent = Intent(this, ReservationActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.nav_book_reservation -> {
+                val intent = Intent(this, BrowseAvailabilityActivity::class.java)
                 startActivity(intent)
             }
         }

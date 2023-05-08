@@ -90,6 +90,9 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         val menuItemReservations = navView.menu.findItem(R.id.nav_reservations)
         menuItemReservations.setActionView(R.layout.menu_item_reservations)
 
+        val menuItemBookReservation = navView.menu.findItem(R.id.nav_book_reservation)
+        menuItemBookReservation.setActionView(R.layout.menu_item_book_reservation)
+
         //set text navbar
         val navbarText = findViewById<TextView>(R.id.navbar_text)
         navbarText.text = "Your reservations"
@@ -146,26 +149,8 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         val reservationButton = findViewById<Button>(R.id.button)
 
         reservationButton.setOnClickListener {
-            val reservationContainer = findViewById<LinearLayout>(R.id.select_sport_reservation_container)
-            val selectSportReservation = layoutInflater.inflate(R.layout.select_sport_availability, reservationContainer, false)
-
-            //spinner for sport
-            val sportSpinner = selectSportReservation.findViewById<Spinner>(R.id.selectSport)
-            sportSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, sports)
-
-            reservationContainer.addView(selectSportReservation)
-
-            val checkAvailability = findViewById<Button>(R.id.checkAvailabilityButton)
-            checkAvailability.setOnClickListener {
-                val selectedSport = sportSpinner.selectedItem.toString()
-
-                val intent = Intent(this, BrowseAvailabilityActivity::class.java)
-                intent.putExtra("selectedSport", selectedSport)
-                startActivity(intent)
-            }
-
-            reservationButton.isClickable = false
-            reservationButton.setBackgroundColor(Color.GRAY)
+            val intent = Intent(this, BrowseAvailabilityActivity::class.java)
+            startActivity(intent)
         }
 
         val showReservationDetail = findViewById<RelativeLayout>(R.id.reservation_box)
@@ -185,6 +170,10 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             }
             R.id.nav_reservations -> {
                 val intent = Intent(this, ReservationActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.nav_book_reservation -> {
+                val intent = Intent(this, BrowseAvailabilityActivity::class.java)
                 startActivity(intent)
             }
         }
