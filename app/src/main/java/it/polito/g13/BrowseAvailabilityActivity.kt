@@ -1,6 +1,7 @@
 package it.polito.g13
 
 import android.annotation.SuppressLint
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -17,6 +18,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.TimePicker
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -54,6 +56,14 @@ class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigat
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navView: NavigationView
 
+    //time picker variables initialization
+    private lateinit var from_time_picker_availability: TimePickerDialog
+    private lateinit var select_from_time_availability: TextView
+    private lateinit var from_time_availability: String
+    private lateinit var to_time_picker_availability: TimePickerDialog
+    private lateinit var select_to_time_availability: TextView
+    private lateinit var to_time_availability: String
+
     private lateinit var calendarView: CustomCalendarView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,6 +99,71 @@ class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigat
         val navbarText = findViewById<TextView>(R.id.navbar_text)
         navbarText.text = "Book your reservation"
 
+        //set time picker
+        select_from_time_availability = findViewById(R.id.select_from_time_availability)
+
+        select_from_time_availability.setOnClickListener(View.OnClickListener {
+            val cldr = Calendar.getInstance()
+            var hour = cldr[Calendar.HOUR_OF_DAY]
+            var minutes = cldr[Calendar.MINUTE]
+
+            if (this::from_time_availability.isInitialized) {
+                hour = from_time_availability.split(":")[0].toInt()
+                minutes = from_time_availability.split(":")[1].toInt()
+            }
+
+            // time picker dialog
+            from_time_picker_availability = TimePickerDialog(this, object : TimePickerDialog.OnTimeSetListener {
+                override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+                    var hourFormatted = hourOfDay.toString()
+                    var minuteFormatted = minute.toString()
+                    if (hourOfDay < 10) {
+                        hourFormatted = "0$hourFormatted"
+                    }
+
+                    if (minute < 10) {
+                        minuteFormatted = "0$minute"
+                    }
+                    select_from_time_availability.text = String.format("%s:%s", hourFormatted, minuteFormatted)
+                }
+            }, hour, minutes, true)
+
+            from_time_picker_availability.show()
+        })
+
+        select_to_time_availability = findViewById(R.id.select_to_time_availability)
+
+        select_to_time_availability.setOnClickListener(View.OnClickListener {
+            val cldr = Calendar.getInstance()
+            var hour = cldr[Calendar.HOUR_OF_DAY]
+            var minutes = cldr[Calendar.MINUTE]
+
+            if (this::to_time_availability.isInitialized) {
+                hour = to_time_availability.split(":")[0].toInt()
+                minutes = to_time_availability.split(":")[1].toInt()
+            }
+
+            // time picker dialog
+            to_time_picker_availability = TimePickerDialog(this, object : TimePickerDialog.OnTimeSetListener {
+                override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+                    var hourFormatted = hourOfDay.toString()
+                    var minuteFormatted = minute.toString()
+                    if (hourOfDay < 10) {
+                        hourFormatted = "0$hourFormatted"
+                    }
+
+                    if (minute < 10) {
+                        minuteFormatted = "0$minute"
+                    }
+
+                    select_to_time_availability.text = String.format("%s:%s", hourFormatted, minuteFormatted)
+                }
+            }, hour, minutes, true)
+
+            to_time_picker_availability.show()
+        })
+
+        //set calendar
         calendarView = findViewById(R.id.book_reservation_calendar_view)
 
         val currentCalendar: Calendar = Calendar.getInstance(Locale.getDefault())
