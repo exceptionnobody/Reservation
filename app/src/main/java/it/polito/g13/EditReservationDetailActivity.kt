@@ -1,13 +1,11 @@
 package it.polito.g13
 
-import android.app.Activity
-import android.content.Context
+import android.app.TimePickerDialog
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
@@ -18,10 +16,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.stacktips.view.CalendarListener
 import com.stacktips.view.CustomCalendarView
 import com.stacktips.view.DayDecorator
-import com.stacktips.view.utils.CalendarUtils
 import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.entities.PosRes
-import it.polito.g13.entities.Reservation
 import it.polito.g13.viewModel.PosResViewModel
 import it.polito.g13.viewModel.ReservationsViewModel
 import java.text.SimpleDateFormat
@@ -47,6 +43,12 @@ class EditReservationDetailActivity : AppCompatActivity() {
     private lateinit var structureName: String
     private lateinit var sportName: String
     private lateinit var confirmButton: Button
+    private lateinit var from_time_picker: TimePickerDialog
+    private lateinit var select_from_time: TextView
+    private lateinit var from_time: String
+    private lateinit var to_time_picker: TimePickerDialog
+    private lateinit var select_to_time: TextView
+    private lateinit var to_time: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +72,69 @@ class EditReservationDetailActivity : AppCompatActivity() {
         sportCentersSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, sportCenters)
 
         sportCentersSpinner.onItemSelectedListener = this@EditReservationDetailActivity*/
+
+        select_from_time = findViewById(R.id.select_from_time)
+
+        select_from_time.setOnClickListener(View.OnClickListener {
+            val cldr = Calendar.getInstance()
+            var hour = cldr[Calendar.HOUR_OF_DAY]
+            var minutes = cldr[Calendar.MINUTE]
+
+            if (this::from_time.isInitialized) {
+                hour = from_time.split(":")[0].toInt()
+                minutes = from_time.split(":")[1].toInt()
+            }
+
+            // time picker dialog
+            from_time_picker = TimePickerDialog(this, object : TimePickerDialog.OnTimeSetListener {
+                override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+                    var hourFormatted = hourOfDay.toString()
+                    var minuteFormatted = minute.toString()
+                    if (hourOfDay < 10) {
+                        hourFormatted = "0$hourFormatted"
+                    }
+
+                    if (minute < 10) {
+                        minuteFormatted = "0$minute"
+                    }
+                    select_from_time.text = String.format("%s:%s", hourFormatted, minuteFormatted)
+                }
+            }, hour, minutes, true)
+
+            from_time_picker.show()
+        })
+
+        select_to_time = findViewById(R.id.select_to_time)
+
+        select_to_time.setOnClickListener(View.OnClickListener {
+            val cldr = Calendar.getInstance()
+            var hour = cldr[Calendar.HOUR_OF_DAY]
+            var minutes = cldr[Calendar.MINUTE]
+
+            if (this::to_time.isInitialized) {
+                hour = to_time.split(":")[0].toInt()
+                minutes = to_time.split(":")[1].toInt()
+            }
+
+            // time picker dialog
+            to_time_picker = TimePickerDialog(this, object : TimePickerDialog.OnTimeSetListener {
+                override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+                    var hourFormatted = hourOfDay.toString()
+                    var minuteFormatted = minute.toString()
+                    if (hourOfDay < 10) {
+                        hourFormatted = "0$hourFormatted"
+                    }
+
+                    if (minute < 10) {
+                        minuteFormatted = "0$minute"
+                    }
+
+                    select_to_time.text = String.format("%s:%s", hourFormatted, minuteFormatted)
+                }
+            }, hour, minutes, true)
+
+            to_time_picker.show()
+        })
 
         notesInput = findViewById(R.id.content_notes)
 
@@ -143,6 +208,21 @@ class EditReservationDetailActivity : AppCompatActivity() {
             val placeText = findViewById<TextView>(R.id.content_place)
             placeText.text = it.strut
             structureName = it.strut
+
+            select_from_time.text = SimpleDateFormat("HH:mm").format(it.data)
+            from_time = SimpleDateFormat("HH:mm").format(it.data)
+
+            var to_time_hour = SimpleDateFormat("HH:mm").format(it.data).split(":")[0].toInt()
+            val to_time_minutes = SimpleDateFormat("HH:mm").format(it.data).split(":")[1]
+
+            if (to_time_hour == 23) {
+                to_time_hour = 0
+            } else {
+                to_time_hour += 1
+            }
+
+            select_to_time.text = String.format("%s:%s", to_time_hour, to_time_minutes)
+            to_time = String.format("%s:%s", to_time_hour, to_time_minutes)
 
             /*val sportSelectedIndex = sports.indexOf(it.sport)
             sportSpinner.setSelection(sportSelectedIndex)
