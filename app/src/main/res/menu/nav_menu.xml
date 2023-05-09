@@ -12,4 +12,8 @@
     <item
         android:id="@+id/nav_book_reservation"
         android:title=""/>
+
+    <item
+        android:id="@+id/nav_review_courts"
+        android:title=""/>
 </menu>

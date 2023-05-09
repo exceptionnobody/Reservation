@@ -1,57 +1,42 @@
 package it.polito.g13
 
+import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
-import android.graphics.Color
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
-import com.stacktips.view.CalendarListener
-import com.stacktips.view.CustomCalendarView
-import com.stacktips.view.DayDecorator
 import dagger.hilt.android.AndroidEntryPoint
-import it.polito.g13.entities.PosRes
 import it.polito.g13.entities.Reservation
-import it.polito.g13.viewModel.PosResViewModel
 import it.polito.g13.viewModel.ReservationsViewModel
 import java.text.SimpleDateFormat
-import java.util.*
 
-private var selectedSport: String? = null
+private lateinit var context : Context
 
 @AndroidEntryPoint
-class ShowPosResDetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class ListReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    val reservationViewModel by viewModels<ReservationsViewModel>()
 
     //initialize toolbar variables
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navView: NavigationView
 
-    private lateinit var notesInput: EditText
-
-    private val posResViewModel by viewModels<PosResViewModel>()
-    private val reservationViewModel by viewModels<ReservationsViewModel>()
-
-    private var selectedPosResId: Int = 0
-    private lateinit var confirmButton: Button
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_show_pos_res_detail)
-
-        //get selected sport
-        selectedSport = intent.getStringExtra("selectedSport")
+        context = this.applicationContext
+        setContentView(R.layout.activity_list_review_courts)
 
         //toolbar instantiation
         toolbar = findViewById(R.id.toolbar)
@@ -82,51 +67,15 @@ class ShowPosResDetailActivity : AppCompatActivity(), NavigationView.OnNavigatio
 
         //set text navbar
         val navbarText = findViewById<TextView>(R.id.navbar_text)
-        navbarText.text = "Your reservation detail"
+        navbarText.text = "Review a court"
 
-        confirmButton = findViewById(R.id.confirm_button_posres)
-        val cancelButton = findViewById<Button>(R.id.cancel_button_posres)
-
-        notesInput = findViewById(R.id.content_notes_posres)
-
-        //get selected reservation
-        selectedPosResId = intent.getIntExtra("selectedPosResId", 0)
-        posResViewModel.getPosResById(selectedPosResId)
-        posResViewModel.singlePosRes.observe(this) {
-            val sportText = findViewById<TextView>(R.id.content_sport_typology_posres)
-            sportText.text = it.sport
-
-            val placeText = findViewById<TextView>(R.id.content_place_posres)
-            placeText.text = it.strut
-
-            val dateTimeText = findViewById<TextView>(R.id.content_date_time_posres)
-            val formattedDate = SimpleDateFormat("dd-MM-yyyy HH:mm").format(it.data).split(" ")
-            val date = formattedDate[0]
-            val hour1 = formattedDate[1]
-            val hour2 = (hour1.split(":")[0].toInt() + 1).toString() + ":" + hour1.split(":")[1]
-
-            dateTimeText.text = date + ", " + hour1 + "-" + hour2
-        }
-
-        confirmButton.setOnClickListener {
-            posResViewModel.singlePosRes.observe(this) {
-                if (it != null) {
-                    reservationViewModel.insertReservation(Reservation(99, it.id, 1, it.strut, it.sport, it.data, notesInput.text.toString(), true))
-                    posResViewModel.updatePosRes(PosRes(it.id, it.strut, it.campo, it.sport, it.data, false))
-
-                    val intent = Intent(this, ReservationActivity::class.java)
-                    startActivity(intent)
-                }
-            }
-        }
-
-        cancelButton.setOnClickListener {
-            val intent = Intent(this, BrowseAvailabilityActivity::class.java)
-            startActivity(intent)
+        reservationViewModel.reservations.observe(this) {
+            val recyclerView = findViewById<RecyclerView>(R.id.list_review_courts)
+            recyclerView.adapter = ReviewReservationAdapter(it, this)
+            recyclerView.layoutManager = LinearLayoutManager(this)
         }
     }
 
-    //handle toolbar items
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_profile -> {
@@ -148,5 +97,38 @@ class ShowPosResDetailActivity : AppCompatActivity(), NavigationView.OnNavigatio
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
+    }
+}
+
+//define recycler view for reservations
+class ReviewReservationsViewHolder(v: View) : RecyclerView.ViewHolder(v){
+    val strut = v.findViewById<TextView>(R.id.review_strut)
+    val sport = v.findViewById<TextView>(R.id.review_sport)
+    val data = v.findViewById<TextView>(R.id.review_data)
+    val note = v.findViewById<TextView>(R.id.review_note)
+}
+
+class ReviewReservationAdapter(val listReservation: List<Reservation>, context: Context ): RecyclerView.Adapter<ReviewReservationsViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewReservationsViewHolder {
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.review_court_box, parent, false)
+
+        return ReviewReservationsViewHolder(v)
+    }
+
+    override fun getItemCount(): Int {
+        return listReservation.size
+    }
+
+    override fun onBindViewHolder(holder: ReviewReservationsViewHolder, position: Int) {
+        val reservation = listReservation[position]
+
+        val formattedDate = SimpleDateFormat("yyyy-MM-dd HH:mm").format(reservation.data).split(" ")
+        val hour1 = formattedDate[1]
+        val hour2 = (hour1.split(":")[0].toInt() + 1).toString() + ":" + hour1.split(":")[1]
+
+        holder.data.text = formattedDate[0] + ", " + hour1 + "-" + hour2
+        holder.strut.text = reservation.strut
+        holder.sport.text = reservation.sport
+        holder.note.text = reservation.note.ifEmpty { "No extra note inserted" }
     }
 }
