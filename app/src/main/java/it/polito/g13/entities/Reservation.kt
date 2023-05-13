@@ -15,16 +15,16 @@ data class Reservation(
     val id: Int=0,
 
     @ColumnInfo(name = "idslot")
-    val idsl: Int = 0,
+    var idsl: Int = 0,
 
     @ColumnInfo(name = "iduser")
-    val iduser: Int = 0,
+    var iduser: Int = 0,
 
     @ColumnInfo(name = "struttura")
-    val strut: String = "",
+    var strut: String = "",
 
     @ColumnInfo(name = "sport")
-    val sport: String = "",
+    var sport: String = "",
 
     @ColumnInfo(name = "date")
     var data: Date? = null,
@@ -33,6 +33,6 @@ data class Reservation(
     var note: String = "",
 
     @ColumnInfo(name = "flag")
-    val flag:Boolean=false
+    var flag:Boolean=false
     )
 

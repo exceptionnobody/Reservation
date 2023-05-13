@@ -3,27 +3,18 @@ package it.polito.g13.entities
 import androidx.room.*
 import it.polito.g13.converter.DataConverter
 import it.polito.g13.utils.Constants.POSRES
+import it.polito.g13.utils.Constants.STRUCT
 import java.util.Date
 
-@Entity(tableName = POSRES)
+@Entity(tableName = STRUCT)
 @TypeConverters(DataConverter::class)
-data class PosRes(
+data class Struttura(
     @PrimaryKey(autoGenerate = true)
     val id: Int=0,
 
     @ColumnInfo(name = "struttura")
-    val strut: String = "",
+    var structure_name: String = "",
 
     @ColumnInfo(name = "campo")
-    val campo: Int = 0,
-
-    @ColumnInfo(name = "sport")
-    val sport: String = "",
-
-    @ColumnInfo(name = "date", defaultValue = "CURRENT_TIMESTAMP")
-    var data: Date,
-
-    @ColumnInfo(name = "flag")
-    var flag: Boolean = false,
-
+    var review_id_struct: Int = 0,
     )

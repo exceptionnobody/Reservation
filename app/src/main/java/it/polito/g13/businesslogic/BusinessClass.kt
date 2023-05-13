@@ -2,10 +2,11 @@ package it.polito.g13.businesslogic
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import it.polito.g13.dao.PosresDao
-import it.polito.g13.dao.ReservationDao
+import it.polito.g13.dao.*
 import it.polito.g13.entities.PosRes
 import it.polito.g13.entities.Reservation
+import it.polito.g13.entities.Sports
+import it.polito.g13.entities.review_struct
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -16,6 +17,11 @@ class BusinessClass
 @Inject constructor(
     private val reservationDao: ReservationDao,
     private val posresDao: PosresDao,
+    private val userDao: UserDao,
+    private val strutDao: StructureDao,
+    private val campoDao: CampoDao,
+    private val sportsDao: SportsDao,
+    private val reviewStructDao: ReviewStructDao
 
     ) {
 
