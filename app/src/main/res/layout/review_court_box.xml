@@ -2,82 +2,78 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="5dp"
-    android:minHeight="50dp">
+    android:layout_height="wrap_content">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_left_grid"
+        android:layout_marginEnd="@dimen/margin_right_grid"
+        android:layout_marginBottom="20dp"
+        app:cardBackgroundColor="#F7F7E9"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="10dp"
+        app:cardMaxElevation="12dp"
+        app:cardPreventCornerOverlap="false"
+        app:cardUseCompatPadding="false"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.173"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:cardElevation="10dp"
-        app:cardCornerRadius="20dp"
-        android:layout_margin="10dp"
-        app:cardBackgroundColor="#F7F7E9"
-        app:strokeWidth="2dp"
         app:strokeColor="@color/primary_green"
-        app:cardMaxElevation="12dp"
-        app:cardPreventCornerOverlap="true"
-        app:cardUseCompatPadding="true">
+        app:strokeWidth="2dp">
 
         <TextView
             android:id="@+id/review_strut"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nome struttura"
-            android:textColor="@color/black"
-            android:fontFamily="@font/crete_round"
             android:layout_alignParentStart="true"
             android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
-            android:textSize="20sp"
-            />
+            android:fontFamily="@font/crete_round"
+            android:text="Nome struttura"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/review_sport"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sport"
-            android:textColor="@color/black"
-            android:fontFamily="@font/crete_round"
             android:layout_alignParentStart="true"
             android:layout_marginStart="15dp"
             android:layout_marginTop="45dp"
             android:layout_marginBottom="15dp"
-            android:textSize="18sp"
-            />
+            android:fontFamily="@font/crete_round"
+            android:text="Sport"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/review_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Data prenotazione, time slot"
-            android:textColor="@color/black"
-            android:fontFamily="@font/crete_round"
             android:layout_alignParentStart="true"
             android:layout_marginStart="15dp"
             android:layout_marginTop="75dp"
             android:layout_marginBottom="15dp"
-            android:textSize="18sp"
-            />
+            android:fontFamily="@font/crete_round"
+            android:text="Data prenotazione, time slot"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/review_note"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Note inserite"
-            android:textColor="@color/black"
-            android:fontFamily="@font/crete_round"
             android:layout_alignParentStart="true"
             android:layout_marginStart="15dp"
             android:layout_marginTop="105dp"
             android:layout_marginBottom="15dp"
-            android:textSize="18sp"
-            />
+            android:fontFamily="@font/crete_round"
+            android:text="Note inserite"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
     </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
