@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            layout="@layout/navbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/margin_left_grid"
+            android:layout_marginTop="@dimen/margin_top_grid"
+            android:layout_marginEnd="@dimen/margin_right_grid"
+            android:layout_marginBottom="@dimen/margin_bottom_grid"
+            android:orientation="vertical"
+            tools:context=".ShowReviewCourtsActivity">
+
+            <TextView
+                android:id="@+id/title2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_start_title_first_level"
+                android:layout_marginRight="@dimen/margin_right_label_reservation_info"
+                android:fontFamily="@font/crete_round"
+                android:text="@string/rate_experience_title"
+                android:textColor="@color/primary_green"
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_bottom_reservation_info"
+                android:fontFamily="@font/crete_round"
+                android:paddingStart="@dimen/input_padding_x"
+                android:paddingTop="@dimen/input_padding_y"
+                android:paddingEnd="@dimen/input_padding_x"
+                android:paddingBottom="@dimen/input_padding_y"
+                android:text="@string/rate_experience_description"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_start_title_first_level"
+                android:layout_marginRight="@dimen/margin_right_label_reservation_info"
+                android:fontFamily="@font/crete_round"
+                android:text="@string/rate_title_sport_structure"
+                android:textColor="@color/primary_green"
+                android:textSize="@dimen/font_size_info_reservation_label" />
+
+            <RatingBar
+                android:id="@+id/rating_structure_courts"
+                style="?android:attr/ratingBarStyleIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/input_padding_x"
+                android:layout_marginTop="@dimen/input_padding_y"
+                android:layout_marginEnd="@dimen/input_padding_x"
+                android:layout_marginBottom="@dimen/margin_bottom_reservation_info"
+                android:contentDescription="@string/rate_title_sport_structure"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:progressTint="@color/primary_gold"
+                android:secondaryProgressTint="@color/secondary_gold" />
+
+            <TextView
+                android:id="@+id/title3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_start_title_first_level"
+                android:layout_marginRight="@dimen/margin_right_label_reservation_info"
+                android:fontFamily="@font/crete_round"
+                android:text="@string/rate_equipment"
+                android:textColor="@color/primary_green"
+                android:textSize="@dimen/font_size_info_reservation_label" />
+
+            <RatingBar
+                android:id="@+id/rating_equipment"
+                style="?android:attr/ratingBarStyleIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/input_padding_x"
+                android:layout_marginTop="@dimen/input_padding_y"
+                android:layout_marginEnd="@dimen/input_padding_x"
+                android:layout_marginBottom="@dimen/margin_bottom_reservation_info"
+                android:contentDescription="@string/rate_title_sport_structure"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:progressTint="@color/primary_gold"
+                android:secondaryProgressTint="@color/secondary_gold" />
+
+            <TextView
+                android:id="@+id/title4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_start_title_first_level"
+                android:layout_marginRight="@dimen/margin_right_label_reservation_info"
+                android:fontFamily="@font/crete_round"
+                android:text="@string/rate_title_dressing_room"
+                android:textColor="@color/primary_green"
+                android:textSize="@dimen/font_size_info_reservation_label" />
+
+            <RatingBar
+                android:id="@+id/rating_dressing_rooms"
+                style="?android:attr/ratingBarStyleIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/input_padding_x"
+                android:layout_marginTop="@dimen/input_padding_y"
+                android:layout_marginEnd="@dimen/input_padding_x"
+                android:layout_marginBottom="@dimen/margin_bottom_reservation_info"
+                android:contentDescription="@string/rate_title_sport_structure"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:progressTint="@color/primary_gold"
+                android:secondaryProgressTint="@color/secondary_gold" />
+
+            <TextView
+                android:id="@+id/title5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_start_title_first_level"
+                android:layout_marginRight="@dimen/margin_right_label_reservation_info"
+                android:fontFamily="@font/crete_round"
+                android:text="@string/rate_personnel"
+                android:textColor="@color/primary_green"
+                android:textSize="@dimen/font_size_info_reservation_label" />
+
+            <RatingBar
+                android:id="@+id/rating_staff"
+                style="?android:attr/ratingBarStyleIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/input_padding_x"
+                android:layout_marginTop="@dimen/input_padding_y"
+                android:layout_marginEnd="@dimen/input_padding_x"
+                android:layout_marginBottom="@dimen/margin_bottom_reservation_info"
+                android:contentDescription="@string/rate_title_sport_structure"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:progressTint="@color/primary_gold"
+                android:secondaryProgressTint="@color/secondary_gold" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_start_title_first_level"
+                android:layout_marginRight="@dimen/margin_right_label_reservation_info"
+                android:fontFamily="@font/crete_round"
+                android:text="@string/rate_feedback_title"
+                android:textColor="@color/primary_green"
+                android:textSize="@dimen/font_size_info_reservation_label" />
+
+            <TextView
+                android:id="@+id/feedback_rate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="@dimen/margin_bottom_reservation_info"
+                android:fontFamily="@font/crete_round"
+                android:paddingStart="@dimen/input_padding_x"
+                android:paddingTop="@dimen/input_padding_y"
+                android:paddingEnd="@dimen/input_padding_x"
+                android:paddingBottom="@dimen/input_padding_y"
+                android:text="@string/rate_no_feedback"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_size_info_reservation_content" />
+
+
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

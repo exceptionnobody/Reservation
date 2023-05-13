@@ -130,5 +130,12 @@ class ReviewReservationAdapter(val listReservation: List<Reservation>, context: 
         holder.strut.text = reservation.strut
         holder.sport.text = reservation.sport
         holder.note.text = reservation.note.ifEmpty { "No extra note inserted" }
+
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, ShowReviewCourtsActivity::class.java)
+            intent.putExtra("selectedCourtName", reservation.strut)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(intent)
+        }
     }
 }

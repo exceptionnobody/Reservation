@@ -88,4 +88,14 @@
     <string name="confirm_button_popup_reservation">Delete reservation</string>
     <string name="cancel_button_popup_reservation">Cancel</string>
     <string name="text_select_date_and_time">Select select time range and date to view availability, then choose a slot</string>
+
+    <string name="rate_experience_title">Rate your experience</string>
+    <string name="rate_experience_description">Give a vote: 1 - insufficient, 5 - excellent</string>
+    <string name="rate_title_sport_structure">The structure and the courts are suitable</string>
+    <string name="rate_equipment">The sports center equipment is adequate</string>
+    <string name="rate_title_dressing_room">The dressing rooms are suitable</string>
+    <string name="rate_personnel">The staff is competent and helpful</string>
+    <string name="rate_feedback_title">Give us your feedback</string>
+    <string name="rate_no_feedback">No extra comment added</string>
+    <string name="rate_feedback_hint">Comment...</string>
 </resources>
