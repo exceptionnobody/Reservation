@@ -134,6 +134,7 @@ class ReviewReservationAdapter(val listReservation: List<Reservation>, context: 
         holder.itemView.setOnClickListener {
             val intent = Intent(context, ShowReviewCourtsActivity::class.java)
             intent.putExtra("selectedCourtName", reservation.strut)
+            intent.putExtra("selectedCourtId", 1)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
         }

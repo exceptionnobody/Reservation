@@ -75,7 +75,8 @@
             android:isIndicator="false"
             android:numStars="5"
             android:progressTint="@color/primary_gold"
-            android:secondaryProgressTint="@color/secondary_gold" />
+            android:secondaryProgressTint="@color/secondary_gold"
+            android:stepSize="1" />
 
         <TextView
             android:id="@+id/title3"
@@ -101,7 +102,8 @@
             android:isIndicator="false"
             android:numStars="5"
             android:progressTint="@color/primary_gold"
-            android:secondaryProgressTint="@color/secondary_gold" />
+            android:secondaryProgressTint="@color/secondary_gold"
+            android:stepSize="1" />
 
         <TextView
             android:id="@+id/title4"
@@ -127,7 +129,8 @@
             android:isIndicator="false"
             android:numStars="5"
             android:progressTint="@color/primary_gold"
-            android:secondaryProgressTint="@color/secondary_gold" />
+            android:secondaryProgressTint="@color/secondary_gold"
+            android:stepSize="1" />
 
         <TextView
             android:id="@+id/title5"
@@ -153,7 +156,8 @@
             android:isIndicator="false"
             android:numStars="5"
             android:progressTint="@color/primary_gold"
-            android:secondaryProgressTint="@color/secondary_gold" />
+            android:secondaryProgressTint="@color/secondary_gold"
+            android:stepSize="1" />
 
         <TextView
             android:id="@+id/textView7"

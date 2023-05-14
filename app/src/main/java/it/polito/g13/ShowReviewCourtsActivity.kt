@@ -11,14 +11,20 @@ import android.widget.RatingBar
 import android.widget.RatingBar.OnRatingBarChangeListener
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import dagger.hilt.android.AndroidEntryPoint
+import it.polito.g13.viewModel.ReservationsViewModel
+import it.polito.g13.viewModel.ReviewStructureViewModel
 
-
+@AndroidEntryPoint
 class ShowReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    val reviewStructureViewModel by viewModels<ReviewStructureViewModel>()
 
     //initialize toolbar variables
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
@@ -26,11 +32,16 @@ class ShowReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigatio
     private lateinit var navView: NavigationView
 
     private lateinit var selectedCourtName: String
+    private var selectedCourtId: Int = 0
+    private var selectedReviewId: Int = 0
+    private var userId: Int = 1
 
     private lateinit var structureAndCourtsRatingBar: RatingBar
     private lateinit var equipmentRatingBar: RatingBar
     private lateinit var dressingRoomsRatingBar: RatingBar
     private lateinit var staffRatingBar: RatingBar
+
+    private lateinit var feedbackRate: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +79,8 @@ class ShowReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigatio
         val navbarText = findViewById<TextView>(R.id.navbar_text)
         navbarText.text = "Review $selectedCourtName"
 
+        selectedCourtId = intent.getIntExtra("selectedCourtId", 0)
+
         // set value from db
         structureAndCourtsRatingBar = findViewById(R.id.rating_structure_courts)
 
@@ -76,6 +89,23 @@ class ShowReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigatio
         dressingRoomsRatingBar = findViewById(R.id.rating_dressing_rooms)
 
         staffRatingBar = findViewById(R.id.rating_staff)
+
+        feedbackRate = findViewById(R.id.feedback_rate)
+
+        reviewStructureViewModel.getReviewByStructureAndUserId(selectedCourtId,userId)
+
+        reviewStructureViewModel.singleReviewStructure.observe(this) {
+            if (it !== null) {
+                selectedReviewId = it.id
+                structureAndCourtsRatingBar.rating = it.s_q1.toFloat()
+                equipmentRatingBar.rating = it.s_q2.toFloat()
+                dressingRoomsRatingBar.rating = it.s_q3.toFloat()
+                staffRatingBar.rating = it.s_q4.toFloat()
+                if (it.description.isNotEmpty()) {
+                    feedbackRate.text = it.description
+                }
+            }
+        }
 
     }
     //handle toolbar items
@@ -112,6 +142,9 @@ class ShowReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigatio
         if (id==R.id.action_edit) {
             val intent = Intent(this, EditReviewCourtsActivity::class.java)
             intent.putExtra("selectedCourtName", selectedCourtName)
+            intent.putExtra("selectedCourtId", selectedCourtId)
+            intent.putExtra("selectedReviewId", selectedReviewId)
+            intent.putExtra("userId", userId)
             startActivity(intent)
             return true
         }
