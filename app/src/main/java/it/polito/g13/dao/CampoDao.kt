@@ -30,6 +30,6 @@ interface CampoDao {
     @Query("SELECT * FROM $CAMPO WHERE id_struttura == :id")
     fun getAllCampOfStruct(id:Int) : LiveData<List<Campo>>
 
-    @Query("SELECT * FROM $CAMPO WHERE tipo_sport == :id")
+    @Query("SELECT * FROM $CAMPO WHERE sport == :sport")
         fun getAllCampOfSports(sport:String) : LiveData<List<Campo>>
 }

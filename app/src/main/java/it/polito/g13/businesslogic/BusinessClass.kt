@@ -110,4 +110,20 @@ class BusinessClass
         val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.UK).format(date)
         return posresDao.getPosResSportDateAndStruct(sport, formattedDate, struct)
     }
+
+    fun createReview(review: review_struct) {
+        return reviewStructDao.insertReviewStructure(review)
+    }
+
+    fun updateReview(review: review_struct) {
+        return reviewStructDao.updateReviewStructure(review)
+    }
+
+    fun getReviewByStructureAndUserId(structureId: Int, userId: Int): review_struct {
+        return reviewStructDao.getSingleRevStructByUserAndStructureId(structureId, userId)
+    }
+
+    fun getReviewById(reviewId: Int): review_struct {
+        return reviewStructDao.getSingleRevStruct(reviewId)
+    }
 }

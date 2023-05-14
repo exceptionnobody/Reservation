@@ -12,7 +12,7 @@ data class review_struct(
     @PrimaryKey(autoGenerate = true)
     val id: Int=0,
 
-    @ColumnInfo(name = "review_id_struct")
+    @ColumnInfo(name = "user_id")
     var user_id: Int = 0,
 
     @ColumnInfo(name = "review_id_struct")

@@ -13,6 +13,7 @@ import java.util.Date
 @TypeConverters(DataConverter::class)
 data class User(
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
     val User_id: Int=0,
 
     @ColumnInfo(name = "photo")
