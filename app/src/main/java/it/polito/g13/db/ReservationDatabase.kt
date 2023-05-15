@@ -7,7 +7,7 @@ import it.polito.g13.converter.DataConverter
 import it.polito.g13.dao.*
 import it.polito.g13.entities.*
 
-@Database(entities = [Reservation::class,PosRes::class,User::class,Struttura::class,Campo::class,Sports::class,review_struct::class], version = 1 )
+@Database(entities = [Reservation::class,PosRes::class,User::class,Struttura::class,Campo::class,Sports::class,review_struct::class], version = 2 )
 @TypeConverters(DataConverter::class)
 abstract class ReservationDatabase :  RoomDatabase(){
     abstract fun reservationDao(): ReservationDao

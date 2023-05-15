@@ -19,6 +19,9 @@ interface StructureDao {
     @Update
     fun updateStructure(struttura: Struttura)
 
+    @Query("SELECT * FROM $STRUCT WHERE id == :id ")
+    fun isPresent(id:Int): Boolean
+
     @Insert(onConflict = OnConflictStrategy.ABORT)
     fun insertStructure(struttura: Struttura)
 

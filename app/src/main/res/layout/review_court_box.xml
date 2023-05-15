@@ -48,32 +48,6 @@
             android:text="Sport"
             android:textColor="@color/black"
             android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/review_data"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="75dp"
-            android:layout_marginBottom="15dp"
-            android:fontFamily="@font/crete_round"
-            android:text="Data prenotazione, time slot"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/review_note"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="105dp"
-            android:layout_marginBottom="15dp"
-            android:fontFamily="@font/crete_round"
-            android:text="Note inserite"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
     </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

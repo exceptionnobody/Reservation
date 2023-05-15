@@ -1,14 +1,20 @@
 package it.polito.g13.businesslogic
 
-import android.util.Log
 import androidx.lifecycle.LiveData
-import it.polito.g13.dao.*
+import it.polito.g13.dao.CampoDao
+import it.polito.g13.dao.PosresDao
+import it.polito.g13.dao.ReservationDao
+import it.polito.g13.dao.ReviewStructDao
+import it.polito.g13.dao.SportsDao
+import it.polito.g13.dao.StructureDao
+import it.polito.g13.dao.UserDao
 import it.polito.g13.entities.PosRes
 import it.polito.g13.entities.Reservation
-import it.polito.g13.entities.Sports
+import it.polito.g13.entities.Struttura
 import it.polito.g13.entities.review_struct
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -125,5 +131,14 @@ class BusinessClass
 
     fun getReviewById(reviewId: Int): review_struct {
         return reviewStructDao.getSingleRevStruct(reviewId)
+    }
+
+    fun getAllStructures() : LiveData<List<Struttura>> {
+        return strutDao.getaLLStructure()
+    }
+
+    fun insertStructure(structure: Struttura) {
+        if (!strutDao.isPresent(structure.id))
+            strutDao.insertStructure(structure)
     }
 }

@@ -18,7 +18,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.entities.Reservation
+import it.polito.g13.entities.Struttura
 import it.polito.g13.viewModel.ReservationsViewModel
+import it.polito.g13.viewModel.StrutturaViewModel
 import java.text.SimpleDateFormat
 
 private lateinit var context : Context
@@ -27,6 +29,7 @@ private lateinit var context : Context
 class ListReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     val reservationViewModel by viewModels<ReservationsViewModel>()
+    val structureViewModel by viewModels<StrutturaViewModel>()
 
     //initialize toolbar variables
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
@@ -69,10 +72,14 @@ class ListReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigatio
         val navbarText = findViewById<TextView>(R.id.navbar_text)
         navbarText.text = "Review a court"
 
-        reservationViewModel.reservations.observe(this) {
-            val recyclerView = findViewById<RecyclerView>(R.id.list_review_courts)
-            recyclerView.adapter = ReviewReservationAdapter(it, this)
-            recyclerView.layoutManager = LinearLayoutManager(this)
+        structureViewModel.structures.observe(this) {structures ->
+            reservationViewModel.reservations.observe(this) {reservations ->
+                val listToReview = reservations.distinctBy { it.strut }
+
+                val recyclerView = findViewById<RecyclerView>(R.id.list_review_courts)
+                recyclerView.adapter = ReviewReservationAdapter(listToReview, structures, this)
+                recyclerView.layoutManager = LinearLayoutManager(this)
+            }
         }
     }
 
@@ -104,11 +111,9 @@ class ListReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigatio
 class ReviewReservationsViewHolder(v: View) : RecyclerView.ViewHolder(v){
     val strut = v.findViewById<TextView>(R.id.review_strut)
     val sport = v.findViewById<TextView>(R.id.review_sport)
-    val data = v.findViewById<TextView>(R.id.review_data)
-    val note = v.findViewById<TextView>(R.id.review_note)
 }
 
-class ReviewReservationAdapter(val listReservation: List<Reservation>, context: Context ): RecyclerView.Adapter<ReviewReservationsViewHolder>() {
+class ReviewReservationAdapter(val listReservation: List<Reservation>, val listStructures: List<Struttura>, context: Context ): RecyclerView.Adapter<ReviewReservationsViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewReservationsViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.review_court_box, parent, false)
 
@@ -122,19 +127,15 @@ class ReviewReservationAdapter(val listReservation: List<Reservation>, context: 
     override fun onBindViewHolder(holder: ReviewReservationsViewHolder, position: Int) {
         val reservation = listReservation[position]
 
-        val formattedDate = SimpleDateFormat("yyyy-MM-dd HH:mm").format(reservation.data).split(" ")
-        val hour1 = formattedDate[1]
-        val hour2 = (hour1.split(":")[0].toInt() + 1).toString() + ":" + hour1.split(":")[1]
-
-        holder.data.text = formattedDate[0] + ", " + hour1 + "-" + hour2
         holder.strut.text = reservation.strut
         holder.sport.text = reservation.sport
-        holder.note.text = reservation.note.ifEmpty { "No extra note inserted" }
+
+        val structure = listStructures.filter { it.structure_name != reservation.strut }[0]
 
         holder.itemView.setOnClickListener {
             val intent = Intent(context, ShowReviewCourtsActivity::class.java)
-            intent.putExtra("selectedCourtName", reservation.strut)
-            intent.putExtra("selectedCourtId", 1)
+            intent.putExtra("selectedCourtName", structure.structure_name)
+            intent.putExtra("selectedCourtId", structure.id)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
         }
