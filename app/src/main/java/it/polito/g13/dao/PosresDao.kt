@@ -41,4 +41,7 @@ interface PosresDao {
 
     @Query("SELECT * FROM $POSRES WHERE sport == :sport AND strftime('%Y-%m-%d', date) = strftime('%Y-%m-%d', :date) AND struttura == :struct AND flag == 1")
     fun getPosResSportDateAndStruct(sport: String, date: String, struct: String) : List<PosRes>
+
+    @Query("SELECT * FROM $POSRES WHERE sport == :sport AND strftime('%Y-%m-%d', date) = strftime('%Y-%m-%d', :date) AND struttura == :struct AND strftime('%H:%M', date) BETWEEN :from AND :to AND flag == 1")
+    fun getPosResStructureSportDateAndTime(sport: String, date: String, from: String, to: String, struct: String) : List<PosRes>
 }

@@ -119,6 +119,11 @@ class BusinessClass
         return posresDao.getPosResSportDateAndStruct(sport, formattedDate, struct)
     }
 
+    fun getPosResStructureSportDateAndTime(sport: String, date: Date, from: String, to: String, struct: String) : List<PosRes> {
+        val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.UK).format(date)
+        return posresDao.getPosResStructureSportDateAndTime(sport, formattedDate, from, to, struct)
+    }
+
     fun createReview(review: review_struct) {
         return reviewStructDao.insertReviewStructure(review)
     }

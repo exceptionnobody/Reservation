@@ -98,6 +98,9 @@ class EditReservationDetailActivity : AppCompatActivity() {
                         minuteFormatted = "0$minute"
                     }
                     select_from_time.text = String.format("%s:%s", hourFormatted, minuteFormatted)
+                    //from_time_selected = String.format("%s:%s", hourFormatted, minuteFormatted)
+                    from_time = String.format("%s:%s", hourFormatted, minuteFormatted)
+                    retrieveNewReservations(selectedDate, from_time, to_time)
                 }
             }, hour, minutes, true)
 
@@ -130,6 +133,9 @@ class EditReservationDetailActivity : AppCompatActivity() {
                     }
 
                     select_to_time.text = String.format("%s:%s", hourFormatted, minuteFormatted)
+                    //to_time_selected = String.format("%s:%s", hourFormatted, minuteFormatted)
+                    to_time = String.format("%s:%s", hourFormatted, minuteFormatted)
+                    retrieveNewReservations(selectedDate, from_time, to_time)
                 }
             }, hour, minutes, true)
 
@@ -185,7 +191,7 @@ class EditReservationDetailActivity : AppCompatActivity() {
             override fun onDateSelected(date: Date) {
                 selectedDate = date
 
-                retrieveNewReservations(date)
+                retrieveNewReservations(date, from_time, to_time)
 
             }
 
@@ -211,6 +217,7 @@ class EditReservationDetailActivity : AppCompatActivity() {
 
             select_from_time.text = SimpleDateFormat("HH:mm").format(it.data)
             from_time = SimpleDateFormat("HH:mm").format(it.data)
+            //from_time_selected = SimpleDateFormat("HH:mm").format(it.data)
 
             var to_time_hour = SimpleDateFormat("HH:mm").format(it.data).split(":")[0].toInt()
             val to_time_minutes = SimpleDateFormat("HH:mm").format(it.data).split(":")[1]
@@ -223,6 +230,7 @@ class EditReservationDetailActivity : AppCompatActivity() {
 
             select_to_time.text = String.format("%s:%s", to_time_hour, to_time_minutes)
             to_time = String.format("%s:%s", to_time_hour, to_time_minutes)
+            //to_time_selected = String.format("%s:%s", to_time_hour, to_time_minutes)
 
             /*val sportSelectedIndex = sports.indexOf(it.sport)
             sportSpinner.setSelection(sportSelectedIndex)
@@ -237,15 +245,16 @@ class EditReservationDetailActivity : AppCompatActivity() {
 
     }
 
-    fun retrieveNewReservations(date: Date) {
-        if (date != null) {
+    fun retrieveNewReservations(date: Date, from: String, to: String) {
+        if (date != null && from !== null && to !== null) {
             val sdf = SimpleDateFormat("yyyy-MM-dd")
             val formattedDate = sdf.parse(sdf.format(date))
 
             //retrieve available reservations
             //posResViewModel.getPosResByStructure(sportSpinner.selectedItem.toString()!!, formattedDate!!, sportCentersSpinner.selectedItem.toString())
 
-            posResViewModel.getPosResByStructure(sportName!!, formattedDate!!, structureName)
+            println("il from $from $to")
+            posResViewModel.getPosResByStructureSportDateAndTime(sportName!!, formattedDate!!, from, to, structureName)
             //show them in the recycler view
             posResViewModel.listPosRes.observe(this@EditReservationDetailActivity) {
                 val noAvailability = findViewById<LinearLayout>(R.id.no_availability)

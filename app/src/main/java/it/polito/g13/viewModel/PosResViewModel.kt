@@ -53,4 +53,8 @@ class PosResViewModel @Inject constructor (private val businessLogic: BusinessCl
     fun getPosResByStructure(sport: String, date: Date, struct: String) {
         _listPosRes.postValue(businessLogic.getPosResSportDateAndStruct(sport, date, struct))
     }
+
+    fun getPosResByStructureSportDateAndTime(sport: String, date: Date, from: String, to: String, struct: String) {
+        _listPosRes.postValue(businessLogic.getPosResStructureSportDateAndTime(sport, date, from, to, struct))
+    }
 }
