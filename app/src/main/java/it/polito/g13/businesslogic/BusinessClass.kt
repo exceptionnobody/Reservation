@@ -8,10 +8,7 @@ import it.polito.g13.dao.ReviewStructDao
 import it.polito.g13.dao.SportsDao
 import it.polito.g13.dao.StructureDao
 import it.polito.g13.dao.UserDao
-import it.polito.g13.entities.PosRes
-import it.polito.g13.entities.Reservation
-import it.polito.g13.entities.Struttura
-import it.polito.g13.entities.review_struct
+import it.polito.g13.entities.*
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -51,6 +48,7 @@ class BusinessClass
     }
 
     fun updatePosRes(pos:PosRes){
+        pos.flag=!pos.flag
         posresDao.updatePosRes(pos)
     }
 
@@ -145,4 +143,24 @@ class BusinessClass
         if (!strutDao.isPresent(structure.id))
             strutDao.insertStructure(structure)
     }
+
+    fun changeUserInfo(user: User) {
+        userDao.updateUser(user)
+    }
+    fun getUserById(id:Int): User {
+        return userDao.getSingleUser(id)
+    }
+
+    fun getSportsById(id: Int): Sports? {
+        return sportsDao.getUserSportsByIdUser(id)
+    }
+
+    fun changeSports(sports: Sports) {
+        return sportsDao.updateSports(sports)
+    }
+
+    fun  insertSports(sports: Sports){
+        return sportsDao.insertSports(sports)
+    }
+
 }
