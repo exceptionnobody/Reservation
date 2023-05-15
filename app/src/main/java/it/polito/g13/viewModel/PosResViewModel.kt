@@ -42,6 +42,10 @@ class PosResViewModel @Inject constructor (private val businessLogic: BusinessCl
         _listPosRes.postValue(businessLogic.getPosResBySport(sport))
     }
 
+    fun getPostResBySportTime(sport: String, from: String, to: String) {
+        _listPosRes.postValue(businessLogic.getPosResSportTime(sport, from, to))
+    }
+
     fun getPosResById(posResId: Int) {
         _singlePosRes.postValue(businessLogic.getPosResSportById(posResId))
     }

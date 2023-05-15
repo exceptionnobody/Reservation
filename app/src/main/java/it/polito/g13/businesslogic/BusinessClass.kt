@@ -104,6 +104,10 @@ class BusinessClass
         return posresDao.getPosResSportDate(sport, formattedDate)
     }
 
+    fun getPosResSportTime(sport: String, from: String, to: String) : List<PosRes> {
+        return posresDao.getPosResSportTime(sport, from, to)
+    }
+
     fun getPosResBySport(sport: String) : List<PosRes> {
         return posresDao.getPosResBySport(sport)
     }

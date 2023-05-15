@@ -189,7 +189,10 @@ class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigat
         checkAvailability.setOnClickListener {
             selectedSport = sportSpinner.selectedItem.toString()
 
-            posResViewModel.getPosResBySport(selectedSport!!)
+            val from = select_from_time_availability.text.ifEmpty { "00:00" }.toString()
+            val to = select_to_time_availability.text.ifEmpty { "23:59" }.toString()
+
+            posResViewModel.getPostResBySportTime(selectedSport!!, from, to)
         }
 
         posResViewModel.listPosRes.observe(this) {
@@ -217,6 +220,7 @@ class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigat
                 if (formattedDate >= formattedToday) {
                     //show them in the recycler view
                     posResViewModel.listPosRes.observe(this@BrowseAvailabilityActivity) {
+                        noPosResBoxContainer.removeAllViews()
                         val posResInDate = it.filter { posRes -> sdf.parse(sdf.format(posRes.data)) == formattedDate}
                         val recyclerView = findViewById<RecyclerView>(R.id.bookReservationContainer)
                         recyclerView.adapter = PosResAdapter(posResInDate)
