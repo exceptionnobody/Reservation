@@ -82,7 +82,9 @@ class ListReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigatio
                 val listPastReview: MutableList<review_struct> = mutableListOf()
 
                 for (r in listToReview) {
-                    reviewStructureViewModel.getReviewByStructureAndUserId(r.id, 1)
+                    val struct = structures.find { it.structure_name == r.strut }
+
+                    reviewStructureViewModel.getReviewByStructureAndUserId(struct?.id!!, 1)
 
                     reviewStructureViewModel.singleReviewStructure.observe(this) {
                         if (it != null)
@@ -146,14 +148,14 @@ class ReviewReservationAdapter(val listReservation: List<Reservation>, val listS
         holder.strut.text = reservation.strut
         holder.sport.text = reservation.sport
 
-        val structure = listStructures.filter { it.structure_name != reservation.strut }[0]
+        val structure = listStructures.filter { it.structure_name == reservation.strut }[0]
 
-        val review = listPastReview.filter { it.review_id_struct != structure.id }
+        val review = listPastReview.filter { it.review_id_struct == structure.id }
 
         if (review.isNotEmpty()) {
             holder.noPastRating.visibility = View.GONE
 
-            val avg = ((review[0].s_q1 + review[0].s_q2 + review[0].s_q3 + review[0].s_q4 + review[0].s_q5) / 5).toFloat()
+            val avg = ((review[0].s_q1 + review[0].s_q2 + review[0].s_q3 + review[0].s_q4) / 4).toFloat()
 
             holder.avgRating.rating = avg
         }
