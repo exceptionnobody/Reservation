@@ -42,6 +42,7 @@
     <string name="nav_reservations">Your reservations</string>
     <string name="nav_book_reservation">Book reservation</string>
     <string name="nav_review_courts">Review courts</string>
+    <string name="nav_browse_courts">Browse courts</string>
 
     <string name="bar_profile">Your profile</string>
 

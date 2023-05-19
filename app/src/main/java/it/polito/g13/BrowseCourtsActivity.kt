@@ -24,12 +24,11 @@ import it.polito.g13.entities.review_struct
 import it.polito.g13.viewModel.ReservationsViewModel
 import it.polito.g13.viewModel.ReviewStructureViewModel
 import it.polito.g13.viewModel.StrutturaViewModel
-import java.text.SimpleDateFormat
 
 private lateinit var context : Context
 
 @AndroidEntryPoint
-class ListReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class BrowseCourtsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     val reservationViewModel by viewModels<ReservationsViewModel>()
     val structureViewModel by viewModels<StrutturaViewModel>()
@@ -43,7 +42,7 @@ class ListReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigatio
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         context = this.applicationContext
-        setContentView(R.layout.activity_list_review_courts)
+        setContentView(R.layout.activity_browse_courts)
 
         //toolbar instantiation
         toolbar = findViewById(R.id.toolbar)
@@ -77,8 +76,10 @@ class ListReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigatio
 
         //set text navbar
         val navbarText = findViewById<TextView>(R.id.navbar_text)
-        navbarText.text = "Review a court"
+        navbarText.text = "Select a court to see reviews"
 
+        //use viewmodel to manage recycler view
+        /*
         structureViewModel.structures.observe(this) {structures ->
             reservationViewModel.reservations.observe(this) {reservations ->
                 val listToReview = reservations.distinctBy { it.strut }
@@ -100,6 +101,8 @@ class ListReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigatio
                 recyclerView.layoutManager = LinearLayoutManager(this)
             }
         }
+
+         */
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -130,7 +133,8 @@ class ListReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigatio
     }
 }
 
-//define recycler view for reservations
+//define recycler view for STRUCTURES
+/*
 class ReviewReservationsViewHolder(v: View) : RecyclerView.ViewHolder(v){
     val strut = v.findViewById<TextView>(R.id.review_strut)
     val sport = v.findViewById<TextView>(R.id.review_sport)
@@ -179,3 +183,4 @@ class ReviewReservationAdapter(val listReservation: List<Reservation>, val listS
         }
     }
 }
+ */

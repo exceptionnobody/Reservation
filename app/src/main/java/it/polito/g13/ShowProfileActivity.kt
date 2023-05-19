@@ -101,6 +101,9 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         val menuItemReviewCourts = navView.menu.findItem(R.id.nav_review_courts)
         menuItemReviewCourts.setActionView(R.layout.menu_item_review_courts)
 
+        val menuItemBrowseCourts = navView.menu.findItem(R.id.nav_browse_courts)
+        menuItemBrowseCourts.setActionView(R.layout.menu_item_review_courts)
+
         sharedPreference =  getSharedPreferences("preferences", 0) // 0 - for private mode
         this.user_image=findViewById(R.id.user_image)
         this.user_name=findViewById(R.id.user_name)
@@ -172,6 +175,10 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             }
             R.id.nav_review_courts -> {
                 val intent = Intent(this, ListReviewCourtsActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.nav_browse_courts -> {
+                val intent = Intent(this, BrowseCourtsActivity::class.java)
                 startActivity(intent)
             }
         }

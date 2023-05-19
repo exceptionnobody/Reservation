@@ -21,6 +21,9 @@
         android:theme="@style/Theme.Mad"
         tools:targetApi="31">
         <activity
+            android:name=".BrowseCourtsActivity"
+            android:exported="false" />
+        <activity
             android:name=".EditReviewCourtsActivity"
             android:exported="false" />
         <activity

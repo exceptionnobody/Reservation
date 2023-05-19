@@ -86,6 +86,9 @@ class EditReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigatio
         val menuItemReviewCourts = navView.menu.findItem(R.id.nav_review_courts)
         menuItemReviewCourts.setActionView(R.layout.menu_item_review_courts)
 
+        val menuItemBrowseCourts = navView.menu.findItem(R.id.nav_browse_courts)
+        menuItemBrowseCourts.setActionView(R.layout.menu_item_review_courts)
+
         //set text navbar
         selectedCourtName = intent.getStringExtra("selectedCourtName").toString()
         userId = intent.getIntExtra("userId", 0)
@@ -199,6 +202,10 @@ class EditReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigatio
             }
             R.id.nav_review_courts -> {
                 val intent = Intent(this, ListReviewCourtsActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.nav_browse_courts -> {
+                val intent = Intent(this, BrowseCourtsActivity::class.java)
                 startActivity(intent)
             }
         }
