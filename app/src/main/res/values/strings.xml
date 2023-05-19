@@ -45,8 +45,11 @@
 
     <string name="bar_profile">Your profile</string>
 
-    <string name="select_sport_time_slot_reservation">Select a time slot and a sport</string>
+    <string name="select_sport_time_slot_reservation">Select your details</string>
+    <string name="select_city_reservation">Insert a city</string>
     <string name="check_availability_button">Check availability</string>
+    <string name="new_reservations_available">New reservations available</string>
+    <string name="join_reservation">Join one reservation</string>
 
     <string name="emailAddress">Email Address</string>
     <string name="save_username">FullName</string>

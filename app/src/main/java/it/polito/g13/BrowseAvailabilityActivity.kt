@@ -231,29 +231,9 @@ class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigat
                             noPosResBoxContainer.addView(noReservationFounded)
                         }
                     }
-                }
 
-                /*
-                val sdf = SimpleDateFormat("yyyy-MM-dd")
-                val formattedDate = sdf.parse(sdf.format(date))
-                val today = Calendar.getInstance().time
-                val formattedToday = sdf.parse(sdf.format(today))
-
-                if(formattedDate >= formattedToday) {
-                    //retrieve available possible reservations
-                    posResViewModel.getPosRes(selectedSport!!, formattedDate!!)
-                    //show them in the recycler view
-                    posResViewModel.listPosRes.observe(this@BrowseAvailabilityActivity) {
-                        if (it != null) {
-                            val recyclerView =
-                                findViewById<RecyclerView>(R.id.bookReservationContainer)
-                            recyclerView.adapter = PosResAdapter(it)
-                            recyclerView.layoutManager =
-                                LinearLayoutManager(this@BrowseAvailabilityActivity)
-                        }
-                    }
+                    //handle also reservations to join with new recycler view
                 }
-                */
             }
 
             override fun onMonthChanged(date: Date) {
