@@ -80,6 +80,14 @@ dependencies {
     // When using the BoM, don't specify versions in Firebase dependencies
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
+
+    implementation 'com.google.firebase:firebase-auth-ktx:22.0.0'
+    implementation 'com.firebaseui:firebase-ui-auth:8.0.2'
+
+    implementation 'com.google.firebase:firebase-database-ktx:20.2.1'
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.6.0'
+    implementation 'androidx.annotation:annotation:1.6.0'
+    implementation 'com.google.android.gms:play-services-auth:20.5.0'
 }
 
 kapt {
