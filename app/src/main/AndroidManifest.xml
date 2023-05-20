@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <application
-        android:name=".MyApp"
+        android:name=".app.MyApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -56,10 +56,10 @@
             android:resource="@xml/preferences" />
 
         <activity
-            android:name=".EditProfileActivity"
+            android:name=".activities.editprofile.EditProfileActivity"
             android:exported="true" />
         <activity
-            android:name=".ShowProfileActivity"
+            android:name=".activities.editprofile.ShowProfileActivity"
             android:exported="true" />
     </application>
 

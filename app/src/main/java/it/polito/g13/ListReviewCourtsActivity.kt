@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import it.polito.g13.activities.editprofile.ShowProfileActivity
 import it.polito.g13.entities.Reservation
 import it.polito.g13.entities.Struttura
 import it.polito.g13.entities.review_struct

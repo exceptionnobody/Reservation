@@ -1,4 +1,4 @@
-package it.polito.g13
+package it.polito.g13.activities.editprofile
 
 
 
@@ -11,7 +11,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.*
-import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -21,13 +20,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
-import it.polito.g13.entities.PosRes
-import it.polito.g13.entities.Reservation
-import it.polito.g13.viewModel.PosResViewModel
-import it.polito.g13.viewModel.ReservationsViewModel
+import it.polito.g13.BrowseAvailabilityActivity
+import it.polito.g13.ListReviewCourtsActivity
+import it.polito.g13.R
+import it.polito.g13.ReservationActivity
+
 import org.json.JSONObject
 import java.util.*
-import java.util.Date
 
 
 @AndroidEntryPoint
@@ -292,7 +291,9 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             val c = BitmapFactory.decodeFileDescriptor(b).toDrawable(resources)
             user_image.setImageDrawable(c)
         } else {
-            user_image.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.user_image))
+            user_image.setImageDrawable(AppCompatResources.getDrawable(context,
+                R.drawable.user_image
+            ))
         }
 
     }
@@ -309,7 +310,7 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id=item.itemId
-        if (id==R.id.action_edit) {
+        if (id== R.id.action_edit) {
             val intent = Intent(this, EditProfileActivity::class.java)
             startActivity(intent)
             return true

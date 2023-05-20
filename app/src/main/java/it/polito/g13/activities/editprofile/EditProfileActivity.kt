@@ -1,4 +1,4 @@
-package it.polito.g13
+package it.polito.g13.activities.editprofile
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -15,20 +15,16 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.*
 import android.widget.*
-import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.exifinterface.media.ExifInterface
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.io.ByteArrayOutputStream
 import dagger.hilt.android.AndroidEntryPoint
-import it.polito.g13.entities.PosRes
-import it.polito.g13.viewModel.PosResViewModel
-import it.polito.g13.viewModel.ReservationsViewModel
+import it.polito.g13.R
 import org.json.JSONObject
 import java.io.FileDescriptor
 import java.io.IOException
-import java.text.SimpleDateFormat
 import java.util.*
 
 val cities = listOf(
@@ -280,8 +276,8 @@ class EditProfileActivity : AppCompatActivity() {
         jsonObject.put(getString(R.string.save_languages), languagesView!!.text)
         jsonObject.put(getString(R.string.save_telnumber), user_number.text.toString())
 
-
-        /*val test = findViewById<LinearLayout>(R.id.sportsContainer)
+/*
+        val test = findViewById<LinearLayout>(R.id.sportsContainer)
         if(test.childCount > 0) {
             jsonObject.put(getString(R.string.save_numbersports), test.childCount)
             val listOfSports = mutableListOf<String>()
@@ -291,6 +287,8 @@ class EditProfileActivity : AppCompatActivity() {
                 val v = test.getChildAt(i)
                 val game = v.findViewById<Spinner>(R.id.editGames)
                 val level = v.findViewById<Spinner>(R.id.editGameLevel)
+                val description = v.findViewById<TextView>(R.id.editDescription)
+                Log.d("PROVASALVATAGGIO", "$level, $description, $game")
                 listOfSports.add(game.selectedItem.toString())
                 listOfLevels.add(level.selectedItem.toString())
             }
@@ -298,7 +296,9 @@ class EditProfileActivity : AppCompatActivity() {
             jsonObject.put(getString(R.string.save_namesports), listOfSports)
             jsonObject.put(getString(R.string.save_levelsports), listOfLevels)
 
-        }*/
+        }
+
+ */
         editor.putString("profile", jsonObject.toString())
         editor.apply()
         val t = Toast.makeText(this, "Confirmed", Toast.LENGTH_SHORT)
@@ -517,7 +517,7 @@ class EditProfileActivity : AppCompatActivity() {
         user_nickname.setText( sharedPreference.getString("user_nickname",getString(R.string.user_nickname))!!)//view?.findViewById(R.id.)
         user_age.setText(sharedPreference.getString("user_age",getString(R.string.user_age)))//view?.findViewById(R.id.)
         var gender:String= sharedPreference.getString("user_gender","Not specified")!!
-        glist= genders.toMutableList()
+        glist = genders.toMutableList()
         if (gender == "Male") {
             glist[0] = "Male"
             glist[1]="Not specified"
