@@ -19,7 +19,9 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.firebase.ui.auth.AuthUI
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.stacktips.view.CalendarListener
@@ -29,6 +31,7 @@ import com.stacktips.view.DayView
 import com.stacktips.view.utils.CalendarUtils
 import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.activities.editprofile.ShowProfileActivity
+import it.polito.g13.activities.login.LoginActivity
 import it.polito.g13.entities.PosRes
 import it.polito.g13.entities.Reservation
 import it.polito.g13.entities.Struttura
@@ -55,11 +58,12 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
 
     lateinit var calendarView: CustomCalendarView
 
+    private lateinit var mAuth : FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         context = this.applicationContext
         setContentView(R.layout.activity_reservation)
-
+        val mAuth = FirebaseAuth.getInstance()
         structureViewMobel.insertStructure(Struttura(1, "Centro sportivo Robilant", 1))
         structureViewMobel.insertStructure(Struttura(2, "Sporting Dora", 2))
         structureViewMobel.insertStructure(Struttura(3, "Centro sportivo Carmagnola", 3))
@@ -104,6 +108,10 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
 
         val menuItemReviewCourts = navView.menu.findItem(R.id.nav_review_courts)
         menuItemReviewCourts.setActionView(R.layout.menu_item_review_courts)
+
+        val menuItemExit = navView.menu.findItem(R.id.nav_exit)
+        menuItemExit.setActionView(R.layout.menu_item_exit)
+
 
         //set text navbar
         val navbarText = findViewById<TextView>(R.id.navbar_text)
@@ -189,6 +197,8 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             .addOnFailureListener { e ->
                 Log.w("TAG", "Error adding document", e)
             }
+
+
     }
 
     //handle toolbar items
@@ -209,6 +219,18 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             R.id.nav_review_courts -> {
                 val intent = Intent(this, ListReviewCourtsActivity::class.java)
                 startActivity(intent)
+            }
+
+            R.id.nav_exit -> {
+                AuthUI.getInstance()
+                    .signOut(this)
+                    .addOnCompleteListener {
+                        // ...
+                        val intent = Intent(this, LoginActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+
             }
         }
         drawerLayout.closeDrawer(GravityCompat.START)

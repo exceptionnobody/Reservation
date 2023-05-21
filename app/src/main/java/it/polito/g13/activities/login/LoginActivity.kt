@@ -9,6 +9,7 @@ import android.util.Log
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import it.polito.g13.R
 import it.polito.g13.ReservationActivity
 import java.util.Arrays
@@ -21,9 +22,11 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         // Verifica se l'utente è già autenticato
-        val currentUser = FirebaseAuth.getInstance().currentUser
+       val  currentUser = FirebaseAuth.getInstance().currentUser
         if (currentUser != null) {
             val intent = Intent(this, ReservationActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+
             startActivity(intent)
 
         } else {
@@ -31,6 +34,8 @@ class LoginActivity : AppCompatActivity() {
 
             launchSignInFlow()
         }
+
+
     }
 
     private fun launchSignInFlow() {
@@ -60,8 +65,9 @@ class LoginActivity : AppCompatActivity() {
             if (resultCode == Activity.RESULT_OK) {
                 Log.d("AUTENTICAZIONE", "SUCCESSO")
                 val intent = Intent(this, ReservationActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
-
+                finish()
             } else {
                 Log.d("AUTENTICAZIONE", "FALLIMENTO")
             }
