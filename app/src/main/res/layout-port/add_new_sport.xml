@@ -1,86 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_marginTop="20dp">
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout6"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_start_content_text"
+        android:layout_marginEnd="@dimen/margin_end_content_text"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/materialDivider2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.173"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <Spinner
-            android:id="@+id/editGames"
-            android:layout_width="120dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="@dimen/margin_start_content_text"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/edit_fields"
-            android:contentDescription="@string/user_games"
-            android:fontFamily="@font/crete_round"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:spinnerMode="dropdown"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/delete_sport"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <Spinner
-            android:id="@+id/editGameLevel"
-            android:layout_width="120dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="35dp"
-            android:layout_marginTop="10dp"
-            android:layout_toEndOf="@+id/editGames"
-            android:background="@drawable/edit_fields"
-            android:contentDescription="@string/user_time"
-            android:fontFamily="@font/crete_round"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:spinnerMode="dropdown"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:layout_constraintBottom_toTopOf="@+id/editDescription"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <Spinner
+                    android:id="@+id/editGames"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/edit_fields"
+                    android:contentDescription="@string/user_games"
+                    android:fontFamily="@font/crete_round"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:spinnerMode="dropdown"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/editGameLevel"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Spinner
+                    android:id="@+id/editGameLevel"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/edit_fields"
+                    android:contentDescription="@string/user_time"
+                    android:fontFamily="@font/crete_round"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:spinnerMode="dropdown"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/editGames"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editDescription"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:background="@drawable/edit_fields"
+                android:fontFamily="@font/crete_round"
+                android:hint="@string/sport_achievements"
+                android:inputType="textAutoCorrect|textMultiLine"
+                android:paddingStart="@dimen/input_padding_x"
+                android:paddingTop="@dimen/input_padding_y"
+                android:paddingEnd="@dimen/input_padding_x"
+                android:paddingBottom="@dimen/input_padding_y"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout4" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/delete_sport"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="40dp"
-            android:layout_marginEnd="@dimen/margin_start_content_text"
             android:clickable="true"
             android:contentDescription="@string/delete_sport"
             android:focusable="true"
             app:backgroundTint="@color/primary_orange"
             app:fabCustomSize="55dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/constraintLayout5"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/trash_bin_icon" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editDescription"
-            android:layout_width="275dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="@dimen/margin_start_content_text"
-            android:layout_marginTop="70dp"
-            android:layout_marginEnd="@dimen/margin_end_content_text"
-            android:background="@drawable/edit_fields"
-            android:fontFamily="@font/crete_round"
-            android:hint="@string/sport_achievements"
-            android:inputType="textAutoCorrect|textMultiLine"
-            android:paddingStart="@dimen/input_padding_x"
-            android:paddingTop="@dimen/input_padding_y"
-            android:paddingEnd="@dimen/input_padding_x"
-            android:paddingBottom="@dimen/input_padding_y"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            app:dividerColor="@color/primary_green"
-            android:layout_marginTop="125dp"/>
-
-    </RelativeLayout>
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/materialDivider2"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        app:dividerColor="@color/primary_green"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout6" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
