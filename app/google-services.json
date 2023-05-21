@@ -7,12 +7,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:129655834282:android:433f4609a145d92a81f2d3",
+        "mobilesdk_app_id": "1:129655834282:android:60bc35d052320b1081f2d3",
         "android_client_info": {
           "package_name": "it.polito.g13"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "129655834282-bmi2k4jn13sa4in3v6tsrte72u9u3isj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "it.polito.g13",
+            "certificate_hash": "f95ac5ee75a7c08d58717ed45da41492fcc8c6db"
+          }
+        },
         {
           "client_id": "129655834282-6fvupl3130f2diiabenta47ascnnkpt0.apps.googleusercontent.com",
           "client_type": 3

@@ -177,7 +177,7 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         val user = hashMapOf(
             "first" to "Ada",
             "last" to "Lovelace",
-            "born" to 1815
+            "born" to Date()
         )
 
 // Add a new document with a generated ID

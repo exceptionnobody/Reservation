@@ -15,7 +15,7 @@ import java.util.Arrays
 
 class LoginActivity : AppCompatActivity() {
 
-    private val RC_SIGN_IN = 1822
+    private val RC_SIGN_IN = 123
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,11 +37,11 @@ class LoginActivity : AppCompatActivity() {
         val providers = Arrays.asList(
             AuthUI.IdpConfig.EmailBuilder().build(),
             AuthUI.IdpConfig.GoogleBuilder().build()
-            // Aggiungi altri provider se necessario
         )
 
         val intent = AuthUI.getInstance()
             .createSignInIntentBuilder()
+            .setIsSmartLockEnabled(false)
             .setAvailableProviders(providers)
             .setLogo(R.drawable.logo_no_bg) // Set logo drawable
             .setTheme(R.style.Theme_Mad)
