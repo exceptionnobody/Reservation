@@ -303,8 +303,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/margin_start_title_first_level"
                                 android:layout_marginEnd="@dimen/margin_right_label_reservation_info"
+                                android:layout_marginBottom="5dp"
                                 android:fontFamily="@font/crete_round"
-                                android:paddingBottom="5dp"
                                 android:text="@string/new_reservations_available"
                                 android:textColor="@color/primary_green"
                                 android:textSize="20sp" />
@@ -313,12 +313,14 @@
                                 android:id="@+id/noPosResBoxContainer"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
+                                android:layout_marginBottom="5dp"
                                 android:orientation="vertical" />
 
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/bookReservationContainer"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginBottom="15dp"
                                 android:orientation="vertical" />
 
                             <TextView
@@ -326,9 +328,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/margin_start_title_first_level"
                                 android:layout_marginEnd="@dimen/margin_right_label_reservation_info"
+                                android:layout_marginBottom="5dp"
                                 android:fontFamily="@font/crete_round"
-                                android:paddingTop="15dp"
-                                android:paddingBottom="5dp"
                                 android:text="@string/join_reservation"
                                 android:textColor="@color/primary_green"
                                 android:textSize="20sp" />
@@ -337,12 +338,14 @@
                                 android:id="@+id/noJoinPosResBoxContainer"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
+                                android:layout_marginBottom="5dp"
                                 android:orientation="vertical" />
 
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/joinReservationContainer"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginBottom="15dp"
                                 android:orientation="vertical" />
                         </LinearLayout>
                     </ScrollView>
