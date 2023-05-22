@@ -1,7 +1,6 @@
 package it.polito.g13.activities.login
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -13,11 +12,10 @@ class VerificationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val user = FirebaseAuth.getInstance().currentUser
-        val userId = user?.displayName
 
         val dialogBuilder = AlertDialog.Builder(this)
-            .setMessage("Sembra che ancora non sia stata confermata la tua email.\nSe non hai ricevuto l'email o risconti dei problemi, contattaci!")
-            .setPositiveButton("Riprova", DialogInterface.OnClickListener { dialog, which ->
+            .setMessage("Sembra che la tua email ( ${user?.email} ) ancora non sia stata confermata.\nSe non hai ricevuto l'email o risconti dei problemi, contattaci!")
+            .setPositiveButton("Riprova") { dialog, which ->
 
                 AuthUI.getInstance()
                     .signOut(this)
@@ -27,7 +25,7 @@ class VerificationActivity : AppCompatActivity() {
                         finish()
                     }
 
-            })
+            }
             .setNegativeButton("Contattaci") { dialog, which ->
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)

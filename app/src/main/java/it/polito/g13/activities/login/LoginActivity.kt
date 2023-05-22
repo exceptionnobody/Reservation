@@ -60,7 +60,7 @@ class LoginActivity : AppCompatActivity() {
                                     } else {
                                         if (email != null && response?.providerType == "password") {
                                             user.sendEmailVerification()
-                                                ?.addOnCompleteListener { task ->
+                                                .addOnCompleteListener { task ->
                                                     if (task.isSuccessful) {
 
                                                         val documentName = user.email.toString()
@@ -76,8 +76,7 @@ class LoginActivity : AppCompatActivity() {
                                                             .addOnSuccessListener {
 
                                                                 val intent = Intent(this, ConfermationActivity::class.java)
-                                                                intent.flags =
-                                                                    Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                                                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                                                                 startActivity(intent)
                                                                 finish()
                                                             }
