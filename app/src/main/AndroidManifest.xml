@@ -21,6 +21,14 @@
         android:theme="@style/Theme.Mad"
         tools:targetApi="31">
         <activity
+            android:name=".activities.login.ConfermationActivity"
+            android:label="My Dialog Activity"
+            />
+        <activity
+            android:name=".activities.login.VerificationActivity"
+            android:label="My Dialog Activity"
+            />
+        <activity
             android:name=".activities.login.LoginActivity"
             android:exported="true">
 
