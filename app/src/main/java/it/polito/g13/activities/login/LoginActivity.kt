@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.firebase.ui.auth.AuthUI
@@ -18,28 +19,36 @@ import java.util.Arrays
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginLauncher: ActivityResultLauncher<Intent>
+    val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            finish()
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        this.onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
         loginLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_CANCELED) {
+                finish()
+            }
+
             if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent? = result.data
                 val response = IdpResponse.fromResultIntent(data)
 
-                Log.d("AUTENTICAZIONE", response.toString())
+                Log.d("AUTENTICAZIONE", "SUCCESSO: "+response.toString())
 
-                Log.d("AUTENTICAZIONE", "SUCCESSO")
                 val intent = Intent(this, ReservationActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
                 finish()
-            } else {
-                Log.d("AUTENTICAZIONE", "FALLIMENTO")
             }
+
+
         }
 
-        // Verifica se l'utente è già autenticato
         val  currentUser = FirebaseAuth.getInstance().currentUser
+
         if (currentUser != null) {
             val intent = Intent(this, ReservationActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
@@ -47,8 +56,6 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
 
         } else {
-            Log.d("AUTENTICAZIONE", "UTENTE NON IDENTIFICATO")
-
             launchSignInFlow()
         }
 
@@ -70,5 +77,6 @@ class LoginActivity : AppCompatActivity() {
 
         loginLauncher.launch(intent)
     }
+
 
 }
