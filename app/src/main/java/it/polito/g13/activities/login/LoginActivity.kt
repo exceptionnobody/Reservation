@@ -15,7 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import it.polito.g13.R
-import it.polito.g13.ReservationActivity
+import it.polito.g13.activities.editprofile.ShowProfileActivity
 import java.util.Arrays
 
 class LoginActivity : AppCompatActivity() {
@@ -47,8 +47,8 @@ class LoginActivity : AppCompatActivity() {
                         val userId = user.uid
                         if (!user.isEmailVerified) {
 
-                            val documentRef =
-                                db.collection("EmailVerification").document(user.email.toString())
+                            val documentRef =  db.collection("EmailVerification").document(user.email.toString())
+                            val userRef =  db.collection("users").document(user.email.toString()).collection("infos").document(user.displayName.toString())
 
                             documentRef.get()
                                 .addOnSuccessListener { documentSnapshot ->
@@ -70,11 +70,17 @@ class LoginActivity : AppCompatActivity() {
                                                             "timestamp" to FieldValue.serverTimestamp()
                                                         )
 
+                                                        val userInformations = hashMapOf(
+                                                            "name" to user.displayName.toString(),
+                                                            "email" to user.email
+
+                                                        )
+
                                                         db.collection("EmailVerification")
                                                             .document(documentName)
                                                             .set(emailVerification)
                                                             .addOnSuccessListener {
-
+                                                                userRef.set(userInformations)
                                                                 val intent = Intent(this, ConfermationActivity::class.java)
                                                                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                                                                 startActivity(intent)
@@ -100,14 +106,12 @@ class LoginActivity : AppCompatActivity() {
 
                         } else {
                             Log.d("AUTENTICAZIONE", "SUCCESSO: " + response.toString())
-                            val documentRef =
-                                db.collection("EmailVerification").document(user.email.toString())
+                            val documentRef =   db.collection("EmailVerification").document(user.email.toString())
 
                             documentRef.delete()
                                 .addOnSuccessListener {
-                                    val intent = Intent(this, ReservationActivity::class.java)
-                                    intent.flags =
-                                        Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                    val intent = Intent(this, ShowProfileActivity::class.java)
+                                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                                     startActivity(intent)
                                     finish()
                                 }
@@ -131,7 +135,7 @@ class LoginActivity : AppCompatActivity() {
         if (currentUser != null) {
 
               if (currentUser.isEmailVerified) {
-                  val intent = Intent(this, ReservationActivity::class.java)
+                  val intent = Intent(this, ShowProfileActivity::class.java)
                   intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
 
                   startActivity(intent)

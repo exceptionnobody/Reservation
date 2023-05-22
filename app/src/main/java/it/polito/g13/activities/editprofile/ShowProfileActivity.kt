@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.BitmapFactory
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -19,11 +20,13 @@ import androidx.core.graphics.drawable.toDrawable
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import com.firebase.ui.auth.AuthUI
 import com.google.android.material.navigation.NavigationView
 import it.polito.g13.BrowseAvailabilityActivity
 import it.polito.g13.ListReviewCourtsActivity
 import it.polito.g13.R
 import it.polito.g13.ReservationActivity
+import it.polito.g13.activities.login.LoginActivity
 
 import org.json.JSONObject
 import java.util.*
@@ -64,6 +67,7 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
     private lateinit var sportSpinner: Spinner
     private lateinit var sportLevelSpinner : Spinner
 
+    private lateinit var navigationIcon : Drawable
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -99,6 +103,10 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
 
         val menuItemReviewCourts = navView.menu.findItem(R.id.nav_review_courts)
         menuItemReviewCourts.setActionView(R.layout.menu_item_review_courts)
+
+        val menuItemExit = navView.menu.findItem(R.id.nav_exit)
+        menuItemExit.setActionView(R.layout.menu_item_exit)
+
 
         sharedPreference =  getSharedPreferences("preferences", 0) // 0 - for private mode
         this.user_image=findViewById(R.id.user_image)
@@ -149,7 +157,9 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         posResViewModel.insertPosRes(PosRes(1, "Lingotto", 1, "Basket", Date(), true))
 
          */
-
+        navView.visibility = View.GONE
+        navigationIcon = toolbar.navigationIcon!!
+        toolbar.navigationIcon = null
         loadImageFromStorage()
         checkSharedPreference()
     }
@@ -172,6 +182,17 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             R.id.nav_review_courts -> {
                 val intent = Intent(this, ListReviewCourtsActivity::class.java)
                 startActivity(intent)
+            }
+            R.id.nav_exit -> {
+                AuthUI.getInstance()
+                    .signOut(this)
+                    .addOnCompleteListener {
+                        // ...
+                        val intent = Intent(this, LoginActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+
             }
         }
         drawerLayout.closeDrawer(GravityCompat.START)
@@ -353,8 +374,10 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         user_languages.text=sharedPreference.getString("user_languages",getString(R.string.user_languages))!!
         user_description.text= sharedPreference.getString("user_description",getString(R.string.user_description))!!
         user_city.text= sharedPreference.getString("user_city",getString(R.string.user_city))!!//view?.findViewById(R.id.)
-
+        navView.visibility = View.VISIBLE
+        toolbar.setNavigationIcon(navigationIcon)
          // user_games= //view?.findViewById(R.id.)
     }
+
 
 }
