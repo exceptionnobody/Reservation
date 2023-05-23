@@ -19,6 +19,8 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.exifinterface.media.ExifInterface
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 import java.io.ByteArrayOutputStream
 import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.R
@@ -80,7 +82,7 @@ class EditProfileActivity : AppCompatActivity() {
     private lateinit var jsonObject : JSONObject
     private lateinit var globalBitmap: Bitmap
     private lateinit var editor: SharedPreferences.Editor
-
+    var num_sports =0
 //gender=spinner no edit view
 
     @SuppressLint("SetTextI18n")
@@ -102,6 +104,8 @@ class EditProfileActivity : AppCompatActivity() {
         this.user_description=findViewById(R.id.editDescription)
         this.user_city =findViewById(R.id.editCity)
 
+
+        //user_mail.isEnabled = false
         //set text navbar
         val navbarText = findViewById<TextView>(R.id.navbar_text)
         navbarText.text = "Edit profile"
@@ -164,18 +168,25 @@ class EditProfileActivity : AppCompatActivity() {
 
         cityInput.setOnItemClickListener { _, _, position, _ ->
             val selectedCity = cityAdapter.getItem(position).toString()
-            Toast.makeText(this, "Selected city: $selectedCity", Toast.LENGTH_SHORT).show()
+           // Toast.makeText(this, "Selected city: $selectedCity", Toast.LENGTH_SHORT).show()
         }
 
         //add a new sport
         val addSportTextContainer = findViewById<RelativeLayout>(R.id.addSportTextContainer)
         val addSportIcon = findViewById<FloatingActionButton>(R.id.addSportIcon)
-
+        num_sports = 0;
         addSportTextContainer.setOnClickListener {
-            handleNewSport()
+            if(num_sports < sports.size){
+                handleNewSport()
+                num_sports++
+            }
+
         }
         addSportIcon.setOnClickListener {
-            handleNewSport()
+            if(num_sports < sports.size){
+                handleNewSport()
+                num_sports++
+            }
         }
 
         //multi selection menu for languages
@@ -315,6 +326,24 @@ class EditProfileActivity : AppCompatActivity() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        val email = intent.getStringExtra("email")
+        if (email != null) {
+            Log.d("EMAIL", email)
+        }else{
+            Log.d("EMAIL", "NULL")
+        }
+        user_mail.setText(email)
+        user_mail.isEnabled = false
+        user_name.setText(FirebaseAuth.getInstance().currentUser?.displayName)
+        user_number.setText("")
+        user_city.setText("")
+        user_description.setText("")
+        user_age.setText("")
+        user_nickname.setText("")
+
+    }
     //restore state when device is rotated
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
@@ -496,6 +525,7 @@ class EditProfileActivity : AppCompatActivity() {
         val deleteSportIcon = sportList.findViewById<FloatingActionButton>(R.id.delete_sport)
         deleteSportIcon.setOnClickListener {
             addSportContainer.removeView(sportList)
+            num_sports--
         }
     }
 

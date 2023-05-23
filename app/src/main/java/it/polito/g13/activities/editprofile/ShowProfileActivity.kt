@@ -157,9 +157,9 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         posResViewModel.insertPosRes(PosRes(1, "Lingotto", 1, "Basket", Date(), true))
 
          */
-        navView.visibility = View.GONE
-        navigationIcon = toolbar.navigationIcon!!
-        toolbar.navigationIcon = null
+      //  navView.visibility = View.GONE
+      //  navigationIcon = toolbar.navigationIcon!!
+      //  toolbar.navigationIcon = null
         loadImageFromStorage()
         checkSharedPreference()
     }
@@ -374,8 +374,8 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         user_languages.text=sharedPreference.getString("user_languages",getString(R.string.user_languages))!!
         user_description.text= sharedPreference.getString("user_description",getString(R.string.user_description))!!
         user_city.text= sharedPreference.getString("user_city",getString(R.string.user_city))!!//view?.findViewById(R.id.)
-        navView.visibility = View.VISIBLE
-        toolbar.setNavigationIcon(navigationIcon)
+     //   navView.visibility = View.VISIBLE
+     //   toolbar.setNavigationIcon(navigationIcon)
          // user_games= //view?.findViewById(R.id.)
     }
 

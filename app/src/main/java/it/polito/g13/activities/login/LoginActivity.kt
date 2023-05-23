@@ -15,6 +15,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import it.polito.g13.R
+import it.polito.g13.ReservationActivity
+import it.polito.g13.activities.editprofile.EditProfileActivity
 import it.polito.g13.activities.editprofile.ShowProfileActivity
 import java.util.Arrays
 
@@ -110,8 +112,9 @@ class LoginActivity : AppCompatActivity() {
 
                             documentRef.delete()
                                 .addOnSuccessListener {
-                                    val intent = Intent(this, ShowProfileActivity::class.java)
+                                    val intent = Intent(this, EditProfileActivity::class.java)
                                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                    intent.putExtra("email", user.email)
                                     startActivity(intent)
                                     finish()
                                 }
@@ -135,7 +138,7 @@ class LoginActivity : AppCompatActivity() {
         if (currentUser != null) {
 
               if (currentUser.isEmailVerified) {
-                  val intent = Intent(this, ShowProfileActivity::class.java)
+                  val intent = Intent(this, ReservationActivity::class.java)
                   intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
 
                   startActivity(intent)
