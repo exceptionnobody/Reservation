@@ -9,6 +9,7 @@ import android.util.Log
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import com.firebase.ui.auth.AuthMethodPickerLayout
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
@@ -17,7 +18,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import it.polito.g13.R
 import it.polito.g13.ReservationActivity
 import it.polito.g13.activities.editprofile.EditProfileActivity
-import it.polito.g13.activities.editprofile.ShowProfileActivity
 import java.util.Arrays
 
 class LoginActivity : AppCompatActivity() {
@@ -170,9 +170,16 @@ class LoginActivity : AppCompatActivity() {
         )
 
 
+        val authUiLayout = AuthMethodPickerLayout
+            .Builder(R.layout.activity_login)
+            .setGoogleButtonId(R.id.GoogleButton)
+            .setEmailButtonId(R.id.emailButton)
+            .build()
+
         val intent = AuthUI.getInstance()
             .createSignInIntentBuilder()
             .setAvailableProviders(providers)
+            .setAuthMethodPickerLayout(authUiLayout)
             .setLogo(R.drawable.logo_no_bg) // Set logo drawable
             .setTheme(R.style.Theme_Mad)
             .build()
