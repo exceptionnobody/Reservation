@@ -12,6 +12,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import it.polito.g13.activities.editprofile.ShowProfileActivity
 import it.polito.g13.viewModel.ReservationsViewModel
 import it.polito.g13.viewModel.ReviewStructureViewModel
 import it.polito.g13.viewModel.StrutturaViewModel

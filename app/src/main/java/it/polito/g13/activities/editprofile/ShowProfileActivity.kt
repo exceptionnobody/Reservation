@@ -23,6 +23,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.firebase.ui.auth.AuthUI
 import com.google.android.material.navigation.NavigationView
 import it.polito.g13.BrowseAvailabilityActivity
+import it.polito.g13.BrowseCourtsActivity
 import it.polito.g13.ListReviewCourtsActivity
 import it.polito.g13.R
 import it.polito.g13.ReservationActivity
