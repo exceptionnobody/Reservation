@@ -11,15 +11,32 @@
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <application
-        android:name=".MyApp"
+        android:name=".app.MyApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/logo_app"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Mad"
         tools:targetApi="31">
+        <activity
+            android:name=".activities.login.ConfermationActivity"
+            android:label="My Dialog Activity"
+            />
+        <activity
+            android:name=".activities.login.VerificationActivity"
+            android:label="My Dialog Activity"
+            />
+        <activity
+            android:name=".activities.login.LoginActivity"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ShowAllCourtReviews"
             android:exported="false" />
@@ -46,15 +63,14 @@
             android:exported="false" />
         <activity
             android:name=".BrowseAvailabilityActivity"
-            android:exported="true" />
+            android:exported="false" />
+
+
+
         <activity
             android:name=".ReservationActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="false">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <meta-data
@@ -62,10 +78,10 @@
             android:resource="@xml/preferences" />
 
         <activity
-            android:name=".EditProfileActivity"
+            android:name=".activities.editprofile.EditProfileActivity"
             android:exported="true" />
         <activity
-            android:name=".ShowProfileActivity"
+            android:name=".activities.editprofile.ShowProfileActivity"
             android:exported="true" />
     </application>
 

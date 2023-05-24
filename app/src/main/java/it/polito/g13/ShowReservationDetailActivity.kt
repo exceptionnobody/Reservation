@@ -15,6 +15,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import it.polito.g13.activities.editprofile.ShowProfileActivity
 import it.polito.g13.viewModel.ReservationsViewModel
 import java.text.SimpleDateFormat
 

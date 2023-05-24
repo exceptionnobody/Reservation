@@ -1,4 +1,4 @@
-package it.polito.g13
+package it.polito.g13.app
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

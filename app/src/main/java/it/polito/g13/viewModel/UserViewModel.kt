@@ -25,4 +25,8 @@ class UserViewModel @Inject constructor (private val businessLogic: BusinessClas
         businessLogic.changeUserInfo(user)
     }
 
+    fun insertUser(user:User) {
+        businessLogic.insertUser(user)
+    }
+
 }

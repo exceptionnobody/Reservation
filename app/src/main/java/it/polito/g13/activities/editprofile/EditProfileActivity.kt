@@ -1,4 +1,4 @@
-package it.polito.g13
+package it.polito.g13.activities.editprofile
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -15,20 +15,18 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.*
 import android.widget.*
-import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.exifinterface.media.ExifInterface
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 import java.io.ByteArrayOutputStream
 import dagger.hilt.android.AndroidEntryPoint
-import it.polito.g13.entities.PosRes
-import it.polito.g13.viewModel.PosResViewModel
-import it.polito.g13.viewModel.ReservationsViewModel
+import it.polito.g13.R
 import org.json.JSONObject
 import java.io.FileDescriptor
 import java.io.IOException
-import java.text.SimpleDateFormat
 import java.util.*
 
 val cities = listOf(
@@ -84,7 +82,7 @@ class EditProfileActivity : AppCompatActivity() {
     private lateinit var jsonObject : JSONObject
     private lateinit var globalBitmap: Bitmap
     private lateinit var editor: SharedPreferences.Editor
-
+    var num_sports =0
 //gender=spinner no edit view
 
     @SuppressLint("SetTextI18n")
@@ -106,6 +104,8 @@ class EditProfileActivity : AppCompatActivity() {
         this.user_description=findViewById(R.id.editDescription)
         this.user_city =findViewById(R.id.editCity)
 
+
+        //user_mail.isEnabled = false
         //set text navbar
         val navbarText = findViewById<TextView>(R.id.navbar_text)
         navbarText.text = "Edit profile"
@@ -168,18 +168,25 @@ class EditProfileActivity : AppCompatActivity() {
 
         cityInput.setOnItemClickListener { _, _, position, _ ->
             val selectedCity = cityAdapter.getItem(position).toString()
-            Toast.makeText(this, "Selected city: $selectedCity", Toast.LENGTH_SHORT).show()
+           // Toast.makeText(this, "Selected city: $selectedCity", Toast.LENGTH_SHORT).show()
         }
 
         //add a new sport
         val addSportTextContainer = findViewById<RelativeLayout>(R.id.addSportTextContainer)
         val addSportIcon = findViewById<FloatingActionButton>(R.id.addSportIcon)
-
+        num_sports = 0;
         addSportTextContainer.setOnClickListener {
-            handleNewSport()
+            if(num_sports < sports.size){
+                handleNewSport()
+                num_sports++
+            }
+
         }
         addSportIcon.setOnClickListener {
-            handleNewSport()
+            if(num_sports < sports.size){
+                handleNewSport()
+                num_sports++
+            }
         }
 
         //multi selection menu for languages
@@ -280,8 +287,8 @@ class EditProfileActivity : AppCompatActivity() {
         jsonObject.put(getString(R.string.save_languages), languagesView!!.text)
         jsonObject.put(getString(R.string.save_telnumber), user_number.text.toString())
 
-
-        /*val test = findViewById<LinearLayout>(R.id.sportsContainer)
+/*
+        val test = findViewById<LinearLayout>(R.id.sportsContainer)
         if(test.childCount > 0) {
             jsonObject.put(getString(R.string.save_numbersports), test.childCount)
             val listOfSports = mutableListOf<String>()
@@ -291,6 +298,8 @@ class EditProfileActivity : AppCompatActivity() {
                 val v = test.getChildAt(i)
                 val game = v.findViewById<Spinner>(R.id.editGames)
                 val level = v.findViewById<Spinner>(R.id.editGameLevel)
+                val description = v.findViewById<TextView>(R.id.editDescription)
+                Log.d("PROVASALVATAGGIO", "$level, $description, $game")
                 listOfSports.add(game.selectedItem.toString())
                 listOfLevels.add(level.selectedItem.toString())
             }
@@ -298,7 +307,9 @@ class EditProfileActivity : AppCompatActivity() {
             jsonObject.put(getString(R.string.save_namesports), listOfSports)
             jsonObject.put(getString(R.string.save_levelsports), listOfLevels)
 
-        }*/
+        }
+
+ */
         editor.putString("profile", jsonObject.toString())
         editor.apply()
         val t = Toast.makeText(this, "Confirmed", Toast.LENGTH_SHORT)
@@ -315,6 +326,24 @@ class EditProfileActivity : AppCompatActivity() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        val email = intent.getStringExtra("email")
+        if (email != null) {
+            Log.d("EMAIL", email)
+        }else{
+            Log.d("EMAIL", "NULL")
+        }
+        user_mail.setText(email)
+        user_mail.isEnabled = false
+        user_name.setText(FirebaseAuth.getInstance().currentUser?.displayName)
+        user_number.setText("")
+        user_city.setText("")
+        user_description.setText("")
+        user_age.setText("")
+        user_nickname.setText("")
+
+    }
     //restore state when device is rotated
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
@@ -496,6 +525,7 @@ class EditProfileActivity : AppCompatActivity() {
         val deleteSportIcon = sportList.findViewById<FloatingActionButton>(R.id.delete_sport)
         deleteSportIcon.setOnClickListener {
             addSportContainer.removeView(sportList)
+            num_sports--
         }
     }
 
@@ -517,7 +547,7 @@ class EditProfileActivity : AppCompatActivity() {
         user_nickname.setText( sharedPreference.getString("user_nickname",getString(R.string.user_nickname))!!)//view?.findViewById(R.id.)
         user_age.setText(sharedPreference.getString("user_age",getString(R.string.user_age)))//view?.findViewById(R.id.)
         var gender:String= sharedPreference.getString("user_gender","Not specified")!!
-        glist= genders.toMutableList()
+        glist = genders.toMutableList()
         if (gender == "Male") {
             glist[0] = "Male"
             glist[1]="Not specified"

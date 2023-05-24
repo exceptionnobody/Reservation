@@ -1,6 +1,9 @@
 package it.polito.g13.businesslogic
 
 import androidx.lifecycle.LiveData
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import it.polito.g13.dao.CampoDao
 import it.polito.g13.dao.PosresDao
 import it.polito.g13.dao.ReservationDao
@@ -24,10 +27,10 @@ class BusinessClass
     private val strutDao: StructureDao,
     private val campoDao: CampoDao,
     private val sportsDao: SportsDao,
-    private val reviewStructDao: ReviewStructDao
+    private val reviewStructDao: ReviewStructDao,
 
     ) {
-
+    private val db: FirebaseFirestore = Firebase.firestore
     /* For the viewModel */
     fun getAllReservations() : LiveData<List<Reservation>> {
         return reservationDao.getAllReservations()
@@ -151,9 +154,25 @@ class BusinessClass
 
     fun changeUserInfo(user: User) {
         userDao.updateUser(user)
+
     }
     fun getUserById(id:Int): User {
         return userDao.getSingleUser(id)
+    }
+
+    fun insertUser(user: User){
+        db.collection("users")
+            .document(user.mail)
+            .collection("profiles")
+            .document(user.nickname)
+            .set(user)
+            .addOnSuccessListener {
+                true
+            }
+            .addOnFailureListener{
+                false
+            }
+
     }
 
     fun getSportsById(id: Int): Sports? {

@@ -1,4 +1,4 @@
-package it.polito.g13
+package it.polito.g13.activities.editprofile
 
 
 
@@ -6,12 +6,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.BitmapFactory
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.*
-import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -20,14 +20,16 @@ import androidx.core.graphics.drawable.toDrawable
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import com.firebase.ui.auth.AuthUI
 import com.google.android.material.navigation.NavigationView
-import it.polito.g13.entities.PosRes
-import it.polito.g13.entities.Reservation
-import it.polito.g13.viewModel.PosResViewModel
-import it.polito.g13.viewModel.ReservationsViewModel
+import it.polito.g13.BrowseAvailabilityActivity
+import it.polito.g13.ListReviewCourtsActivity
+import it.polito.g13.R
+import it.polito.g13.ReservationActivity
+import it.polito.g13.activities.login.LoginActivity
+
 import org.json.JSONObject
 import java.util.*
-import java.util.Date
 
 
 @AndroidEntryPoint
@@ -65,6 +67,7 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
     private lateinit var sportSpinner: Spinner
     private lateinit var sportLevelSpinner : Spinner
 
+    private lateinit var navigationIcon : Drawable
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -100,6 +103,10 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
 
         val menuItemReviewCourts = navView.menu.findItem(R.id.nav_review_courts)
         menuItemReviewCourts.setActionView(R.layout.menu_item_review_courts)
+
+        val menuItemExit = navView.menu.findItem(R.id.nav_exit)
+        menuItemExit.setActionView(R.layout.menu_item_exit)
+
 
         val menuItemBrowseCourts = navView.menu.findItem(R.id.nav_browse_courts)
         menuItemBrowseCourts.setActionView(R.layout.menu_item_review_courts)
@@ -153,7 +160,9 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         posResViewModel.insertPosRes(PosRes(1, "Lingotto", 1, "Basket", Date(), true))
 
          */
-
+      //  navView.visibility = View.GONE
+      //  navigationIcon = toolbar.navigationIcon!!
+      //  toolbar.navigationIcon = null
         loadImageFromStorage()
         checkSharedPreference()
     }
@@ -180,6 +189,17 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             R.id.nav_browse_courts -> {
                 val intent = Intent(this, BrowseCourtsActivity::class.java)
                 startActivity(intent)
+            }
+            R.id.nav_exit -> {
+                AuthUI.getInstance()
+                    .signOut(this)
+                    .addOnCompleteListener {
+                        // ...
+                        val intent = Intent(this, LoginActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+
             }
         }
         drawerLayout.closeDrawer(GravityCompat.START)
@@ -299,7 +319,9 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             val c = BitmapFactory.decodeFileDescriptor(b).toDrawable(resources)
             user_image.setImageDrawable(c)
         } else {
-            user_image.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.user_image))
+            user_image.setImageDrawable(AppCompatResources.getDrawable(context,
+                R.drawable.user_image
+            ))
         }
 
     }
@@ -316,7 +338,7 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id=item.itemId
-        if (id==R.id.action_edit) {
+        if (id== R.id.action_edit) {
             val intent = Intent(this, EditProfileActivity::class.java)
             startActivity(intent)
             return true
@@ -359,8 +381,10 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         user_languages.text=sharedPreference.getString("user_languages",getString(R.string.user_languages))!!
         user_description.text= sharedPreference.getString("user_description",getString(R.string.user_description))!!
         user_city.text= sharedPreference.getString("user_city",getString(R.string.user_city))!!//view?.findViewById(R.id.)
-
+     //   navView.visibility = View.VISIBLE
+     //   toolbar.setNavigationIcon(navigationIcon)
          // user_games= //view?.findViewById(R.id.)
     }
+
 
 }

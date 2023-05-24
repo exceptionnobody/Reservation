@@ -8,7 +8,6 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -34,11 +33,11 @@ import com.stacktips.view.DayDecorator
 import com.stacktips.view.DayView
 import com.stacktips.view.utils.CalendarUtils
 import dagger.hilt.android.AndroidEntryPoint
+import it.polito.g13.activities.editprofile.ShowProfileActivity
+import it.polito.g13.activities.editprofile.sports
 import it.polito.g13.entities.PosRes
-import it.polito.g13.entities.Reservation
 import it.polito.g13.ui.main.ReservationFragment
 import it.polito.g13.viewModel.PosResViewModel
-import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.util.*
 

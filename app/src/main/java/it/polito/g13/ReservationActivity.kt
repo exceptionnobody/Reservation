@@ -4,9 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
-import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -19,14 +19,19 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
+import com.firebase.ui.auth.AuthUI
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.stacktips.view.CalendarListener
 import com.stacktips.view.CustomCalendarView
 import com.stacktips.view.DayDecorator
 import com.stacktips.view.DayView
 import com.stacktips.view.utils.CalendarUtils
 import dagger.hilt.android.AndroidEntryPoint
+import it.polito.g13.activities.editprofile.ShowProfileActivity
+import it.polito.g13.activities.login.LoginActivity
 import it.polito.g13.entities.PosRes
 import it.polito.g13.entities.Reservation
 import it.polito.g13.entities.Struttura
@@ -53,12 +58,12 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
 
     lateinit var calendarView: CustomCalendarView
 
+    private lateinit var mAuth : FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         context = this.applicationContext
         setContentView(R.layout.activity_reservation)
-
-        //creating some data for structure table
+        val mAuth = FirebaseAuth.getInstance()
         structureViewMobel.insertStructure(Struttura(1, "Centro sportivo Robilant", 1))
         structureViewMobel.insertStructure(Struttura(2, "Sporting Dora", 2))
         structureViewMobel.insertStructure(Struttura(3, "Centro sportivo Carmagnola", 3))
@@ -70,6 +75,7 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         posResViewModel.insertPosRes(PosRes(3, "Centro sportivo Carmagnola", 1, "Tennis", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-05-30 12:00")!!, true))
         posResViewModel.insertPosRes(PosRes(4, "Sporting Dora", 1, "Basket", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-05-05 18:00")!!, true))
         posResViewModel.insertPosRes(PosRes(5, "Centro sportivo Carmagnola", 1, "Volleyball", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-05-06 19:00")!!, true))
+        posResViewModel.insertPosRes(PosRes(6, "Centro sportivo Carmagnola", 3, "Volleyball", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-05-19 15:00")!!, true))
 
         //creating some data for reservation table
         reservationViewModel.insertReservation(Reservation(1, 19405, 1, "Centro sportivo Robilant", "Football", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-05-29 14:00")!!, "Need a ball", true ))
@@ -105,6 +111,10 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
 
         val menuItemBrowseCourts = navView.menu.findItem(R.id.nav_browse_courts)
         menuItemBrowseCourts.setActionView(R.layout.menu_item_review_courts)
+
+        val menuItemExit = navView.menu.findItem(R.id.nav_exit)
+        menuItemExit.setActionView(R.layout.menu_item_exit)
+
 
         //set text navbar
         val navbarText = findViewById<TextView>(R.id.navbar_text)
@@ -172,6 +182,26 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             val intent = Intent(this, ShowReservationDetailActivity::class.java)
             startActivity(intent)
         }
+
+        val db = Firebase.firestore
+
+        val user = hashMapOf(
+            "first" to "Ada",
+            "last" to "Lovelace",
+            "born" to Date()
+        )
+
+// Add a new document with a generated ID
+        db.collection("users")
+            .add(user)
+            .addOnSuccessListener { documentReference ->
+                Log.d("TAG", "DocumentSnapshot added with ID: ${documentReference.id}")
+            }
+            .addOnFailureListener { e ->
+                Log.w("TAG", "Error adding document", e)
+            }
+
+
     }
 
     //handle toolbar items
@@ -196,6 +226,18 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             R.id.nav_browse_courts -> {
                 val intent = Intent(this, BrowseCourtsActivity::class.java)
                 startActivity(intent)
+            }
+
+            R.id.nav_exit -> {
+                AuthUI.getInstance()
+                    .signOut(this)
+                    .addOnCompleteListener {
+                        // ...
+                        val intent = Intent(this, LoginActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+
             }
         }
         drawerLayout.closeDrawer(GravityCompat.START)
