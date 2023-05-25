@@ -13,9 +13,11 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import com.firebase.ui.auth.AuthUI
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.activities.editprofile.ShowProfileActivity
+import it.polito.g13.activities.login.LoginActivity
 import it.polito.g13.viewModel.ReservationsViewModel
 import java.text.SimpleDateFormat
 
@@ -62,7 +64,10 @@ class ShowReservationDetailActivity : AppCompatActivity(), NavigationView.OnNavi
         menuItemReviewCourts.setActionView(R.layout.menu_item_review_courts)
 
         val menuItemBrowseCourts = navView.menu.findItem(R.id.nav_browse_courts)
-        menuItemBrowseCourts.setActionView(R.layout.menu_item_review_courts)
+        menuItemBrowseCourts.setActionView(R.layout.menu_item_browse_courts)
+
+        val menuItemExit = navView.menu.findItem(R.id.nav_exit)
+        menuItemExit.setActionView(R.layout.menu_item_exit)
 
         //set text navbar
         val navbarText = findViewById<TextView>(R.id.navbar_text)
@@ -126,6 +131,16 @@ class ShowReservationDetailActivity : AppCompatActivity(), NavigationView.OnNavi
             R.id.nav_browse_courts -> {
                 val intent = Intent(this, BrowseCourtsActivity::class.java)
                 startActivity(intent)
+            }
+            R.id.nav_exit -> {
+                AuthUI.getInstance()
+                    .signOut(this)
+                    .addOnCompleteListener {
+                        // ...
+                        val intent = Intent(this, LoginActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
             }
         }
         drawerLayout.closeDrawer(GravityCompat.START)

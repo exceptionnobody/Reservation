@@ -110,7 +110,7 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         menuItemReviewCourts.setActionView(R.layout.menu_item_review_courts)
 
         val menuItemBrowseCourts = navView.menu.findItem(R.id.nav_browse_courts)
-        menuItemBrowseCourts.setActionView(R.layout.menu_item_review_courts)
+        menuItemBrowseCourts.setActionView(R.layout.menu_item_browse_courts)
 
         val menuItemExit = navView.menu.findItem(R.id.nav_exit)
         menuItemExit.setActionView(R.layout.menu_item_exit)
@@ -183,6 +183,7 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             startActivity(intent)
         }
 
+        /*
         val db = Firebase.firestore
 
         val user = hashMapOf(
@@ -200,6 +201,8 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             .addOnFailureListener { e ->
                 Log.w("TAG", "Error adding document", e)
             }
+
+         */
 
 
     }
@@ -227,7 +230,6 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
                 val intent = Intent(this, BrowseCourtsActivity::class.java)
                 startActivity(intent)
             }
-
             R.id.nav_exit -> {
                 AuthUI.getInstance()
                     .signOut(this)
@@ -237,7 +239,6 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
                         startActivity(intent)
                         finish()
                     }
-
             }
         }
         drawerLayout.closeDrawer(GravityCompat.START)

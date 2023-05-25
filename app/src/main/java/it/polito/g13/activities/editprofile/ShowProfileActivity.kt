@@ -105,12 +105,11 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         val menuItemReviewCourts = navView.menu.findItem(R.id.nav_review_courts)
         menuItemReviewCourts.setActionView(R.layout.menu_item_review_courts)
 
+        val menuItemBrowseCourts = navView.menu.findItem(R.id.nav_browse_courts)
+        menuItemBrowseCourts.setActionView(R.layout.menu_item_browse_courts)
+
         val menuItemExit = navView.menu.findItem(R.id.nav_exit)
         menuItemExit.setActionView(R.layout.menu_item_exit)
-
-
-        val menuItemBrowseCourts = navView.menu.findItem(R.id.nav_browse_courts)
-        menuItemBrowseCourts.setActionView(R.layout.menu_item_review_courts)
 
         sharedPreference =  getSharedPreferences("preferences", 0) // 0 - for private mode
         this.user_image=findViewById(R.id.user_image)
@@ -200,7 +199,6 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
                         startActivity(intent)
                         finish()
                     }
-
             }
         }
         drawerLayout.closeDrawer(GravityCompat.START)
