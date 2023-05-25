@@ -3,6 +3,7 @@ package it.polito.g13
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -20,7 +21,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.auth.AuthUI
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.auth.FirebaseAuth
 import com.stacktips.view.CalendarListener
 import com.stacktips.view.CustomCalendarView
 import com.stacktips.view.DayDecorator
@@ -123,7 +123,7 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             decorators.add(DaysWithReservations(it))
 
             calendarView.decorators = decorators
-            calendarView.refreshCalendar(currentCalendar);
+            calendarView.refreshCalendar(currentCalendar)
         }
 
         calendarView.setCalendarListener(object : CalendarListener {
@@ -203,6 +203,7 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
                     .addOnCompleteListener {
                         // ...
                         val intent = Intent(this, LoginActivity::class.java)
+                        intent.flags = FLAG_ACTIVITY_CLEAR_TOP or FLAG_ACTIVITY_NEW_TASK
                         startActivity(intent)
                         finish()
                     }
