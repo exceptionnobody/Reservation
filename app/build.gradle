@@ -7,6 +7,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        debug {
+            storeFile file('C:\\Users\\Francesco\\AndroidStudioProjects\\Mad\\app\\mykey.jks')
+            storePassword 'android'
+            keyAlias 'mykey'
+            keyPassword 'android'
+        }
+    }
     namespace 'it.polito.g13'
     compileSdk 33
 
