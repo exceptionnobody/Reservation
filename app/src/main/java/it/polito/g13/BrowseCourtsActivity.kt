@@ -4,18 +4,21 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RatingBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.firebase.ui.auth.AuthUI
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.activities.editprofile.ShowProfileActivity
@@ -25,15 +28,17 @@ import it.polito.g13.entities.review_struct
 import it.polito.g13.viewModel.ReservationsViewModel
 import it.polito.g13.viewModel.ReviewStructureViewModel
 import it.polito.g13.viewModel.StrutturaViewModel
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import it.polito.g13.activities.login.LoginActivity
+import it.polito.g13.viewModel.StructuresViewModel
 
 private lateinit var context : Context
 
 @AndroidEntryPoint
 class BrowseCourtsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    val reservationViewModel by viewModels<ReservationsViewModel>()
-    val structureViewModel by viewModels<StrutturaViewModel>()
-    val reviewStructureViewModel by viewModels<ReviewStructureViewModel>()
+    val structuresViewModel by viewModels<StructuresViewModel>()
 
     //initialize toolbar variables
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
@@ -73,37 +78,20 @@ class BrowseCourtsActivity : AppCompatActivity(), NavigationView.OnNavigationIte
         menuItemReviewCourts.setActionView(R.layout.menu_item_review_courts)
 
         val menuItemBrowseCourts = navView.menu.findItem(R.id.nav_browse_courts)
-        menuItemBrowseCourts.setActionView(R.layout.menu_item_review_courts)
+        menuItemBrowseCourts.setActionView(R.layout.menu_item_browse_courts)
+
+        val menuItemExit = navView.menu.findItem(R.id.nav_exit)
+        menuItemExit.setActionView(R.layout.menu_item_exit)
 
         //set text navbar
         val navbarText = findViewById<TextView>(R.id.navbar_text)
         navbarText.text = "Select a court to see reviews"
 
-        //use viewmodel to manage recycler view
-        /*
-        structureViewModel.structures.observe(this) {structures ->
-            reservationViewModel.reservations.observe(this) {reservations ->
-                val listToReview = reservations.distinctBy { it.strut }
-                val listPastReview: MutableList<review_struct> = mutableListOf()
-
-                for (r in listToReview) {
-                    val struct = structures.find { it.structure_name == r.strut }
-
-                    reviewStructureViewModel.getReviewByStructureAndUserId(struct?.id!!, 1)
-
-                    reviewStructureViewModel.singleReviewStructure.observe(this) {
-                        if (it != null)
-                            listPastReview.add(it)
-                    }
-                }
-
-                val recyclerView = findViewById<RecyclerView>(R.id.list_review_courts)
-                recyclerView.adapter = ReviewReservationAdapter(listToReview, structures, listPastReview, this)
-                recyclerView.layoutManager = LinearLayoutManager(this)
-            }
+        structuresViewModel.courts.observe(this) {
+            val recyclerView = findViewById<RecyclerView>(R.id.list_browse_courts)
+            recyclerView.adapter = BrowseCourtsAdapter(it, this)
+            recyclerView.layoutManager = LinearLayoutManager(this)
         }
-
-         */
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -128,60 +116,46 @@ class BrowseCourtsActivity : AppCompatActivity(), NavigationView.OnNavigationIte
                 val intent = Intent(this, BrowseCourtsActivity::class.java)
                 startActivity(intent)
             }
+            R.id.nav_exit -> {
+                AuthUI.getInstance()
+                    .signOut(this)
+                    .addOnCompleteListener {
+                        // ...
+                        val intent = Intent(this, LoginActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+            }
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
 }
 
-//define recycler view for STRUCTURES
-/*
-class ReviewReservationsViewHolder(v: View) : RecyclerView.ViewHolder(v){
-    val strut = v.findViewById<TextView>(R.id.review_strut)
-    val sport = v.findViewById<TextView>(R.id.review_sport)
-    val noPastRating = v.findViewById<TextView>(R.id.no_past_rating)
-    val avgRating = v.findViewById<RatingBar>(R.id.average_past_rating)
+//define recycler view
+class BrowseCourtsViewHolder(v: View) : RecyclerView.ViewHolder(v){
+    val strut = v.findViewById<TextView>(R.id.browse_strut)
+    val sport = v.findViewById<TextView>(R.id.browse_sport)
+    //val noPastRating = v.findViewById<TextView>(R.id.no_past_rating)
+    //val avgRating = v.findViewById<RatingBar>(R.id.average_past_rating)
 }
 
-class ReviewReservationAdapter(val listReservation: List<Reservation>, val listStructures: List<Struttura>, val listPastReview: List<review_struct>, context: Context ): RecyclerView.Adapter<ReviewReservationsViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewReservationsViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.review_court_box, parent, false)
+class BrowseCourtsAdapter(val listCourts: List<MutableMap<String, Any>>, context: Context ): RecyclerView.Adapter<BrowseCourtsViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BrowseCourtsViewHolder {
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.browse_court_box, parent, false)
 
-        return ReviewReservationsViewHolder(v)
+        return BrowseCourtsViewHolder(v)
     }
 
     override fun getItemCount(): Int {
-        return listReservation.size
+        return listCourts.size
     }
 
-    override fun onBindViewHolder(holder: ReviewReservationsViewHolder, position: Int) {
-        val reservation = listReservation[position]
+    override fun onBindViewHolder(holder: BrowseCourtsViewHolder, position: Int) {
+        val court = listCourts[position]
 
-        holder.strut.text = reservation.strut
-        holder.sport.text = reservation.sport
-
-        val structure = listStructures.filter { it.structure_name == reservation.strut }[0]
-
-        val review = listPastReview.filter { it.review_id_struct == structure.id }
-
-        if (review.isNotEmpty()) {
-            holder.noPastRating.visibility = View.GONE
-
-            val avg = ((review[0].s_q1 + review[0].s_q2 + review[0].s_q3 + review[0].s_q4) / 4).toFloat()
-
-            holder.avgRating.rating = avg
-        }
-        else {
-            holder.avgRating.visibility = View.GONE
-        }
-
-        holder.itemView.setOnClickListener {
-            val intent = Intent(context, ShowReviewCourtsActivity::class.java)
-            intent.putExtra("selectedCourtName", structure.structure_name)
-            intent.putExtra("selectedCourtId", structure.id)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            context.startActivity(intent)
-        }
+        holder.strut.text = court["nomestruttura"].toString()
+        holder.sport.text = court["tiposport"].toString()
+        //holder.avgRating.rating = court["meanRating"].toString().toFloat()
     }
 }
- */
