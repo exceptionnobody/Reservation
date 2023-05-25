@@ -9,7 +9,6 @@ import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.annotation.RequiresApi
@@ -71,7 +70,6 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Log.d("HiltApplication", this.applicationContext.toString())
         context = this.applicationContext
         //getDataFromSharedPref()
 
@@ -201,24 +199,32 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
 
     private fun checkSharedPreference() {
         val profile = sharedPreference.getString("profile", "").toString()
-
+        var strName : String
         if(profile!= ""){
             jsonObject = JSONObject(profile)
-            println("IL MIO JESONOBJECT $jsonObject")
-            var strName = jsonObject.getString(getString(R.string.save_username))
-            user_name.setText(strName)
 
-            val age = jsonObject.getString(getString(R.string.save_age))
-            user_age.setText(age)
+            if(jsonObject.has("Fullname")) {
+                strName = jsonObject.getString(getString(R.string.save_username))
+                user_name.setText(strName)
+            }
 
-            strName = jsonObject.getString(getString(R.string.save_description))
-            user_description.setText(strName)
+            if(jsonObject.has("Age")) {
+                val age = jsonObject.getString(getString(R.string.save_age))
+                user_age.setText(age)
+            }
 
+            if(jsonObject.has("Description")) {
+                strName = jsonObject.getString(getString(R.string.save_description))
+                if (strName != "")
+                    user_description.setText(strName)
+            }
            // strName = jsonObject.getString(getString(R.string.save_nickname))
            // user_nickname.setText(strName)
 
-            strName = jsonObject.getString(getString(R.string.save_gender))
-            user_gender.setText(strName)
+            if(jsonObject.has("Gender")) {
+                strName = jsonObject.getString(getString(R.string.save_gender))
+                user_gender.setText(strName)
+            }
             /*for (i in 0 until gender.adapter.count) {
                 if (gender.getItemAtPosition(i).toString() == strName) {
                     gender.setSelection(i)
@@ -228,9 +234,10 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             strName = jsonObject.getString(getString(R.string.save_email))
             user_mail.setText(strName)
 
-            val numTelephone = jsonObject.getString(getString(R.string.save_telnumber))
-            user_number.setText(numTelephone.toString())
-
+            if(jsonObject.has("Telephone")) {
+                val numTelephone = jsonObject.getString(getString(R.string.save_telnumber))
+                user_number.setText(numTelephone.toString())
+            }
 
             if(jsonObject.has(getString(R.string.save_city))){
                 strName = jsonObject.getString(getString(R.string.save_city))
@@ -367,6 +374,8 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         }
        // user_name.text = sharedPreference.getString("user_name",getString(R.string.user_name))//?.text=sharedPreference.getString("user_name",R.string.user_name.toString())!!//view?.findViewById(R.id.)
        // user_nickname.text= sharedPreference.getString("user_nickname",getString(R.string.user_nickname))!!//view?.findViewById(R.id.)
+        user_name.text = sharedPreference.getString("user_name",getString(R.string.user_name))
+        user_nickname.text = sharedPreference.getString("user_nickname",getString(R.string.user_nickname))
         user_age.text = sharedPreference.getString("user_age",getString(R.string.user_age))//view?.findViewById(R.id.)
         user_gender.text= sharedPreference.getString("user_gender",getString(R.string.user_gender))!!//view?.findViewById(R.id.)
         user_mail.text= sharedPreference.getString("user_mail",getString(R.string.user_email))!!//view?.findViewById(R.id.)

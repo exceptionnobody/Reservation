@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -22,8 +21,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.auth.AuthUI
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.stacktips.view.CalendarListener
 import com.stacktips.view.CustomCalendarView
 import com.stacktips.view.DayDecorator
@@ -58,12 +55,10 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
 
     lateinit var calendarView: CustomCalendarView
 
-    private lateinit var mAuth : FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         context = this.applicationContext
         setContentView(R.layout.activity_reservation)
-        val mAuth = FirebaseAuth.getInstance()
         structureViewMobel.insertStructure(Struttura(1, "Centro sportivo Robilant", 1))
         structureViewMobel.insertStructure(Struttura(2, "Sporting Dora", 2))
         structureViewMobel.insertStructure(Struttura(3, "Centro sportivo Carmagnola", 3))
@@ -117,11 +112,11 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         val navbarText = findViewById<TextView>(R.id.navbar_text)
         navbarText.text = "Your reservations"
 
-        calendarView = findViewById(R.id.calendar_view);
+        calendarView = findViewById(R.id.calendar_view)
         val currentCalendar: Calendar = Calendar.getInstance(Locale.getDefault())
-        calendarView.setFirstDayOfWeek(Calendar.MONDAY);
-        calendarView.setShowOverflowDate(true);
-        calendarView.refreshCalendar(currentCalendar);
+        calendarView.setFirstDayOfWeek(Calendar.MONDAY)
+        calendarView.setShowOverflowDate(true)
+        calendarView.refreshCalendar(currentCalendar)
 
         reservationViewModel.reservations.observe(this@ReservationActivity) {
             val decorators : MutableList<DayDecorator> = mutableListOf<DayDecorator>()
@@ -179,25 +174,6 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             val intent = Intent(this, ShowReservationDetailActivity::class.java)
             startActivity(intent)
         }
-
-        val db = Firebase.firestore
-
-        val user = hashMapOf(
-            "first" to "Ada",
-            "last" to "Lovelace",
-            "born" to Date()
-        )
-
-// Add a new document with a generated ID
-        db.collection("users")
-            .add(user)
-            .addOnSuccessListener { documentReference ->
-                Log.d("TAG", "DocumentSnapshot added with ID: ${documentReference.id}")
-            }
-            .addOnFailureListener { e ->
-                Log.w("TAG", "Error adding document", e)
-            }
-
 
     }
 

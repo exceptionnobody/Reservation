@@ -94,7 +94,7 @@ class LoginActivity : AppCompatActivity() {
 
                                                     } else {
                                                         // Da gestire
-                                                        val exception = task.exception
+                                                        val _exception = task.exception
 
                                                     }
                                                 }
@@ -179,6 +179,7 @@ class LoginActivity : AppCompatActivity() {
         val intent = AuthUI.getInstance()
             .createSignInIntentBuilder()
             .setAvailableProviders(providers)
+            .setIsSmartLockEnabled(false)
             .setAuthMethodPickerLayout(authUiLayout)
             .setLogo(R.drawable.logo_no_bg) // Set logo drawable
             .setTheme(R.style.Theme_Mad)
