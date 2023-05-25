@@ -39,18 +39,21 @@ import it.polito.g13.activities.editprofile.sports
 import it.polito.g13.activities.login.LoginActivity
 import it.polito.g13.entities.PosRes
 import it.polito.g13.ui.main.ReservationFragment
+import it.polito.g13.viewModel.PosResDBViewModel
 import it.polito.g13.viewModel.PosResViewModel
+import it.polito.g13.viewModel.StructuresViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 private lateinit var context : Context
 private var selectedSport: String? = null
+private lateinit var structureList:  List<MutableMap<String, Any>>
 
 @AndroidEntryPoint
 class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     //instantiate viewModel
-    private val posResViewModel by viewModels<PosResViewModel>()
+    private val posResViewModel by viewModels<PosResDBViewModel>()
 
     //initialize toolbar variables
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
@@ -228,7 +231,12 @@ class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigat
                     //show them in the recycler view
                     posResViewModel.listPosRes.observe(this@BrowseAvailabilityActivity) {
                         noPosResBoxContainer.removeAllViews()
-                        val posResInDate = it.filter { posRes -> sdf.parse(sdf.format(posRes.data)) == formattedDate}
+                        val posResInDate = it.filter { posRes ->
+                            val timestamp = posRes["data"] as com.google.firebase.Timestamp
+                            val milliseconds = timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
+                            val netDate = Date(milliseconds)
+                            sdf.parse(sdf.format(netDate)) == formattedDate
+                        }
                         val recyclerView = findViewById<RecyclerView>(R.id.bookReservationContainer)
                         recyclerView.adapter = PosResAdapter(posResInDate)
                         recyclerView.layoutManager = LinearLayoutManager(this@BrowseAvailabilityActivity)
@@ -307,7 +315,7 @@ class PosResViewHolder(v: View) : RecyclerView.ViewHolder(v) {
     val tv = v.findViewById<TextView>(R.id.book_reservation_title)
 }
 
-class PosResAdapter(val listPosRes: List<PosRes>): RecyclerView.Adapter<PosResViewHolder>() {
+class PosResAdapter(val listPosRes: List<MutableMap<String, Any>>): RecyclerView.Adapter<PosResViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PosResViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.availability_box, parent, false)
 
@@ -321,17 +329,21 @@ class PosResAdapter(val listPosRes: List<PosRes>): RecyclerView.Adapter<PosResVi
     override fun onBindViewHolder(holder: PosResViewHolder, position: Int) {
         val posRes = listPosRes[position]
 
-        val formattedDate = SimpleDateFormat("yyyy-mm-dd HH:mm").format(posRes.data).split(" ")
+        val timestamp = posRes["data"] as com.google.firebase.Timestamp
+        val milliseconds = timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
+        val netDate = Date(milliseconds)
+
+        val formattedDate = SimpleDateFormat("yyyy-mm-dd HH:mm").format(netDate).split(" ")
         val hour1 = formattedDate[1]
         val hour2 = (hour1.split(":")[0].toInt() + 1).toString() + ":" + hour1.split(":")[1]
 
-        val txt = posRes.strut + ", " + hour1 + "-" + hour2
+        val txt = posRes["idstruttura"].toString() + ", " + hour1 + "-" + hour2
 
         holder.tv.text = txt
 
         holder.itemView.setOnClickListener {
             val intent = Intent(context, ShowPosResDetailActivity::class.java)
-            intent.putExtra("selectedPosResId", posRes.id)
+            intent.putExtra("selectedPosResId", posRes["idstruttura"].toString())
             intent.putExtra("selectedSport", selectedSport)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
@@ -339,13 +351,16 @@ class PosResAdapter(val listPosRes: List<PosRes>): RecyclerView.Adapter<PosResVi
     }
 }
 
-class DaysWithPosRes(posResList: List<PosRes>) : DayDecorator {
+class DaysWithPosRes(posResList: List<MutableMap<String, Any>>) : DayDecorator {
     val posResToShow = posResList
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun decorate(dayView: DayView) {
         posResToShow.forEach{posRes -> run {
+            val timestamp = posRes["data"] as com.google.firebase.Timestamp
+            val milliseconds = timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
+            val netDate = Date(milliseconds)
 
-            val formattedDate1 = SimpleDateFormat("yyyy-MM-dd").format(posRes.data)
+            val formattedDate1 = SimpleDateFormat("yyyy-MM-dd").format(netDate)
             val formattedDate2 = SimpleDateFormat("yyyy-MM-dd").format(dayView.date)
 
             val date1 = SimpleDateFormat("yyyy-MM-dd").parse(formattedDate1)
