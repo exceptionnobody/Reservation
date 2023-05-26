@@ -334,7 +334,7 @@ class PosResAdapter(val listPosRes: List<MutableMap<String, Any>>): RecyclerView
         val hour1 = formattedDate[1]
         val hour2 = (hour1.split(":")[0].toInt() + 1).toString() + ":" + hour1.split(":")[1]
 
-        val txt = posRes["idstruttura"].toString() + ", " + hour1 + "-" + hour2
+        val txt = posRes["nomestruttura"].toString() + ", " + hour1 + "-" + hour2
 
         holder.tv.text = txt
 

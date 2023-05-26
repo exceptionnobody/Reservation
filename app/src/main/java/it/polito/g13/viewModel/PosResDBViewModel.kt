@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
@@ -76,10 +77,20 @@ class PosResDBViewModel : ViewModel() {
 
                     if (formattedDate.equals(formattedFrom) || formattedDate.equals(formattedTo) ||
                         (formattedDate.after(formattedFrom) && formattedDate.before(formattedTo))) {
+
+                        val idStruct = posResData["idstruttura"] as DocumentReference
+
+                        idStruct
+                            .get()
+                            .addOnSuccessListener {
+                                posResData["nomestruttura"] = it.data?.get("nomestruttura")
+                            }
+
                         allPosRes.add(posResData)
                     }
                 }
 
+                Log.d("PROVA", allPosRes.toString())
                 _listPosRes.value = allPosRes
 
             }
