@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:openDrawer="start"
-    tools:context=".activities.editprofile.ShowProfileActivity">
+    tools:context=".activities.editprofile.ShowProfileActivity"
+    tools:ignore="MissingDefaultResource">
 
     <include
         layout="@layout/activity_show_profile_content"

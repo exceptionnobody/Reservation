@@ -657,7 +657,7 @@ class EditProfileActivity : AppCompatActivity() {
 
     private fun insertUserProfile(myuser: ProfileUser) {
         val email = FirebaseAuth.getInstance().currentUser?.email
-        val user = db.collection("users").document(email ?: myuser.mail).collection("profile").document("info")
+        val user = db.collection("users").document(FirebaseAuth.getInstance().uid!!).collection("profile").document("info")
         user.set(myuser)
             .addOnCompleteListener {
 
