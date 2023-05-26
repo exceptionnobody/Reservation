@@ -38,7 +38,7 @@
                 android:fontFamily="@font/crete_round"
                 android:text="@string/structure"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -68,7 +68,7 @@
                 android:fontFamily="@font/crete_round"
                 android:text="@string/equipment"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -98,7 +98,7 @@
                 android:fontFamily="@font/crete_round"
                 android:text="@string/dressing_rooms"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/structure_rating" />
 
@@ -128,7 +128,7 @@
                 android:fontFamily="@font/crete_round"
                 android:text="@string/staff"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/equipment_rating" />
 
@@ -156,7 +156,7 @@
                 android:fontFamily="@font/crete_round"
                 android:text="@string/additional_comment"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/dressing_rooms_rating" />
 
@@ -169,10 +169,12 @@
                 android:fontFamily="@font/crete_round"
                 android:text="@string/no_comment_inserted"
                 android:textColor="@color/primary_error"
-                android:textSize="13sp"
+                android:textSize="18sp"
+                android:paddingBottom="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/additional_comment_txt" />
 
+            <!--
             <TextView
                 android:id="@+id/author_txt"
                 android:layout_width="wrap_content"
@@ -200,6 +202,7 @@
                 android:textSize="14sp"
                 app:layout_constraintStart_toEndOf="@+id/author_txt"
                 app:layout_constraintTop_toBottomOf="@+id/additional_comment" />
+                -->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>

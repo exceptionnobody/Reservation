@@ -181,5 +181,13 @@ class BrowseCourtsAdapter(
 
         holder.strut.text = court["nomestruttura"].toString()
         holder.sport.text = court["tiposport"].toString()
+
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, ShowAllCourtReviews::class.java)
+            intent.putExtra("structName", court["nomestruttura"].toString())
+            intent.putExtra("idStruct", court["idstruttura"].toString())
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(intent)
+        }
     }
 }

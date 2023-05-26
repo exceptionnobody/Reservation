@@ -1,5 +1,6 @@
 package it.polito.g13.viewModel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,6 +17,9 @@ class ReviewsDBViewModel : ViewModel() {
 
     private val _reviews = MutableLiveData<List<MutableMap<String, Any>>>()
     val reviews: LiveData<List<MutableMap<String, Any>>> = _reviews
+
+    private val _structReviews = MutableLiveData<List<MutableMap<String, Any>>>()
+    val structReviews: LiveData<List<MutableMap<String, Any>>> = _structReviews
 
     private lateinit var l: ListenerRegistration
 
@@ -80,6 +84,24 @@ class ReviewsDBViewModel : ViewModel() {
                 }
             reviewListeners.add(listener)
         }
+    }
+
+    fun getReviewsByStruct(idStruct: String) {
+
+        db
+            .collection("struttura")
+            .document(idStruct)
+            .collection("reviewStruttura")
+            .get()
+            .addOnSuccessListener { listReviews ->
+                val allStructReviews: MutableList<MutableMap<String, Any>> = mutableListOf()
+
+                for (review in listReviews) {
+                    allStructReviews.add(review.data)
+                }
+
+                _structReviews.value = allStructReviews
+            }
     }
 
     override fun onCleared() {
