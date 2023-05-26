@@ -13,13 +13,13 @@ android {
             storePassword 'android'
             keyAlias 'mykey'
             keyPassword 'android'
-            storeFile file('C:\\Users\\Francesco\\AndroidStudioProjects\\Mad\\app\\mykey.jks')
+            storeFile file("$projectDir/mykey.jks")
         }
         release {
             storePassword 'android'
             keyAlias 'mykey'
             keyPassword 'android'
-            storeFile file('C:\\Users\\Francesco\\AndroidStudioProjects\\Mad\\app\\mykey.jks')
+            storeFile file("$projectDir/mykey.jks")
         }
     }
     namespace 'it.polito.g13'
