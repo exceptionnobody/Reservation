@@ -45,71 +45,138 @@ class LoginActivity : AppCompatActivity() {
                 val db = FirebaseFirestore.getInstance()
 
                 if (user != null) {
-                        val email = user.email
-                        val userId = user.uid
-                        if (!user.isEmailVerified) {
+                    val email = user.email
+                    val userId = user.uid
+                    if (!user.isEmailVerified) {
 
-                            val documentRef =  db.collection("EmailVerification").document(user.email.toString())
-                            val userRef =  db.collection("users").document(user.email.toString()).collection("infos").document(user.displayName.toString())
+                        val documentRef =
+                            db.collection("EmailVerification").document(user.email.toString())
+                        val userRef = db.collection("users").document(user.email.toString())
+                            .collection("infos").document(user.displayName.toString())
 
-                            documentRef.get()
-                                .addOnSuccessListener { documentSnapshot ->
-                                    if (documentSnapshot.exists()) {
-                                                val intent = Intent(this, VerificationActivity::class.java)
-                                                startActivity(intent)
-                                                finish()
+                        documentRef.get()
+                            .addOnSuccessListener { documentSnapshot ->
+                                if (documentSnapshot.exists()) {
+                                    val intent = Intent(this, VerificationActivity::class.java)
+                                    startActivity(intent)
+                                    finish()
 
-                                    } else {
-                                        if (email != null && response?.providerType == "password") {
-                                            user.sendEmailVerification()
-                                                .addOnCompleteListener { task ->
-                                                    if (task.isSuccessful) {
+                                } else {
+                                    if (email != null && response?.providerType == "password") {
+                                        user.sendEmailVerification()
+                                            .addOnCompleteListener { task ->
+                                                if (task.isSuccessful) {
 
-                                                        val documentName = user.email.toString()
+                                                    val documentName = user.email.toString()
 
-                                                        val emailVerification = hashMapOf(
-                                                            "userId" to userId,
-                                                            "timestamp" to FieldValue.serverTimestamp()
-                                                        )
+                                                    val emailVerification = hashMapOf(
+                                                        "userId" to userId,
+                                                        "timestamp" to FieldValue.serverTimestamp()
+                                                    )
 
-                                                        val userInformations = hashMapOf(
-                                                            "name" to user.displayName.toString(),
-                                                            "email" to user.email
+                                                    val userInformations = hashMapOf(
+                                                        "name" to user.displayName.toString(),
+                                                        "email" to user.email
 
-                                                        )
+                                                    )
 
-                                                        db.collection("EmailVerification")
-                                                            .document(documentName)
-                                                            .set(emailVerification)
-                                                            .addOnSuccessListener {
-                                                                userRef.set(userInformations)
-                                                                val intent = Intent(this, ConfermationActivity::class.java)
-                                                                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                                                                startActivity(intent)
-                                                                finish()
-                                                            }
-                                                            .addOnFailureListener { e ->
-                                                                // Errore durante la creazione
-                                                            }
+                                                    db.collection("EmailVerification")
+                                                        .document(documentName)
+                                                        .set(emailVerification)
+                                                        .addOnSuccessListener {
+                                                            userRef.set(userInformations)
+                                                            val intent = Intent(
+                                                                this,
+                                                                ConfermationActivity::class.java
+                                                            )
+                                                            intent.flags =
+                                                                Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                                            startActivity(intent)
+                                                            finish()
+                                                        }
+                                                        .addOnFailureListener { e ->
+                                                            // Errore durante la creazione
+                                                        }
 
-                                                    } else {
-                                                        // Da gestire
-                                                        val exception = task.exception
+                                                } else {
+                                                    // Da gestire
+                                                    val _exception = task.exception
 
-                                                    }
                                                 }
-                                        }
+                                            }
                                     }
                                 }
-                                .addOnFailureListener { e ->
+                            }
+                            .addOnFailureListener { e ->
+                                // Errore durante il recupero del documento
+                            }
+
+
+                    } else {
+                        Log.d("AUTENTICAZIONE", "SUCCESSO: " + response.toString())
+                        val documentRef =
+                            db.collection("EmailVerification").document(user.email.toString())
+
+                        if (response?.providerType.equals("google.com")) {
+                            Log.d(
+                                "AUTORIZZAZIONE",
+                                "CERCO IL DOCUMENTO CON LO username: ${user.uid}"
+                            )
+                            val documentPath = "users/${user.uid}/profile/"
+                            val userRef = db.collection("users/${user.uid}/profile").document("info")
+
+
+                            userRef.get().addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    Log.d(
+                                        "AUTENTICAZIONE",
+                                        "HO RECUPERATO IL DOCUMENTO: ${task.result}"
+                                    )
+                                    val documentSnapshot = task.result
+                                    if (documentSnapshot.exists()) {
+                                        Log.d("AUTENTICAZIONE", "UTENTE GIA' LOGGATO")
+                                        val intent =
+                                            Intent(this, ReservationActivity::class.java)
+                                        intent.flags =
+                                            Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                        startActivity(intent)
+                                    } else {
+                                        Log.d(
+                                            "AUTENTICAZIONE",
+                                            "UTENTE LOGGATO CON ACCOUNT MA NON ANCORA REGISTRATO"
+                                        )
+
+                                        val userRef = db.collection("users")
+                                            .document(user.email.toString())
+                                            .collection("loginInfo")
+                                            .document(user.displayName.toString())
+
+                                        val userInformations = hashMapOf(
+                                            "name" to user.displayName.toString(),
+                                            "email" to user.email,
+                                            "timestamp_registrazione" to FieldValue.serverTimestamp()
+                                        )
+                                        userRef.set(userInformations)
+                                            .addOnCompleteListener {
+                                                val intent = Intent(
+                                                    this,
+                                                    EditProfileActivity::class.java
+                                                )
+                                                intent.flags =
+                                                    Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+
+                                                startActivity(intent)
+                                            }
+
+                                    }
+                                } else {
                                     // Errore durante il recupero del documento
                                 }
-
-
-                        } else {
-                            Log.d("AUTENTICAZIONE", "SUCCESSO: " + response.toString())
-                            val documentRef =   db.collection("EmailVerification").document(user.email.toString())
-
+                            }
+                        }else{
+                                documentRef.delete()
+                            }
+                            /*
                             documentRef.delete()
                                 .addOnSuccessListener {
                                     val intent = Intent(this, EditProfileActivity::class.java)
@@ -122,7 +189,11 @@ class LoginActivity : AppCompatActivity() {
                                     // Errore da gestire
                                 }
 
-                        }
+                             */
+
+
+                    }
+
 
                 } else {
                     launchSignInFlow()
@@ -179,6 +250,7 @@ class LoginActivity : AppCompatActivity() {
         val intent = AuthUI.getInstance()
             .createSignInIntentBuilder()
             .setAvailableProviders(providers)
+            .setIsSmartLockEnabled(false)
             .setAuthMethodPickerLayout(authUiLayout)
             .setLogo(R.drawable.logo_no_bg) // Set logo drawable
             .setTheme(R.style.Theme_Mad)

@@ -1,14 +1,14 @@
 package it.polito.g13.firebase_objects
 
-data class FirebaseUser(
+data class ProfileUser(
 
-    var photo: String? = null,
+   // var photo: String? = null,
 
     var name_surname: String = "",
 
     var nickname: String = "",
 
-    var age: Int = 0,
+    var age: String = "",
 
     var gender: String = "",
 
@@ -18,13 +18,9 @@ data class FirebaseUser(
 
     var description : String = "",
 
-    var languages : String = "",
+    var languages : String?,
 
     var city : String = "",
-
-    var feedback : Int = 0,
-
-    var user_Sports : Int? = null,
 
     ) {
 }

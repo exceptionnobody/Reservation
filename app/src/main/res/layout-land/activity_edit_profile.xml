@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activities.editprofile.ShowProfileActivity">
+    tools:context=".activities.editprofile.ShowProfileActivity"
+    tools:ignore="MissingDefaultResource">
 
     <include
         layout="@layout/navbar"

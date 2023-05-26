@@ -7,6 +7,21 @@ plugins {
 }
 
 android {
+
+    signingConfigs {
+        debug {
+            storePassword 'android'
+            keyAlias 'mykey'
+            keyPassword 'android'
+            storeFile file("$projectDir/mykey.jks")
+        }
+        release {
+            storePassword 'android'
+            keyAlias 'mykey'
+            keyPassword 'android'
+            storeFile file("$projectDir/mykey.jks")
+        }
+    }
     namespace 'it.polito.g13'
     compileSdk 33
 
@@ -59,6 +74,7 @@ dependencies {
     implementation 'androidx.room:room-runtime:2.5.1'
     implementation 'androidx.room:room-ktx:2.5.1'
     implementation 'com.google.firebase:firebase-firestore-ktx:24.6.0'
+    implementation 'com.google.firebase:firebase-storage-ktx:20.2.0'
     kapt 'androidx.room:room-compiler:2.5.1'
     androidTestImplementation 'androidx.room:room-testing:2.5.1'
 

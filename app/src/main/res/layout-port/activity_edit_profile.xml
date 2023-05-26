@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:ignore="MissingDefaultResource">
 
     <include
         layout="@layout/navbar"
@@ -235,7 +236,7 @@
                         android:id="@+id/editEmail"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
-                        android:text="a@example.com"
+                        android:text="example@example.com"
                         android:layout_marginStart="@dimen/margin_start_content_text"
                         android:layout_marginTop="4dp"
                         android:layout_marginEnd="@dimen/margin_end_content_text"
