@@ -17,8 +17,6 @@ class StructuresDBViewModel : ViewModel() {
     private val _courts = MutableLiveData<List<MutableMap<String, Any>>>()
     val courts: LiveData<List<MutableMap<String, Any>>> = _courts
 
-    private lateinit var l: ListenerRegistration
-
     init {
         val structs = db.collection("struttura")
 
@@ -82,10 +80,5 @@ class StructuresDBViewModel : ViewModel() {
                 }
             courtListeners.add(listener)
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        l.remove()
     }
 }

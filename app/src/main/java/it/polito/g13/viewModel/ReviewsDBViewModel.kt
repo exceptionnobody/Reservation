@@ -21,8 +21,6 @@ class ReviewsDBViewModel : ViewModel() {
     private val _structReviews = MutableLiveData<List<MutableMap<String, Any>>>()
     val structReviews: LiveData<List<MutableMap<String, Any>>> = _structReviews
 
-    private lateinit var l: ListenerRegistration
-
     init {
         val structs = db.collection("struttura")
 
@@ -102,10 +100,5 @@ class ReviewsDBViewModel : ViewModel() {
 
                 _structReviews.value = allStructReviews
             }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        l.remove()
     }
 }
