@@ -30,7 +30,6 @@ class VerificationActivity : AppCompatActivity() {
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
                 finish()
-
             }
 
         val dialog = dialogBuilder.create()
