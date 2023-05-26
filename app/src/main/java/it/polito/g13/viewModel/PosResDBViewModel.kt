@@ -5,8 +5,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.text.SimpleDateFormat
+import java.time.LocalTime
 import java.util.*
 
 class PosResDBViewModel : ViewModel() {
@@ -50,16 +53,31 @@ class PosResDBViewModel : ViewModel() {
         val posResCollection = db.collection("posres")
 
         posResCollection
-            .whereEqualTo("tiposport", sport)
-            .whereGreaterThanOrEqualTo("data", from)
-            .whereLessThanOrEqualTo("data", to)
+            .whereEqualTo("tiposport", sport.lowercase())
+            //.whereGreaterThanOrEqualTo("data", from)
+            //.whereLessThanOrEqualTo("data", to)
             .get()
             .addOnSuccessListener { listPosRes ->
                 val allPosRes: MutableList<MutableMap<String, Any>> = mutableListOf()
 
                 for (posres_ in listPosRes) {
                     val posResData = posres_.data
-                    allPosRes.add(posResData)
+
+                    val posResFrom = posResData["data"] as Timestamp
+                    val seconds = posResFrom.seconds
+                    val nanoseconds = posResFrom.nanoseconds
+                    val milliseconds = seconds * 1000 + nanoseconds / 1_000_000
+
+                    val date = SimpleDateFormat("HH:mm").format(Date(milliseconds))
+                    val formattedDate = SimpleDateFormat("HH:mm").parse(date)
+
+                    val formattedFrom = SimpleDateFormat("HH:mm").parse(from)
+                    val formattedTo = SimpleDateFormat("HH:mm").parse(to)
+
+                    if (formattedDate.equals(formattedFrom) || formattedDate.equals(formattedTo) ||
+                        (formattedDate.after(formattedFrom) && formattedDate.before(formattedTo))) {
+                        allPosRes.add(posResData)
+                    }
                 }
 
                 _listPosRes.value = allPosRes
