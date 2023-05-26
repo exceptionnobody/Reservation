@@ -37,11 +37,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.activities.editprofile.ShowProfileActivity
 import it.polito.g13.activities.editprofile.sports
 import it.polito.g13.activities.login.LoginActivity
-import it.polito.g13.entities.PosRes
 import it.polito.g13.ui.main.ReservationFragment
 import it.polito.g13.viewModel.PosResDBViewModel
-import it.polito.g13.viewModel.PosResViewModel
-import it.polito.g13.viewModel.StructuresViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 

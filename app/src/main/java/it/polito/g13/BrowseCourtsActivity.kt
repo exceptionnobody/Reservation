@@ -9,9 +9,9 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.RatingBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
@@ -22,23 +22,17 @@ import com.firebase.ui.auth.AuthUI
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.activities.editprofile.ShowProfileActivity
-import it.polito.g13.entities.Reservation
-import it.polito.g13.entities.Struttura
-import it.polito.g13.entities.review_struct
-import it.polito.g13.viewModel.ReservationsViewModel
-import it.polito.g13.viewModel.ReviewStructureViewModel
-import it.polito.g13.viewModel.StrutturaViewModel
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import it.polito.g13.activities.login.LoginActivity
-import it.polito.g13.viewModel.StructuresViewModel
+import it.polito.g13.viewModel.ReviewsDBViewModel
+import it.polito.g13.viewModel.StructuresDBViewModel
 
 private lateinit var context : Context
 
 @AndroidEntryPoint
 class BrowseCourtsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    val structuresViewModel by viewModels<StructuresViewModel>()
+    val structuresViewModel by viewModels<StructuresDBViewModel>()
+    val reviewsViewModel by viewModels<ReviewsDBViewModel>()
 
     //initialize toolbar variables
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
@@ -87,10 +81,16 @@ class BrowseCourtsActivity : AppCompatActivity(), NavigationView.OnNavigationIte
         val navbarText = findViewById<TextView>(R.id.navbar_text)
         navbarText.text = "Select a court to see reviews"
 
-        structuresViewModel.courts.observe(this) {
-            val recyclerView = findViewById<RecyclerView>(R.id.list_browse_courts)
-            recyclerView.adapter = BrowseCourtsAdapter(it, this)
-            recyclerView.layoutManager = LinearLayoutManager(this)
+        val loading = findViewById<ProgressBar>(R.id.loading_browse_courts)
+
+        structuresViewModel.courts.observe(this) {courts ->
+            reviewsViewModel.reviews.observe(this) {reviews ->
+                val recyclerView = findViewById<RecyclerView>(R.id.list_browse_courts)
+                recyclerView.adapter = BrowseCourtsAdapter(courts, reviews, this)
+                recyclerView.layoutManager = LinearLayoutManager(this)
+
+                loading.visibility = View.GONE
+            }
         }
     }
 
@@ -136,11 +136,14 @@ class BrowseCourtsActivity : AppCompatActivity(), NavigationView.OnNavigationIte
 class BrowseCourtsViewHolder(v: View) : RecyclerView.ViewHolder(v){
     val strut = v.findViewById<TextView>(R.id.browse_strut)
     val sport = v.findViewById<TextView>(R.id.browse_sport)
-    //val noPastRating = v.findViewById<TextView>(R.id.no_past_rating)
-    //val avgRating = v.findViewById<RatingBar>(R.id.average_past_rating)
+    val noPastRating = v.findViewById<TextView>(R.id.no_past_rating_browse)
+    val avgRating = v.findViewById<RatingBar>(R.id.average_past_rating_browse)
 }
 
-class BrowseCourtsAdapter(val listCourts: List<MutableMap<String, Any>>, context: Context ): RecyclerView.Adapter<BrowseCourtsViewHolder>() {
+class BrowseCourtsAdapter(
+    val listCourts: List<MutableMap<String, Any>>,
+    val listReviews: List<MutableMap<String, Any>>,
+    context: Context) : RecyclerView.Adapter<BrowseCourtsViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BrowseCourtsViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.browse_court_box, parent, false)
 
@@ -152,10 +155,31 @@ class BrowseCourtsAdapter(val listCourts: List<MutableMap<String, Any>>, context
     }
 
     override fun onBindViewHolder(holder: BrowseCourtsViewHolder, position: Int) {
+
         val court = listCourts[position]
+
+        val reviews = listReviews.filter { it["idstruttura"] == court["idstruttura"] }
+
+        if (reviews.isNotEmpty()) {
+            holder.noPastRating.visibility = View.GONE
+
+            var sumRatings = 0f
+            var countRatings = 0
+
+            for (r in reviews) {
+                sumRatings += r["voto1"].toString().toFloat() + r["voto2"].toString().toFloat() +
+                        r["voto3"].toString().toFloat() + r["voto4"].toString().toFloat()
+
+                countRatings += 4
+            }
+
+            holder.avgRating.rating = sumRatings / countRatings
+        }
+        else {
+            holder.avgRating.visibility = View.GONE
+        }
 
         holder.strut.text = court["nomestruttura"].toString()
         holder.sport.text = court["tiposport"].toString()
-        //holder.avgRating.rating = court["meanRating"].toString().toFloat()
     }
 }

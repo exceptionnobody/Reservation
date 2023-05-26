@@ -1,6 +1,5 @@
 package it.polito.g13.viewModel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,7 +8,7 @@ import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-class StructuresViewModel : ViewModel() {
+class StructuresDBViewModel : ViewModel() {
     private val db = Firebase.firestore
 
     private val _structures = MutableLiveData<List<MutableMap<String, Any>>>()
@@ -17,9 +16,6 @@ class StructuresViewModel : ViewModel() {
 
     private val _courts = MutableLiveData<List<MutableMap<String, Any>>>()
     val courts: LiveData<List<MutableMap<String, Any>>> = _courts
-
-    private val _reviews = MutableLiveData<List<MutableMap<String, Any>>>()
-    val reviews: LiveData<List<MutableMap<String, Any>>> = _reviews
 
     private lateinit var l: ListenerRegistration
 
@@ -43,20 +39,6 @@ class StructuresViewModel : ViewModel() {
                         .collection("campistruttura")
                 }
 
-                /*
-                val reviewReferences = listStructs.map { struct ->
-                    structs.document(struct.id)
-                        .collection("reviewStruttura")
-                }
-
-                val meanRating = calculateMeanRating(reviewReferences)
-
-                for (struct in listStructs) {
-                    struct.data["meanRating"] = meanRating
-                }
-
-                 */
-
                 fetchCourts(courtReferences, allStructs)
             }
     }
@@ -78,12 +60,12 @@ class StructuresViewModel : ViewModel() {
                         val courtsData = value?.mapNotNull { it.data }
 
                         courtsData?.let {
+                            val idStruct = allStructs[index]["idstruttura"] as? String
                             val structName = allStructs[index]["nomestruttura"] as? String
-                            //val meanRating = allStructs[index]["meanRating"] as? String
 
                             it.forEach { court ->
                                 court["nomestruttura"] = structName
-                                //court["meanRating"] = meanRating
+                                court["idstruttura"] = idStruct
                             }
 
                             allCourts.addAll(it)
@@ -100,29 +82,6 @@ class StructuresViewModel : ViewModel() {
                 }
             courtListeners.add(listener)
         }
-    }
-
-    private fun calculateMeanRating(ratingsReferences: List<CollectionReference>?): Double {
-        var totalRating = 0.0
-        var count = 0
-
-        ratingsReferences?.forEachIndexed { index, collectionReference ->
-            collectionReference.get().addOnSuccessListener {
-                for (document in it) {
-                    val rating = document.getDouble("voto1")
-                        ?.plus(document.getDouble("voto2")!!)
-                        ?.plus(document.getDouble("voto3")!!)
-                        ?.plus(document.getDouble("voto4")!!)
-
-                    if (rating != null) {
-                        totalRating += rating
-                        count += 4
-                    }
-                }
-            }
-        }
-
-        return if (count > 0) totalRating / count else 0.0
     }
 
     override fun onCleared() {
