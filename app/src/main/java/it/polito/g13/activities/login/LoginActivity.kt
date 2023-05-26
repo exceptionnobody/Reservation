@@ -13,12 +13,12 @@ import com.firebase.ui.auth.AuthMethodPickerLayout
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import it.polito.g13.R
 import it.polito.g13.ReservationActivity
 import it.polito.g13.activities.editprofile.EditProfileActivity
-import java.util.Arrays
 
 class LoginActivity : AppCompatActivity() {
 
@@ -28,201 +28,63 @@ class LoginActivity : AppCompatActivity() {
             finish()
         }
     }
+    val db = FirebaseFirestore.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
-        loginLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        loginLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
 
-            if (result.resultCode == Activity.RESULT_CANCELED) {
-                finish()
-            }
-
-            if (result.resultCode == Activity.RESULT_OK) {
-
-                val data: Intent? = result.data
-                val response = IdpResponse.fromResultIntent(data)
-                val user = FirebaseAuth.getInstance().currentUser
-                val db = FirebaseFirestore.getInstance()
-
-                if (user != null) {
-                    val email = user.email
-                    val userId = user.uid
-                    if (!user.isEmailVerified) {
-
-                        val documentRef =
-                            db.collection("EmailVerification").document(user.email.toString())
-                        val userRef = db.collection("users").document(user.email.toString())
-                            .collection("infos").document(user.displayName.toString())
-
-                        documentRef.get()
-                            .addOnSuccessListener { documentSnapshot ->
-                                if (documentSnapshot.exists()) {
-                                    val intent = Intent(this, VerificationActivity::class.java)
-                                    startActivity(intent)
-                                    finish()
-
-                                } else {
-                                    if (email != null && response?.providerType == "password") {
-                                        user.sendEmailVerification()
-                                            .addOnCompleteListener { task ->
-                                                if (task.isSuccessful) {
-
-                                                    val documentName = user.email.toString()
-
-                                                    val emailVerification = hashMapOf(
-                                                        "userId" to userId,
-                                                        "timestamp" to FieldValue.serverTimestamp()
-                                                    )
-
-                                                    val userInformations = hashMapOf(
-                                                        "name" to user.displayName.toString(),
-                                                        "email" to user.email
-
-                                                    )
-
-                                                    db.collection("EmailVerification")
-                                                        .document(documentName)
-                                                        .set(emailVerification)
-                                                        .addOnSuccessListener {
-                                                            userRef.set(userInformations)
-                                                            val intent = Intent(
-                                                                this,
-                                                                ConfermationActivity::class.java
-                                                            )
-                                                            intent.flags =
-                                                                Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                                                            startActivity(intent)
-                                                            finish()
-                                                        }
-                                                        .addOnFailureListener { e ->
-                                                            // Errore durante la creazione
-                                                        }
-
-                                                } else {
-                                                    // Da gestire
-                                                    val _exception = task.exception
-
-                                                }
-                                            }
-                                    }
-                                }
-                            }
-                            .addOnFailureListener { e ->
-                                // Errore durante il recupero del documento
-                            }
-
-
-                    } else {
-                        Log.d("AUTENTICAZIONE", "SUCCESSO: " + response.toString())
-                        val documentRef =
-                            db.collection("EmailVerification").document(user.email.toString())
-
-                        if (response?.providerType.equals("google.com")) {
-                            Log.d(
-                                "AUTORIZZAZIONE",
-                                "CERCO IL DOCUMENTO CON LO username: ${user.uid}"
-                            )
-                            val documentPath = "users/${user.uid}/profile/"
-                            val userRef = db.collection("users/${user.uid}/profile").document("info")
-
-
-                            userRef.get().addOnCompleteListener { task ->
-                                if (task.isSuccessful) {
-                                    Log.d(
-                                        "AUTENTICAZIONE",
-                                        "HO RECUPERATO IL DOCUMENTO: ${task.result}"
-                                    )
-                                    val documentSnapshot = task.result
-                                    if (documentSnapshot.exists()) {
-                                        Log.d("AUTENTICAZIONE", "UTENTE GIA' LOGGATO")
-                                        val intent =
-                                            Intent(this, ReservationActivity::class.java)
-                                        intent.flags =
-                                            Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                                        startActivity(intent)
-                                    } else {
-                                        Log.d(
-                                            "AUTENTICAZIONE",
-                                            "UTENTE LOGGATO CON ACCOUNT MA NON ANCORA REGISTRATO"
-                                        )
-
-                                        val userRef = db.collection("users")
-                                            .document(user.email.toString())
-                                            .collection("loginInfo")
-                                            .document(user.displayName.toString())
-
-                                        val userInformations = hashMapOf(
-                                            "name" to user.displayName.toString(),
-                                            "email" to user.email,
-                                            "timestamp_registrazione" to FieldValue.serverTimestamp()
-                                        )
-                                        userRef.set(userInformations)
-                                            .addOnCompleteListener {
-                                                val intent = Intent(
-                                                    this,
-                                                    EditProfileActivity::class.java
-                                                )
-                                                intent.flags =
-                                                    Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-
-                                                startActivity(intent)
-                                            }
-
-                                    }
-                                } else {
-                                    // Errore durante il recupero del documento
-                                }
-                            }
-                        }else{
-                                documentRef.delete()
-                            }
-                            /*
-                            documentRef.delete()
-                                .addOnSuccessListener {
-                                    val intent = Intent(this, EditProfileActivity::class.java)
-                                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                                    intent.putExtra("email", user.email)
-                                    startActivity(intent)
-                                    finish()
-                                }
-                                .addOnFailureListener { e ->
-                                    // Errore da gestire
-                                }
-
-                             */
-
-
-                    }
-
-
-                } else {
-                    launchSignInFlow()
+                if (result.resultCode == Activity.RESULT_CANCELED) {
+                    finish()
                 }
 
+                if (result.resultCode == Activity.RESULT_OK) {
+
+                    val data: Intent? = result.data
+                    val response = IdpResponse.fromResultIntent(data)
+                    val user = FirebaseAuth.getInstance().currentUser
+
+                    if (user != null) {
+                        if (!user.isEmailVerified) {
+                            userIsNotValidate(user, response)
+                        } else {
+                            Log.d("AUTENTICAZIONE", "SUCCESSO: " + response.toString())
+
+                            if (response?.providerType.equals("google.com")) {
+                                checkGoogleAccount(user)
+                            } else {
+                                checkNonGoogleAccount(user)
+                            }
+                        }
+
+                    } else {
+                        launchSignInFlow()
+                    }
+
+                }
+
+
             }
 
-
-        }
-
-        val  currentUser = FirebaseAuth.getInstance().currentUser
+        val currentUser = FirebaseAuth.getInstance().currentUser
 
         if (currentUser != null) {
 
-              if (currentUser.isEmailVerified) {
-                  val intent = Intent(this, ReservationActivity::class.java)
-                  intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-
-                  startActivity(intent)
-                } else {
-                    AuthUI.getInstance()
-                      .signOut(this)
-                        .addOnCompleteListener {
-                            val intent = Intent(this, LoginActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                        }
-                }
-
+            if (currentUser.isEmailVerified) {
+                val intent = Intent(this, ReservationActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+            } else {
+                AuthUI.getInstance()
+                    .signOut(this)
+                    .addOnCompleteListener {
+                        val intent = Intent(this, LoginActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(intent)
+                        finish()
+                    }
+            }
 
 
         } else {
@@ -231,11 +93,10 @@ class LoginActivity : AppCompatActivity() {
         }
 
 
-
     }
 
     private fun launchSignInFlow() {
-        val providers = Arrays.asList(
+        val providers = listOf(
             AuthUI.IdpConfig.EmailBuilder().build(),
             AuthUI.IdpConfig.GoogleBuilder().build()
         )
@@ -259,5 +120,164 @@ class LoginActivity : AppCompatActivity() {
         loginLauncher.launch(intent)
     }
 
+    private fun checkNonGoogleAccount(user: FirebaseUser) {
+        val db = FirebaseFirestore.getInstance()
+
+        val documentRef = db.collection("EmailVerification").document(user.email.toString())
+        documentRef.get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val documentSnapshot = task.result
+                    if (documentSnapshot.exists()) {
+//                        Log.d("AUTENTICAZIONE", "UTENTE GIA' VERIFICATO MA ANCORA NON REGISTRATO")
+                        documentRef.delete()
+                        val userRef = db.collection("users").document(user.email.toString())
+                            .collection("infos").document(user.displayName.toString())
+                        userRef.delete()
+                        val intent = Intent(this, EditProfileActivity::class.java)
+                        intent.flags =
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(intent)
+                    } else {
+//                        Log.d("AUTENTICAZIONE","UTENTE LOGGATO CON ACCOUNT DIVERSA DA GOOGLE VERIFICATO")
+
+                        val userRef = db.collection("users")
+                            .document(user.uid)
+                            .collection("loginInfo")
+                            .document(user.displayName.toString())
+
+                        val userInformations = hashMapOf(
+                            "name" to user.displayName.toString(),
+                            "email" to user.email,
+                            "timestamp_registrazione" to FieldValue.serverTimestamp()
+                        )
+                        userRef.set(userInformations)
+                            .addOnCompleteListener {
+                                val intent = Intent(
+                                    this,
+                                    ReservationActivity::class.java
+                                )
+                                intent.flags =
+                                    Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                startActivity(intent)
+                            }
+
+                    }
+                } else {
+                    // Errore durante il recupero del documento
+                }
+            }
+            .addOnFailureListener { e ->
+                // Errore da gestire
+            }
+    }
+
+    private fun checkGoogleAccount(user: FirebaseUser) {
+
+        val userRef = db.collection("users/${user.uid}/profile").document("info")
+
+
+        userRef.get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+
+                val documentSnapshot = task.result
+
+                if (documentSnapshot.exists()) {
+//                    Log.d("AUTENTICAZIONE", "UTENTE GIA' LOGGATO")
+                    val intent = Intent(this, ReservationActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                } else {
+//                    Log.d("AUTENTICAZIONE", "UTENTE LOGGATO CON ACCOUNT GOOGLE MA NON ANCORA REGISTRATO")
+                    val myuserRef = db.collection("users")
+                        .document(user.uid)
+                        .collection("loginInfo")
+                        .document(user.displayName.toString())
+
+                    val userInformations = hashMapOf(
+                        "name" to user.displayName.toString(),
+                        "email" to user.email,
+                        "timestamp_registrazione" to FieldValue.serverTimestamp()
+                    )
+                    myuserRef.set(userInformations)
+                        .addOnCompleteListener {
+                            val intent = Intent(
+                                this,
+                                EditProfileActivity::class.java
+                            )
+                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                            startActivity(intent)
+                        }
+
+                }
+            } else {
+                // Errore durante il recupero del documento
+            }
+        }
+    }
+
+    private fun userIsNotValidate(user: FirebaseUser, response: IdpResponse?) {
+        val userId = user.uid
+        val email = user.email
+        val documentRef = db.collection("EmailVerification").document(email!!)
+        val userRef = db.collection("users").document(email)
+            .collection("infos").document(user.displayName!!)
+
+        documentRef.get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    val intent = Intent(this, VerificationActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    if (response?.providerType == "password") {
+                        user.sendEmailVerification()
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+
+                                    val emailVerification = hashMapOf(
+                                        "userId" to userId,
+                                        "timestamp" to FieldValue.serverTimestamp()
+                                    )
+
+                                    val userInformations = hashMapOf(
+                                        "name" to user.displayName.toString(),
+                                        "email" to email
+
+                                    )
+
+                                    db.collection("EmailVerification")
+                                        .document(email)
+                                        .set(emailVerification)
+                                        .addOnSuccessListener {
+                                            userRef.set(userInformations)
+                                            val intent = Intent(
+                                                this,
+                                                ConfermationActivity::class.java
+                                            )
+                                            intent.flags =
+                                                Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                            startActivity(intent)
+                                            finish()
+                                        }
+                                        .addOnFailureListener { e ->
+                                            // Errore durante la creazione
+                                        }
+
+                                } else {
+                                    // Da gestire
+                                    val _exception = task.exception
+
+                                }
+                            }
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                // Errore durante il recupero del documento
+            }
+
+
+    }
 
 }
