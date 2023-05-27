@@ -9,6 +9,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import it.polito.g13.entities.PosRes
 import java.text.SimpleDateFormat
 import java.time.LocalTime
 import java.util.*
@@ -44,7 +45,7 @@ class PosResDBViewModel : ViewModel() {
         val posResCollection = db.collection("posres")
 
         posResCollection
-            .document(posresId)
+            .document(posresId.trim())
             .update("flagattivo", flag)
             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
             .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
@@ -57,6 +58,7 @@ class PosResDBViewModel : ViewModel() {
             .whereEqualTo("tiposport", sport.lowercase())
             //.whereGreaterThanOrEqualTo("data", from)
             //.whereLessThanOrEqualTo("data", to)
+            .whereEqualTo("flagattivo", true)
             .get()
             .addOnSuccessListener { listPosRes ->
                 val allPosRes: MutableList<MutableMap<String, Any>> = mutableListOf()
@@ -90,7 +92,6 @@ class PosResDBViewModel : ViewModel() {
                     }
                 }
 
-                Log.d("PROVA", allPosRes.toString())
                 _listPosRes.value = allPosRes
 
             }
@@ -100,10 +101,25 @@ class PosResDBViewModel : ViewModel() {
         val posResCollection = db.collection("posres")
 
         posResCollection
-            .document(posresId)
+            .whereEqualTo("posresid", posresId)
             .get()
             .addOnSuccessListener { listPosRes ->
-                _singlePosRes.value = listPosRes.data
+
+                for (posres_ in listPosRes) {
+                    val posResData = posres_.data
+
+                    val idStruct = posResData["idstruttura"] as DocumentReference
+
+                    idStruct
+                        .get()
+                        .addOnSuccessListener {
+                            posResData["nomestruttura"] = it.data?.get("nomestruttura")
+                            _singlePosRes.value = posResData
+                        }
+                        .addOnFailureListener {
+                            _singlePosRes.value = posResData
+                        }
+                }
             }
     }
 

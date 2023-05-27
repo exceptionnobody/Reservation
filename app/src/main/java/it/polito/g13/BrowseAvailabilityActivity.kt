@@ -340,7 +340,7 @@ class PosResAdapter(val listPosRes: List<MutableMap<String, Any>>): RecyclerView
 
         holder.itemView.setOnClickListener {
             val intent = Intent(context, ShowPosResDetailActivity::class.java)
-            intent.putExtra("selectedPosResId", posRes["idstruttura"].toString())
+            intent.putExtra("selectedPosResId", posRes["posresid"].toString())
             intent.putExtra("selectedSport", selectedSport)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)

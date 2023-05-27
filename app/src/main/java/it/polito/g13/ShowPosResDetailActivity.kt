@@ -11,14 +11,18 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.firebase.ui.auth.AuthUI
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.activities.editprofile.ShowProfileActivity
 import it.polito.g13.activities.login.LoginActivity
 import it.polito.g13.entities.PosRes
 import it.polito.g13.entities.Reservation
+import it.polito.g13.viewModel.PosResDBViewModel
 import it.polito.g13.viewModel.PosResViewModel
+import it.polito.g13.viewModel.ReservationsDBViewModel
 import it.polito.g13.viewModel.ReservationsViewModel
 import java.text.SimpleDateFormat
+import java.util.*
 
 private var selectedSport: String? = null
 
@@ -32,10 +36,10 @@ class ShowPosResDetailActivity : AppCompatActivity(), NavigationView.OnNavigatio
 
     private lateinit var notesInput: EditText
 
-    private val posResViewModel by viewModels<PosResViewModel>()
-    private val reservationViewModel by viewModels<ReservationsViewModel>()
+    private val posResViewModel by viewModels<PosResDBViewModel>()
+    private val reservationViewModel by viewModels<ReservationsDBViewModel>()
 
-    private var selectedPosResId: Int = 0
+    private lateinit var selectedPosResId: String
     private lateinit var confirmButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,29 +92,39 @@ class ShowPosResDetailActivity : AppCompatActivity(), NavigationView.OnNavigatio
         notesInput = findViewById(R.id.content_notes_posres)
 
         //get selected reservation
-        selectedPosResId = intent.getIntExtra("selectedPosResId", 0)
+        selectedPosResId = intent.getStringExtra("selectedPosResId").toString()
         posResViewModel.getPosResById(selectedPosResId)
         posResViewModel.singlePosRes.observe(this) {
-            val sportText = findViewById<TextView>(R.id.content_sport_typology_posres)
-            sportText.text = it.sport
+            if (it !== null) {
+                val sportText = findViewById<TextView>(R.id.content_sport_typology_posres)
+                sportText.text = it["tiposport"].toString()
 
-            val placeText = findViewById<TextView>(R.id.content_place_posres)
-            placeText.text = it.strut
+                val placeText = findViewById<TextView>(R.id.content_place_posres)
+                if (it["nomestruttura"].toString() !== "null") {
+                    placeText.text = it["nomestruttura"].toString()
+                }
 
-            val dateTimeText = findViewById<TextView>(R.id.content_date_time_posres)
-            val formattedDate = SimpleDateFormat("dd-MM-yyyy HH:mm").format(it.data).split(" ")
-            val date = formattedDate[0]
-            val hour1 = formattedDate[1]
-            val hour2 = (hour1.split(":")[0].toInt() + 1).toString() + ":" + hour1.split(":")[1]
+                val dateTimeText = findViewById<TextView>(R.id.content_date_time_posres)
+                val timestamp = it["data"] as com.google.firebase.Timestamp
+                val milliseconds = timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
+                val netDate = Date(milliseconds)
+                val formattedDate = SimpleDateFormat("dd-MM-yyyy HH:mm").format(netDate).split(" ")
+                val date = formattedDate[0]
+                val hour1 = formattedDate[1]
+                val hour2 = (hour1.split(":")[0].toInt() + 1).toString() + ":" + hour1.split(":")[1]
 
-            dateTimeText.text = date + ", " + hour1 + "-" + hour2
+                dateTimeText.text = date + ", " + hour1 + "-" + hour2
+            }
         }
 
         confirmButton.setOnClickListener {
             posResViewModel.singlePosRes.observe(this) {
                 if (it != null) {
-                    reservationViewModel.insertReservation(Reservation(99, it.id, 1, it.strut, it.sport, it.data, notesInput.text.toString(), true))
-                    posResViewModel.updatePosRes(PosRes(it.id, it.strut, it.campo, it.sport, it.data, false))
+                    val timestamp = it["data"] as com.google.firebase.Timestamp
+                    val milliseconds = timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
+                    val netDate = Date(milliseconds)
+                    reservationViewModel.insertReservation(it["posresid"].toString(), it["idstruttura"].toString(), netDate, it["idcampo"].toString(), it["tiposport"].toString(), notesInput.text.toString())
+                    posResViewModel.updatePosRes(it["posresid"].toString(), false)
 
                     val intent = Intent(this, ReservationActivity::class.java)
                     startActivity(intent)
