@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,8 +40,21 @@ class ReservationsDBViewModel : ViewModel() {
                     val allReservations: MutableList<MutableMap<String, Any>> = mutableListOf()
 
                     for (reservation in listReservations) {
-                        val structData = reservation.data
-                        allReservations.add(structData)
+                        val reservationData = reservation.data
+                        val idStruct = reservationData["idstruttura"] as DocumentReference
+
+                        reservationData["idprenotazione"] = reservation.id
+
+                        idStruct
+                            .get()
+                            .addOnSuccessListener {
+                                reservationData["nomestruttura"] = it.data?.get("nomestruttura")
+                                allReservations.add(reservationData)
+                            }
+                            .addOnFailureListener {
+                                allReservations.add(reservationData)
+                            }
+
                     }
 
                     _reservations.value = allReservations
@@ -48,11 +62,11 @@ class ReservationsDBViewModel : ViewModel() {
         }
     }
 
-    fun insertReservation(posresid : String, idstruttura : String, data: Date, idcampo: String, tiposport: String, note: String) {
+    fun insertReservation(posresid : String, idstruttura : Any?, data: Date, idcampo: Any?, tiposport: String, note: String) {
         if (user != null && user.email != null) {
             val reservationsRef = db.collection("users").document(user.email!!).collection("reservations")
             val data = hashMapOf(
-                "posresid" to posresid,
+                "posresid" to posresid.trim(),
                 "idstruttura" to idstruttura,
                 "data" to data,
                 "idcampo" to idcampo,

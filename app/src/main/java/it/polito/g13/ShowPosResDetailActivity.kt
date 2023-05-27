@@ -123,7 +123,7 @@ class ShowPosResDetailActivity : AppCompatActivity(), NavigationView.OnNavigatio
                     val timestamp = it["data"] as com.google.firebase.Timestamp
                     val milliseconds = timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
                     val netDate = Date(milliseconds)
-                    reservationViewModel.insertReservation(it["posresid"].toString(), it["idstruttura"].toString(), netDate, it["idcampo"].toString(), it["tiposport"].toString(), notesInput.text.toString())
+                    reservationViewModel.insertReservation(it["posresid"].toString(), it["idstruttura"], netDate, it["idcampo"], it["tiposport"].toString(), notesInput.text.toString())
                     posResViewModel.updatePosRes(it["posresid"].toString(), false)
 
                     val intent = Intent(this, ReservationActivity::class.java)
