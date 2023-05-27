@@ -33,6 +33,7 @@ class firebaseDB(mail:String){
                     val reviews:Array<FirebaseStructureReviews> = emptyArray()
                     var idStruttura:String=""
                     var nomeStruttura:String=""
+                    var citta:String=""
                     db.collection("struttura/").document(document.id).collection("campistruttura").get()
                         .addOnSuccessListener { querySnapshot ->
                             for (document in querySnapshot) {
@@ -69,6 +70,7 @@ class firebaseDB(mail:String){
                             for (document in querySnapshot) {
                                 nomeStruttura=document.data.get("nomestruttura").toString()
                                 idStruttura=document.data.get("idstruttura").toString()
+                                citta=document.data.get("citta").toString()
                             }
                         }
                         .addOnFailureListener { exception ->
@@ -77,6 +79,7 @@ class firebaseDB(mail:String){
                     var struttura=FirebaseStructure(fields = campi, reviews = reviews)
                     struttura.idstruttura=idStruttura
                     struttura.nomestruttura=nomeStruttura
+                    struttura.citta=citta
                     strutture.plus(struttura)
                 }
             }
