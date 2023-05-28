@@ -183,22 +183,73 @@ class PosResDBViewModel : ViewModel() {
             }
     }
 
-    public  fun getPosResByStructureSportDateAndTime(sport: String, date: Date, from: String, to: String, struct: String) {
+    public  fun getPosResByStructureSportDateAndTime(sport: String, date: Date, from: String, to: String, struct: DocumentReference, currentPosResId: String) {
         val posResCollection = db.collection("posres")
 
         posResCollection
             .whereEqualTo("idstruttura", struct)
             .whereEqualTo("tiposport", sport)
-            .whereGreaterThanOrEqualTo("data", from)
-            .whereLessThanOrEqualTo("data", to)
+            //.whereGreaterThanOrEqualTo("data", from)
+            //.whereLessThanOrEqualTo("data", to)
             .get()
             .addOnSuccessListener { listPosRes ->
                 val allPosRes: MutableList<MutableMap<String, Any>> = mutableListOf()
 
                 for (posres_ in listPosRes) {
                     val posResData = posres_.data
+                    var skipPosRes = false
+
                     posResData["posresid"] = posres_.id
-                    allPosRes.add(posResData)
+
+                    if (posResData["players"] != null) {
+                        val players = posResData["players"] as List<DocumentReference>
+
+                        val userPath = db.document("users/${user?.uid}")
+
+                        if (players.any{ it == userPath } && posResData["posresid"].toString() != currentPosResId) {
+                            skipPosRes = true
+                        }
+
+                        posResData["numberOfCurrentPlayers"] = players.size.toString()
+                    } else {
+                        posResData["numberOfCurrentPlayers"] = "0"
+                    }
+
+                    if (posResData["posresid"].toString() != currentPosResId && posResData["flagattivo"] == false) {
+                        skipPosRes = true
+                    }
+
+                    val posResFrom = posResData["data"] as Timestamp
+                    val seconds = posResFrom.seconds
+                    val nanoseconds = posResFrom.nanoseconds
+                    val milliseconds = seconds * 1000 + nanoseconds / 1_000_000
+
+                    val datePosRes = SimpleDateFormat("HH:mm").format(Date(milliseconds))
+                    val formatteTime = SimpleDateFormat("HH:mm").parse(datePosRes)
+                    val formattedDate = SimpleDateFormat("yyyy-MM-dd").format(Date(milliseconds))
+                    val formattedDateSelected = SimpleDateFormat("yyyy-MM-dd").format(date)
+
+                    val formattedFrom = SimpleDateFormat("HH:mm").parse(from)
+                    val formattedTo = SimpleDateFormat("HH:mm").parse(to)
+
+                    if (
+                        (
+                            formatteTime.equals(formattedFrom) || formatteTime.equals(formattedTo) ||
+                            (formatteTime.after(formattedFrom) && formatteTime.before(formattedTo))
+                        )
+                        && formattedDateSelected == formattedDate
+                        && !skipPosRes
+                    ) {
+                        val idStruct = posResData["idstruttura"] as DocumentReference
+
+                        idStruct
+                            .get()
+                            .addOnSuccessListener {
+                                posResData["nomestruttura"] = it.data?.get("nomestruttura")
+                            }
+
+                        allPosRes.add(posResData)
+                    }
                 }
 
                 _listPosRes.value = allPosRes

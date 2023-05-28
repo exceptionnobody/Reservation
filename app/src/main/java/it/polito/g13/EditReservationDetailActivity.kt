@@ -13,19 +13,22 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.DocumentReference
 import com.stacktips.view.CalendarListener
 import com.stacktips.view.CustomCalendarView
 import com.stacktips.view.DayDecorator
 import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.entities.PosRes
+import it.polito.g13.viewModel.PosResDBViewModel
 import it.polito.g13.viewModel.PosResViewModel
+import it.polito.g13.viewModel.ReservationsDBViewModel
 import it.polito.g13.viewModel.ReservationsViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 val sportCenters = listOf("Centro sportivo Robilant", "Sporting Dora", "Centro sportivo Carmagnola", "Impianto sportivo Roveda")
 
-private var newPosResId: Int? = 0
+private var newPosResId: String? = null
 
 @AndroidEntryPoint
 //class EditReservationDetailActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
@@ -36,11 +39,13 @@ class EditReservationDetailActivity : AppCompatActivity() {
 
     private lateinit var calendarView: CustomCalendarView
 
-    private val reservationViewModel by viewModels<ReservationsViewModel> ()
-    private val posResViewModel by viewModels<PosResViewModel>()
-    private var selectedReservationId: Int = 0
-    private lateinit var selectedDate: Date
+    private val reservationViewModel by viewModels<ReservationsDBViewModel> ()
+    private val posResViewModel by viewModels<PosResDBViewModel>()
+    private lateinit var selectedReservationId: String
+    private var selectedDate: Date? = null
     private lateinit var structureName: String
+    private lateinit var structureId: DocumentReference
+    private lateinit var reservationId: String
     private lateinit var sportName: String
     private lateinit var confirmButton: Button
     private lateinit var from_time_picker: TimePickerDialog
@@ -100,7 +105,9 @@ class EditReservationDetailActivity : AppCompatActivity() {
                     select_from_time.text = String.format("%s:%s", hourFormatted, minuteFormatted)
                     //from_time_selected = String.format("%s:%s", hourFormatted, minuteFormatted)
                     from_time = String.format("%s:%s", hourFormatted, minuteFormatted)
-                    retrieveNewReservations(selectedDate, from_time, to_time)
+                    if (selectedDate != null) {
+                        retrieveNewReservations(selectedDate!!, from_time, to_time)
+                    }
                 }
             }, hour, minutes, true)
 
@@ -135,7 +142,9 @@ class EditReservationDetailActivity : AppCompatActivity() {
                     select_to_time.text = String.format("%s:%s", hourFormatted, minuteFormatted)
                     //to_time_selected = String.format("%s:%s", hourFormatted, minuteFormatted)
                     to_time = String.format("%s:%s", hourFormatted, minuteFormatted)
-                    retrieveNewReservations(selectedDate, from_time, to_time)
+                    if (selectedDate != null) {
+                        retrieveNewReservations(selectedDate!!, from_time, to_time)
+                    }
                 }
             }, hour, minutes, true)
 
@@ -170,12 +179,31 @@ class EditReservationDetailActivity : AppCompatActivity() {
         confirmButton.setBackgroundColor(Color.GRAY)
 
         confirmButton.setOnClickListener {
-            if (newPosResId != null && newPosResId != 0) {
+            if (newPosResId != null) {
                 posResViewModel.getPosResById(newPosResId!!)
                 posResViewModel.singlePosRes.observe(this@EditReservationDetailActivity) {
                     if (it != null) {
-                        reservationViewModel.updateReservation(selectedReservationId, it.data, notesInput.text.toString() )
+                        // fare modifica data/prenotazione
                         val intent = Intent(this, ShowReservationDetailActivity::class.java)
+                        if (selectedReservationId == it["posresid"]) {
+                            intent.putExtra("selectedReservationId", selectedReservationId)
+                            reservationViewModel.updateNoteReservation(selectedReservationId, notesInput.text.toString() )
+                        } else {
+                            val timestamp = it["data"] as com.google.firebase.Timestamp
+                            val milliseconds = timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
+                            val netDate = Date(milliseconds)
+                            intent.putExtra("selectedReservationId", it["posresid"].toString())
+                            reservationViewModel.changeReservation(
+                                selectedReservationId,
+                                it["posresid"].toString(),
+                                it["idstruttura"],
+                                netDate,
+                                it["idcampo"],
+                                it["tiposport"].toString(),
+                                notesInput.text.toString()
+                            )
+                            posResViewModel.updatePosRes(it)
+                        }
                         startActivity(intent)
                     }
                 }
@@ -201,26 +229,32 @@ class EditReservationDetailActivity : AppCompatActivity() {
         })
 
         //get selected reservation
-        selectedReservationId = intent.getIntExtra("selectedReservationId", 0)
+        selectedReservationId = intent.getStringExtra("selectedReservationId").toString()
         reservationViewModel.getSingleReservation(selectedReservationId);
         reservationViewModel.singleReservation.observe(this@EditReservationDetailActivity) {
             val codeText = findViewById<TextView>(R.id.content_reservation_number)
-            codeText.text = it.idsl.toString()
+            codeText.text = it["reservationid"].toString()
+            reservationId = it["reservationid"].toString()
 
             val sportText = findViewById<TextView>(R.id.content_sport_typology)
-            sportText.text = it.sport
-            sportName = it.sport
+            sportText.text = it["tiposport"].toString()
+            sportName = it["tiposport"].toString()
 
             val placeText = findViewById<TextView>(R.id.content_place)
-            placeText.text = it.strut
-            structureName = it.strut
+            placeText.text = it["nomestruttura"].toString()
+            structureName = it["nomestruttura"].toString()
+            structureId = it["idstruttura"] as DocumentReference
 
-            select_from_time.text = SimpleDateFormat("HH:mm").format(it.data)
-            from_time = SimpleDateFormat("HH:mm").format(it.data)
+            val timestamp = it["data"] as com.google.firebase.Timestamp
+            val milliseconds = timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
+            val netDate = Date(milliseconds)
+
+            select_from_time.text = SimpleDateFormat("HH:mm").format(netDate)
+            from_time = SimpleDateFormat("HH:mm").format(netDate)
             //from_time_selected = SimpleDateFormat("HH:mm").format(it.data)
 
-            var to_time_hour = SimpleDateFormat("HH:mm").format(it.data).split(":")[0].toInt()
-            val to_time_minutes = SimpleDateFormat("HH:mm").format(it.data).split(":")[1]
+            var to_time_hour = SimpleDateFormat("HH:mm").format(netDate).split(":")[0].toInt()
+            val to_time_minutes = SimpleDateFormat("HH:mm").format(netDate).split(":")[1]
 
             if (to_time_hour == 23) {
                 to_time_hour = 0
@@ -238,8 +272,8 @@ class EditReservationDetailActivity : AppCompatActivity() {
             val placeSelectedIndex = sportCenters.indexOf(it.strut)
             sportCentersSpinner.setSelection(placeSelectedIndex)*/
 
-            if (it.note.isNotEmpty() && it.note != R.string.int_content_notes.toString()) {
-                notesInput.setText(it.note)
+            if (it["note"] != null && it["note"].toString() != R.string.int_content_notes.toString()) {
+                notesInput.setText(it["note"].toString())
             }
         }
 
@@ -253,8 +287,7 @@ class EditReservationDetailActivity : AppCompatActivity() {
             //retrieve available reservations
             //posResViewModel.getPosResByStructure(sportSpinner.selectedItem.toString()!!, formattedDate!!, sportCentersSpinner.selectedItem.toString())
 
-            println("il from $from $to")
-            posResViewModel.getPosResByStructureSportDateAndTime(sportName!!, formattedDate!!, from, to, structureName)
+            posResViewModel.getPosResByStructureSportDateAndTime(sportName!!, formattedDate!!, from, to, structureId, reservationId)
             //show them in the recycler view
             posResViewModel.listPosRes.observe(this@EditReservationDetailActivity) {
                 val noAvailability = findViewById<LinearLayout>(R.id.no_availability)
@@ -295,7 +328,7 @@ class AvailableSlotViewHolder(v: View) : RecyclerView.ViewHolder(v){
     val tv = v.findViewById<TextView>(R.id.book_reservation_title)
 }
 
-class AvailableSlotAdapter(val listAvailableReservation: List<PosRes>, val confirmButton: Button, val resources: Resources): RecyclerView.Adapter<AvailableSlotViewHolder>() {
+class AvailableSlotAdapter(val listAvailableReservation: List<MutableMap<String, Any>>, val confirmButton: Button, val resources: Resources): RecyclerView.Adapter<AvailableSlotViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AvailableSlotViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.availability_box, parent, false)
 
@@ -309,16 +342,20 @@ class AvailableSlotAdapter(val listAvailableReservation: List<PosRes>, val confi
     override fun onBindViewHolder(holder: AvailableSlotViewHolder, position: Int) {
         val availableReservation = listAvailableReservation[position]
 
-        val formattedDate = SimpleDateFormat("yyyy-mm-dd HH:mm").format(availableReservation.data).split(" ")
+        val timestamp = availableReservation["data"] as com.google.firebase.Timestamp
+        val milliseconds = timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
+        val netDate = Date(milliseconds)
+
+        val formattedDate = SimpleDateFormat("yyyy-mm-dd HH:mm").format(netDate).split(" ")
         val hour1 = formattedDate[1]
         val hour2 = (hour1.split(":")[0].toInt() + 1).toString() + ":" + hour1.split(":")[1]
 
-        val txt = availableReservation.strut + ", " + availableReservation.sport + ", " + hour1 + "-" + hour2
+        val txt = availableReservation["nomestruttura"].toString() + ", " + availableReservation["tiposport"].toString() + ", " + hour1 + "-" + hour2
 
         holder.tv.text = txt
 
         holder.itemView.setOnClickListener {
-            newPosResId = availableReservation.id
+            newPosResId = availableReservation["posresid"].toString()
             confirmButton.isClickable = true
             confirmButton.setBackgroundColor(resources.getColor(R.color.primary_green))
             holder.itemView.findViewById<RelativeLayout>(R.id.reservation_box).background = resources.getDrawable(R.drawable.bg_reservation_box_selected)

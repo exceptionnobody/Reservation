@@ -113,9 +113,16 @@ class ReservationsDBViewModel : ViewModel() {
         }
     }
 
-    /*fun updateReservation(idReservation: Int, newData: Date, notes: String) {
-        businessLogic.changeReservation(idReservation, newData, notes)
-    }*/
+    fun updateNoteReservation(idReservation: String, notes: String) {
+        if (user != null && user.uid != null) {
+            db
+                .collection("users")
+                .document(user.uid)
+                .collection("reservations")
+                .document(idReservation)
+                .update("note", notes)
+        }
+    }
 
     fun deleteReservation(idreservation: String) {
         if (user != null && user.uid != null) {
@@ -173,40 +180,62 @@ class ReservationsDBViewModel : ViewModel() {
 
                     var reservationData : MutableMap<String, Any?> = mutableMapOf()
 
-                    val idStruct = listPosRes.data?.get("idstruttura") as DocumentReference
+                    if (listPosRes.data?.get("idstruttura") != null) {
+                        val idStruct = listPosRes.data?.get("idstruttura") as DocumentReference
 
-                    reservationData["reservationid"] = idreservation
-                    reservationData["posresid"] = listPosRes.data?.get("posresid")
-                    reservationData["data"] = listPosRes.data?.get("data")
-                    reservationData["tiposport"] = listPosRes.data?.get("tiposport")
-                    reservationData["idstruttura"] = idStruct
+                        reservationData["reservationid"] = idreservation
+                        reservationData["posresid"] = listPosRes.data?.get("posresid")
+                        reservationData["data"] = listPosRes.data?.get("data")
+                        reservationData["tiposport"] = listPosRes.data?.get("tiposport")
+                        reservationData["idstruttura"] = idStruct
 
-                    db
-                        .collection("users")
-                        .document(user.uid!!)
-                        .collection("reservations")
-                        .whereEqualTo("posresid", listPosRes.data?.get("posresid"))
-                        .get()
-                        .addOnSuccessListener { listReservation ->
-                            for (reserv in listReservation) {
-                                reservationData["note"] = reserv["note"]
-                                idStruct
-                                    .get()
-                                    .addOnSuccessListener {
-                                        reservationData["nomestruttura"] = it.data?.get("nomestruttura")
-                                        _singleReservation.value = reservationData
-                                    }
-                                    .addOnFailureListener {
-                                        _singleReservation.value = reservationData
-                                    }
+                        db
+                            .collection("users")
+                            .document(user.uid!!)
+                            .collection("reservations")
+                            .whereEqualTo("posresid", listPosRes.data?.get("posresid"))
+                            .get()
+                            .addOnSuccessListener { listReservation ->
+                                for (reserv in listReservation) {
+                                    reservationData["note"] = reserv["note"]
+
+                                    db
+                                        .collection("posres")
+                                        .document(listPosRes.data?.get("posresid").toString())
+                                        .get()
+                                        .addOnSuccessListener {
+                                            reservationData["flagattivo"] =
+                                                it.data?.get("flagattivo")
+                                            idStruct
+                                                .get()
+                                                .addOnSuccessListener {
+                                                    reservationData["nomestruttura"] =
+                                                        it.data?.get("nomestruttura")
+                                                    _singleReservation.value = reservationData
+                                                }
+                                                .addOnFailureListener {
+                                                    _singleReservation.value = reservationData
+                                                }
+                                        }
+                                }
                             }
-                        }
+                    }
 
                 }
         }
     }
 
-    /*fun getReservationsByDate(date: Date) {
-        _listReservationsByDate.postValue(businessLogic.getReservationsByDate(date))
-    }*/
+    fun changeReservation(
+        oldReservation: String,
+        newReseservationId: String,
+        idstruttura: Any?,
+        data: Date,
+        idcampo: Any?,
+        tiposport: String,
+        note: String
+    ) {
+        deleteReservation(oldReservation)
+        insertReservation(newReseservationId, idstruttura, data, idcampo, tiposport)
+        insertReservationInUser(newReseservationId, note)
+    }
 }
