@@ -261,23 +261,76 @@
             </com.stacktips.view.CustomCalendarView>
 
             <LinearLayout
+                android:id="@+id/reservationContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="invisible"
+                tools:visibility="gone">
+
+                <TextView
+                    android:id="@+id/titleBookReservation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_start_title_first_level"
+                    android:layout_marginEnd="@dimen/margin_right_label_reservation_info"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/crete_round"
+                    android:text="@string/new_reservations_available"
+                    android:textColor="@color/primary_green"
+                    android:textSize="20sp"
+                    android:visibility="invisible"
+                    tools:visibility="gone" />
 
                 <LinearLayout
-                    android:id="@+id/no_availability"
+                    android:id="@+id/noPosResBoxContainer"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                </LinearLayout>
+                    android:layout_marginBottom="5dp"
+                    android:orientation="vertical"
+                    android:visibility="invisible"
+                    tools:visibility="gone" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/availability_recyclerView"
+                    android:id="@+id/bookReservationContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical"
+                    android:visibility="invisible"
+                    tools:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/titleJoinReservation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_start_title_first_level"
+                    android:layout_marginEnd="@dimen/margin_right_label_reservation_info"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/crete_round"
+                    android:text="@string/join_reservation"
+                    android:textColor="@color/primary_green"
+                    android:textSize="20sp"
+                    android:visibility="invisible"
+                    tools:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/noJoinPosResBoxContainer"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="@dimen/margin_bottom_reservation_info" />
+                    android:layout_marginBottom="5dp"
+                    android:orientation="vertical"
+                    android:visibility="invisible"
+                    tools:visibility="gone" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/joinReservationContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical"
+                    android:visibility="invisible"
+                    tools:visibility="gone" />
             </LinearLayout>
 
             <TextView
