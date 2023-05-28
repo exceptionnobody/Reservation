@@ -26,15 +26,15 @@ class ReservationsDBViewModel : ViewModel() {
     private val _listReservationsByDate = MutableLiveData<List<MutableMap<String, Any>>>()
     val listReservationsByDate: LiveData<List<MutableMap<String, Any>>> = _listReservationsByDate
 
-    private val _singleReservation = MutableLiveData<MutableMap<String, Any>>()
-    val singleReservation: LiveData<MutableMap<String, Any>> = _singleReservation
+    private val _singleReservation = MutableLiveData<MutableMap<String, Any?>>()
+    val singleReservation: LiveData<MutableMap<String, Any?>> = _singleReservation
 
     private val user = FirebaseAuth.getInstance().currentUser
 
     init {
 
         if (user != null && user.uid != null) {
-            /*val reservationsRef = db.collection("users").document(user.uid!!).collection("reservations")
+            val reservationsRef = db.collection("users").document(user.uid!!).collection("reservations")
 
             reservationsRef
                 .get()
@@ -43,24 +43,31 @@ class ReservationsDBViewModel : ViewModel() {
 
                     for (reservation in listReservations) {
                         val reservationData = reservation.data
-                        val idStruct = reservationData["idstruttura"] as DocumentReference
 
-                        reservationData["idprenotazione"] = reservation.id
-
-                        idStruct
+                        db
+                            .collection("reservations")
+                            .document(reservationData["posresid"].toString())
                             .get()
                             .addOnSuccessListener {
-                                reservationData["nomestruttura"] = it.data?.get("nomestruttura")
-                                allReservations.add(reservationData)
-                            }
-                            .addOnFailureListener {
-                                allReservations.add(reservationData)
-                            }
+                                val idStruct = it.data?.get("idstruttura") as DocumentReference
+                                reservationData["tiposport"] = it.data?.get("tiposport")
+                                reservationData["data"] = it.data?.get("data")
+                                reservationData["reservationid"] = it.id
 
+                                idStruct
+                                    .get()
+                                    .addOnSuccessListener {
+                                        reservationData["nomestruttura"] = it.data?.get("nomestruttura")
+                                        allReservations.add(reservationData)
+                                    }
+                                    .addOnFailureListener {
+                                        allReservations.add(reservationData)
+                                    }
+                            }
                     }
 
                     _reservations.value = allReservations
-                }*/
+                }
         }
     }
 
@@ -82,7 +89,8 @@ class ReservationsDBViewModel : ViewModel() {
                 .addOnSuccessListener {listPosRes ->
                     if (listPosRes.isEmpty) {
                         reservationsRef
-                            .add(data)
+                            .document(posresid.trim())
+                            .set(data)
                     }
                 }
         }
@@ -118,31 +126,44 @@ class ReservationsDBViewModel : ViewModel() {
 
     fun getSingleReservation(idreservation: String) {
         if (user != null && user.uid != null) {
-            val reservationsRef = db.collection("users").document(user.uid!!).collection("reservations")
+            val reservationsRef = db.collection("reservations")
 
             reservationsRef
                 .document(idreservation)
                 .get()
                 .addOnSuccessListener { listPosRes ->
 
-                    var reservationData = listPosRes.data
+                    var reservationData : MutableMap<String, Any?> = mutableMapOf()
 
-                    if (reservationData != null) {
-                        val idStruct = reservationData?.get("idstruttura") as DocumentReference
+                    val idStruct = listPosRes.data?.get("idstruttura") as DocumentReference
 
-                        reservationData["idprenotazione"] = idreservation
+                    reservationData["reservationid"] = idreservation
+                    reservationData["posresid"] = listPosRes.data?.get("posresid")
+                    reservationData["data"] = listPosRes.data?.get("data")
+                    reservationData["tiposport"] = listPosRes.data?.get("tiposport")
+                    reservationData["idstruttura"] = idStruct
 
-                        idStruct
-                            .get()
-                            .addOnSuccessListener {
-                                reservationData["nomestruttura"] = it.data?.get("nomestruttura")
-                                _singleReservation.value = reservationData!!
+                    db
+                        .collection("users")
+                        .document(user.uid!!)
+                        .collection("reservations")
+                        .whereEqualTo("posresid", listPosRes.data?.get("posresid"))
+                        .get()
+                        .addOnSuccessListener { listReservation ->
+                            for (reserv in listReservation) {
+                                reservationData["note"] = reserv["note"]
+                                idStruct
+                                    .get()
+                                    .addOnSuccessListener {
+                                        reservationData["nomestruttura"] = it.data?.get("nomestruttura")
+                                        _singleReservation.value = reservationData
+                                    }
+                                    .addOnFailureListener {
+                                        _singleReservation.value = reservationData
+                                    }
                             }
-                            .addOnFailureListener {
-                                _singleReservation.value = reservationData!!
-                            }
-                    }
-                    //}
+                        }
+
                 }
         }
     }

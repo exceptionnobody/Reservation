@@ -34,6 +34,7 @@ import it.polito.g13.entities.Reservation
 import it.polito.g13.entities.Struttura
 import it.polito.g13.ui.main.ReservationFragment
 import it.polito.g13.viewModel.PosResViewModel
+import it.polito.g13.viewModel.ReservationsDBViewModel
 import it.polito.g13.viewModel.ReservationsViewModel
 import it.polito.g13.viewModel.StrutturaViewModel
 import java.text.SimpleDateFormat
@@ -44,9 +45,7 @@ private lateinit var context : Context
 @AndroidEntryPoint
 class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    val posResViewModel by viewModels<PosResViewModel>()
-    val reservationViewModel by viewModels<ReservationsViewModel> ()
-    val structureViewMobel by viewModels<StrutturaViewModel>()
+    val reservationViewModel by viewModels<ReservationsDBViewModel> ()
 
     //initialize toolbar variables
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
@@ -59,23 +58,6 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         super.onCreate(savedInstanceState)
         context = this.applicationContext
         setContentView(R.layout.activity_reservation)
-        structureViewMobel.insertStructure(Struttura(1, "Centro sportivo Robilant", 1))
-        structureViewMobel.insertStructure(Struttura(2, "Sporting Dora", 2))
-        structureViewMobel.insertStructure(Struttura(3, "Centro sportivo Carmagnola", 3))
-        structureViewMobel.insertStructure(Struttura(4, "Impianto sportivo Roveda", 4))
-
-        //creating some data for posRes table
-        posResViewModel.insertPosRes(PosRes(1, "Centro sportivo Robilant", 1, "Football", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-05-30 15:00")!!, true))
-        posResViewModel.insertPosRes(PosRes(2, "Sporting Dora", 1, "Football", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-05-30 17:00")!!, true))
-        posResViewModel.insertPosRes(PosRes(3, "Centro sportivo Carmagnola", 1, "Tennis", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-05-30 12:00")!!, true))
-        posResViewModel.insertPosRes(PosRes(4, "Sporting Dora", 1, "Basket", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-05-05 18:00")!!, true))
-        posResViewModel.insertPosRes(PosRes(5, "Centro sportivo Carmagnola", 1, "Volleyball", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-05-06 19:00")!!, true))
-        posResViewModel.insertPosRes(PosRes(6, "Centro sportivo Carmagnola", 3, "Volleyball", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-05-19 15:00")!!, true))
-
-        //creating some data for reservation table
-        reservationViewModel.insertReservation(Reservation(1, 19405, 1, "Centro sportivo Robilant", "Football", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-05-29 14:00")!!, "Need a ball", true ))
-        reservationViewModel.insertReservation(Reservation(2, 19406, 1, "Sporting Dora", "Volleyball", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-05-29 15:00")!!, "", true ))
-        reservationViewModel.insertReservation(Reservation(3, 19407, 1, "Sporting Dora", "Volleyball", SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK).parse("2023-05-30 19:00")!!, "open field", true ))
 
         //toolbar instantiation
         toolbar = findViewById(R.id.toolbar)
@@ -141,7 +123,12 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
 
                 //show them in the recycler view
                 reservationViewModel.reservations.observe(this@ReservationActivity) {
-                    val reservationInDate = it.filter { res -> sdf.parse(sdf.format(res.data)) == formattedDate}
+                    val reservationInDate = it.filter { res ->
+                        val timestamp = res["data"] as com.google.firebase.Timestamp
+                        val milliseconds = timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
+                        val netDate = Date(milliseconds)
+                        sdf.parse(sdf.format(netDate)) == formattedDate
+                    }
                     val recyclerView = findViewById<RecyclerView>(R.id.reservationBoxContainer)
                     recyclerView.adapter = ReservationAdapter(reservationInDate, this@ReservationActivity)
                     recyclerView.layoutManager = LinearLayoutManager(this@ReservationActivity)
@@ -242,13 +229,16 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
     }
 }
 
-class DaysWithReservations(reservationList: List<Reservation>) : DayDecorator {
+class DaysWithReservations(reservationList: List<MutableMap<String, Any>>) : DayDecorator {
     val reservationToShow = reservationList
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun decorate(dayView: DayView) {
         reservationToShow.forEach{reserv -> run {
 
-                val formattedDate1 = SimpleDateFormat("yyyy-MM-dd").format(reserv.data)
+                val timestamp = reserv["data"] as com.google.firebase.Timestamp
+                val milliseconds = timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
+                val netDate = Date(milliseconds)
+                val formattedDate1 = SimpleDateFormat("yyyy-MM-dd").format(netDate)
                 val formattedDate2 = SimpleDateFormat("yyyy-MM-dd").format(dayView.date)
 
                 val date1 = SimpleDateFormat("yyyy-MM-dd").parse(formattedDate1)
@@ -269,7 +259,7 @@ class ReservationViewHolder(v: View) : RecyclerView.ViewHolder(v){
     val tv = v.findViewById<TextView>(R.id.reservation_title)
 }
 
-class ReservationAdapter(val listReservation: List<Reservation>, context: Context ): RecyclerView.Adapter<ReservationViewHolder>() {
+class ReservationAdapter(val listReservation: List<MutableMap<String, Any>>, context: Context ): RecyclerView.Adapter<ReservationViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReservationViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.reservation_box, parent, false)
 
@@ -283,17 +273,21 @@ class ReservationAdapter(val listReservation: List<Reservation>, context: Contex
     override fun onBindViewHolder(holder: ReservationViewHolder, position: Int) {
         val reservation = listReservation[position]
 
-        val formattedDate = SimpleDateFormat("yyyy-mm-dd HH:mm").format(reservation.data).split(" ")
+        val timestamp = reservation["data"] as com.google.firebase.Timestamp
+        val milliseconds = timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
+        val netDate = Date(milliseconds)
+
+        val formattedDate = SimpleDateFormat("yyyy-mm-dd HH:mm").format(netDate).split(" ")
         val hour1 = formattedDate[1]
         val hour2 = (hour1.split(":")[0].toInt() + 1).toString() + ":" + hour1.split(":")[1]
 
-        val txt = reservation.strut + ", " + reservation.sport + ", " + hour1 + "-" + hour2
+        val txt = reservation["nomestruttura"].toString() + ", " + reservation["tiposport"] + ", " + hour1 + "-" + hour2
 
         holder.tv.text = txt
 
         holder.itemView.setOnClickListener {
             val intent = Intent(context, ShowReservationDetailActivity::class.java)
-            intent.putExtra("selectedReservationId", reservation.id)
+            intent.putExtra("selectedReservationId", reservation["reservationid"].toString())
             intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
         }

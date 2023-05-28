@@ -18,8 +18,10 @@ import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.activities.editprofile.ShowProfileActivity
 import it.polito.g13.activities.login.LoginActivity
+import it.polito.g13.viewModel.ReservationsDBViewModel
 import it.polito.g13.viewModel.ReservationsViewModel
 import java.text.SimpleDateFormat
+import java.util.*
 
 @AndroidEntryPoint
 class ShowReservationDetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -29,8 +31,8 @@ class ShowReservationDetailActivity : AppCompatActivity(), NavigationView.OnNavi
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navView: NavigationView
 
-    private val reservationViewModel by viewModels<ReservationsViewModel> ()
-    private var selectedReservationId: Int = 0
+    private val reservationViewModel by viewModels<ReservationsDBViewModel> ()
+    private lateinit var selectedReservationId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,19 +84,23 @@ class ShowReservationDetailActivity : AppCompatActivity(), NavigationView.OnNavi
         )
 
         //get selected reservation
-        selectedReservationId = intent.getIntExtra("selectedReservationId", 0)
+        selectedReservationId = intent.getStringExtra("selectedReservationId").toString()
         reservationViewModel.getSingleReservation(selectedReservationId);
         reservationViewModel.singleReservation.observe(this@ShowReservationDetailActivity) {
             val codeText = findViewById<TextView>(R.id.content_reservation_number)
-            codeText.text = it.idsl.toString()
+            codeText.text = it["reservationid"].toString()
 
             val sportType = findViewById<TextView>(R.id.content_sport_typology)
-            sportType.text = it.sport
+            sportType.text = it["tiposport"].toString()
 
             val place = findViewById<TextView>(R.id.content_place)
-            place.text = it.strut
+            place.text = it["nomestruttura"].toString()
 
-            val formattedDate = SimpleDateFormat("dd-MM-yyyy HH:mm").format(it.data).split(" ")
+            val timestamp = it["data"] as com.google.firebase.Timestamp
+            val milliseconds = timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
+            val netDate = Date(milliseconds)
+
+            val formattedDate = SimpleDateFormat("dd-MM-yyyy HH:mm").format(netDate).split(" ")
             val date = formattedDate[0]
             val hour1 = formattedDate[1]
             val hour2 = (hour1.split(":")[0].toInt() + 1).toString() + ":" + hour1.split(":")[1]
@@ -102,9 +108,9 @@ class ShowReservationDetailActivity : AppCompatActivity(), NavigationView.OnNavi
             val date_time = findViewById<TextView>(R.id.content_date_time)
             date_time.text = date + ", " + hour1 + "-" + hour2
 
-            if (it.note.isNotEmpty() && it.note != R.string.content_notes.toString()) {
+            if (it["note"].toString().isNotEmpty() && it["note"].toString() != R.string.content_notes.toString()) {
                 val notes = findViewById<TextView>(R.id.content_notes)
-                notes.text = it.note
+                notes.text = it["note"].toString()
             }
         }
 
@@ -188,7 +194,7 @@ class ShowReservationDetailActivity : AppCompatActivity(), NavigationView.OnNavi
             // elimina reservation
             reservationViewModel.getSingleReservation(selectedReservationId)
             reservationViewModel.singleReservation.observe(this@ShowReservationDetailActivity) {
-                reservationViewModel.deleteReservation(it)
+                reservationViewModel.deleteReservation(it["posresid"].toString())
                 val intent = Intent(this, ReservationActivity::class.java)
                 startActivity(intent)
             }
