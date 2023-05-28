@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -49,20 +50,22 @@ class ReservationsDBViewModel : ViewModel() {
                             .document(reservationData["posresid"].toString())
                             .get()
                             .addOnSuccessListener {
-                                val idStruct = it.data?.get("idstruttura") as DocumentReference
-                                reservationData["tiposport"] = it.data?.get("tiposport")
-                                reservationData["data"] = it.data?.get("data")
-                                reservationData["reservationid"] = it.id
+                                if (it.data?.get("idstruttura") != null && !it.data?.get("idstruttura").toString().isNullOrBlank() && !it.data?.get("idstruttura").toString().isNullOrEmpty()) {
+                                    val idStruct = it.data?.get("idstruttura") as DocumentReference
+                                    reservationData["tiposport"] = it.data?.get("tiposport")
+                                    reservationData["data"] = it.data?.get("data")
+                                    reservationData["reservationid"] = it.id
 
-                                idStruct
-                                    .get()
-                                    .addOnSuccessListener {
-                                        reservationData["nomestruttura"] = it.data?.get("nomestruttura")
-                                        allReservations.add(reservationData)
-                                    }
-                                    .addOnFailureListener {
-                                        allReservations.add(reservationData)
-                                    }
+                                    idStruct
+                                        .get()
+                                        .addOnSuccessListener {
+                                            reservationData["nomestruttura"] = it.data?.get("nomestruttura")
+                                            allReservations.add(reservationData)
+                                        }
+                                        .addOnFailureListener {
+                                            allReservations.add(reservationData)
+                                        }
+                                }
                             }
                     }
 
@@ -105,7 +108,8 @@ class ReservationsDBViewModel : ViewModel() {
             )
 
             reservationsRef
-                .add(data)
+                .document(posresid.trim())
+                .set(data)
         }
     }
 
@@ -114,13 +118,47 @@ class ReservationsDBViewModel : ViewModel() {
     }*/
 
     fun deleteReservation(idreservation: String) {
-        if (user != null && user.email != null) {
+        if (user != null && user.uid != null) {
             db
-                .collection("users")
-                .document(user.email!!)
-                .collection("reservations")
-                .document(idreservation.trim())
-                .delete()
+                .collection("posres")
+                .document(idreservation)
+                .get()
+                .addOnSuccessListener {
+                    val newPlayers: MutableList<DocumentReference> = mutableListOf()
+                    val updates: MutableMap<String, Any> = mutableMapOf()
+                    updates["flagattivo"] = true
+                    if (it.data?.get("players") != null) {
+                        val players = it.data?.get("players") as List<DocumentReference>
+                        val userPath = db.document("users/${user?.uid}")
+                        if (players.isNotEmpty()) {
+                            for (player in players) {
+                                if (player != userPath) {
+                                    newPlayers.add(player)
+                                }
+                            }
+                        }
+                        if (newPlayers.isEmpty()) {
+                            updates["players"] = FieldValue.delete()
+                            db
+                                .collection("reservations")
+                                .document(idreservation.trim())
+                                .delete()
+                        } else {
+                            updates["players"] = newPlayers
+                        }
+                    }
+                    db
+                        .collection("posres")
+                        .document(idreservation)
+                        .update(updates)
+                    db
+                        .collection("users")
+                        .document(user.uid!!)
+                        .collection("reservations")
+                        .document(idreservation.trim())
+                        .delete()
+                }
+
         }
     }
 
