@@ -19,6 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import it.polito.g13.R
 import it.polito.g13.ReservationActivity
 import it.polito.g13.activities.editprofile.EditProfileActivity
+import org.json.JSONObject
 
 class LoginActivity : AppCompatActivity() {
 
@@ -28,6 +29,7 @@ class LoginActivity : AppCompatActivity() {
             finish()
         }
     }
+
     val db = FirebaseFirestore.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -183,7 +185,85 @@ class LoginActivity : AppCompatActivity() {
                 val documentSnapshot = task.result
 
                 if (documentSnapshot.exists()) {
+                    val data = documentSnapshot.data
+                    val jsonObject = JSONObject()
+
+
 //                    Log.d("AUTENTICAZIONE", "UTENTE GIA' LOGGATO")
+                    val sharedPreference =  getSharedPreferences("preferences", 0)
+                    val profile = sharedPreference.getString("profile", "").toString()
+
+                    if(profile!= ""){
+                        Log.d("SHAREDPREFERENCES", "piene")
+                    }else{
+                        Log.d("SHAREDPREFERENCES", "vuote")
+
+                        if(data != null) {
+                            val myshare = sharedPreference.edit()
+                            myshare.putString("user_name", data["name_surname"].toString())
+                            jsonObject.put(
+                                getString(R.string.save_username),
+                                data["name_surname"].toString()
+                            )
+                            myshare.putString("user_nickname", data["nickname"].toString())
+                            jsonObject.put(
+                                getString(R.string.save_nickname),
+                                data["nickname"].toString()
+                            )
+                            if(data["city"].toString() != "") {
+                                myshare.putString("user_city", data["city"].toString())
+                                jsonObject.put(
+                                    getString(R.string.save_city),
+                                    data["city"].toString()
+                                )
+                            }
+                            if(data["gender"].toString() != "null") {
+                                myshare.putString("user_gender", data["gender"] as String?)
+                                jsonObject.put(
+                                    getString(R.string.save_gender),
+                                    data["gender"].toString()
+                                )
+                            }
+
+                            if(data["phone_number"].toString() != "") {
+                                myshare.putString("user_number", data["phone_number"].toString())
+                                jsonObject.put(
+                                    getString(R.string.save_telnumber),
+                                    data["phone_number"].toString()
+                                )
+                            }
+                            if(data["age"].toString() != "") {
+                                myshare.putString("user_age", data["age"].toString())
+                                jsonObject.put(
+                                    getString(R.string.save_age),
+                                    data["age"].toString()
+                                )
+                            }
+
+                            if(data["description"].toString() != "") {
+                                myshare.putString("user_description", data["description"].toString())
+                                jsonObject.put(
+                                    getString(R.string.save_description),
+                                    data["description"].toString()
+                                )
+                            }
+
+                            if(data["languages"].toString() != "") {
+                                myshare.putString("user_languages", data["languages"].toString())
+                                jsonObject.put(
+                                    getString(R.string.save_languages),
+                                    data["languages"].toString()
+                                )
+                            }
+
+                            myshare.putString("profile", jsonObject.toString())
+                            Log.d(
+                                "SHAREDPREFERENCES",
+                                "profile_lato_login: ${data}"
+                            )
+                            myshare.apply()
+                        }
+                    }
                     val intent = Intent(this, ReservationActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)
@@ -203,7 +283,7 @@ class LoginActivity : AppCompatActivity() {
                         .addOnCompleteListener {
                             val intent = Intent(
                                 this,
-                                EditProfileActivity::class.java
+                                RegistrationActivity::class.java
                             )
                             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                             startActivity(intent)

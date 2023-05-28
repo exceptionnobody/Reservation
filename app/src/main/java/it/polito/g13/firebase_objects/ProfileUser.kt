@@ -10,7 +10,7 @@ data class ProfileUser(
 
     var age: String = "",
 
-    var gender: String = "",
+    var gender: String? = null,
 
     var mail : String = "",
 

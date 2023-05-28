@@ -43,6 +43,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activities.login.RegistrationActivity"
+            android:exported="false" />
+        <activity
             android:name=".ShowAllCourtReviews"
             android:exported="false" />
         <activity

@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.annotation.RequiresApi
@@ -21,6 +22,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.firebase.ui.auth.AuthUI
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
 import it.polito.g13.BrowseAvailabilityActivity
 import it.polito.g13.BrowseCourtsActivity
 import it.polito.g13.ListReviewCourtsActivity
@@ -193,7 +195,13 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
                     .signOut(this)
                     .addOnCompleteListener {
                         // ...
+                        val sharedPref = getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                        val editor = sharedPref.edit()
+                        editor.clear()
+                        editor.apply()
+                        Log.d("SHAREDPREFERENCES", "cancello le shared preferences")
                         val intent = Intent(this, LoginActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intent)
                         finish()
                     }
@@ -206,6 +214,8 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
     private fun checkSharedPreference() {
         val profile = sharedPreference.getString("profile", "").toString()
         var strName : String
+        Log.d("SHAREDPREFERENCES", "profile: ${profile}")
+
         if(profile!= ""){
             jsonObject = JSONObject(profile)
 
@@ -237,7 +247,7 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
                 }
             }*/
 
-            strName = jsonObject.getString(getString(R.string.save_email))
+            strName = FirebaseAuth.getInstance().currentUser?.email!!
             user_mail.setText(strName)
 
             if(jsonObject.has("Telephone")) {
@@ -384,7 +394,7 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         user_nickname.text = sharedPreference.getString("user_nickname",getString(R.string.user_nickname))
         user_age.text = sharedPreference.getString("user_age",getString(R.string.user_age))//view?.findViewById(R.id.)
         user_gender.text= sharedPreference.getString("user_gender",getString(R.string.user_gender))!!//view?.findViewById(R.id.)
-        user_mail.text= sharedPreference.getString("user_mail",getString(R.string.user_email))!!//view?.findViewById(R.id.)
+        user_mail.text= FirebaseAuth.getInstance().currentUser?.email!!
         user_number.text= sharedPreference.getString("user_number",getString(R.string.user_number))//view?.findViewById(R.id.)
         user_languages.text=sharedPreference.getString("user_languages",getString(R.string.user_languages))!!
         user_description.text= sharedPreference.getString("user_description",getString(R.string.user_description))!!

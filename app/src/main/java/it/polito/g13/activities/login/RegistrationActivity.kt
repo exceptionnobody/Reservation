@@ -1,4 +1,4 @@
-package it.polito.g13.activities.editprofile
+package it.polito.g13.activities.login
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -29,6 +29,7 @@ import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream
 import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.R
+import it.polito.g13.ReservationActivity
 import it.polito.g13.firebase_objects.ProfileUser
 import org.json.JSONObject
 import java.io.FileDescriptor
@@ -55,7 +56,7 @@ const val filename = "myPhoto"
 
 
 @AndroidEntryPoint
-class EditProfileActivity : AppCompatActivity() {
+class RegistrationActivity : AppCompatActivity() {
 
     // TEST VIEWMODEL RESERVATIONS
     //private val resViewModel: ReservationsViewModel by viewModels()
@@ -64,7 +65,6 @@ class EditProfileActivity : AppCompatActivity() {
     //private val posResViewModel by viewModels<PosResViewModel>()
 
     private val db = Firebase.firestore
-    private val  currentUser = FirebaseAuth.getInstance().currentUser
 
     lateinit var sharedPreference:SharedPreferences
     //selected languages saved after device rotation
@@ -80,7 +80,6 @@ class EditProfileActivity : AppCompatActivity() {
     lateinit var user_name: EditText //= null//: String= ""
     lateinit var user_nickname: EditText //= null//:String= ""
     lateinit var user_age: EditText //= null//:Int =0
-    lateinit var user_mail: EditText //= null //:String= "" //view?.findViewById(R.id.)
     lateinit var user_number: EditText //= null//:Int =0
     lateinit var user_description: EditText //= null//:String= ""
 
@@ -100,7 +99,7 @@ class EditProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         context = this.applicationContext
-        setContentView(R.layout.activity_edit_profile)
+        setContentView(R.layout.registration_profile)
         jsonObject = JSONObject()
 
         imageView = findViewById(R.id.user_image)
@@ -112,12 +111,12 @@ class EditProfileActivity : AppCompatActivity() {
         user_age=findViewById(R.id.editAge)
         user_number=findViewById(R.id.editNumber)
         user_description=findViewById(R.id.editDescription)
-        user_city =findViewById(R.id.editCity)
+        user_city = findViewById(R.id.editCity)
 
         //user_mail.isEnabled = false
         //set text navbar
         val navbarText = findViewById<TextView>(R.id.navbar_text)
-        navbarText.text = "Edit profile"
+        navbarText.text = "Create your profile"
         val textInputName = findViewById<TextInputLayout>(R.id.textInputName)
         val textInputNickname = findViewById<TextInputLayout>(R.id.textInputNickname)
 
@@ -150,9 +149,6 @@ class EditProfileActivity : AppCompatActivity() {
             }
         }
 
-        val cancelButton =findViewById<Button>(R.id.cancel_button)
-        cancelButton.setOnClickListener { this.finish() }
-
         //change profile picture
 
         val imgButton = findViewById<ImageButton>(R.id.imageButton)
@@ -178,7 +174,7 @@ class EditProfileActivity : AppCompatActivity() {
 
         cityInput.setOnItemClickListener { _, _, position, _ ->
             val selectedCity = cityAdapter.getItem(position).toString()
-           // Toast.makeText(this, "Selected city: $selectedCity", Toast.LENGTH_SHORT).show()
+            // Toast.makeText(this, "Selected city: $selectedCity", Toast.LENGTH_SHORT).show()
         }
 
         //add a new sport
@@ -204,9 +200,9 @@ class EditProfileActivity : AppCompatActivity() {
 
         val selectedLanguages = BooleanArray(languages.size) { false }
         val listLanguages = mutableListOf<Int>()
-       // if (savedLanguages!=null && savedLanguages!="")
-         //   savedLanguages?.split(",")?.forEach { j:String -> listLanguages.add(languages.indexOf(j))
-           // }
+        // if (savedLanguages!=null && savedLanguages!="")
+        //   savedLanguages?.split(",")?.forEach { j:String -> listLanguages.add(languages.indexOf(j))
+        // }
 
         languagesView!!.setOnClickListener {
             //initialize alert dialog
@@ -270,14 +266,13 @@ class EditProfileActivity : AppCompatActivity() {
             //show dialog
             builder.show()
         }
-        getDataFromSharedPref()
 //spinner for gender
         genderSpinner= findViewById(R.id.editGender)
 
-        genderSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, glist)
+        genderSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, genders)
 
-        textInputName.isHintEnabled = false
         textInputNickname.isHintEnabled = false
+        textInputName.isHintEnabled = false
     }
 
     private fun persistData() {
@@ -290,41 +285,31 @@ class EditProfileActivity : AppCompatActivity() {
             }
         }
 
-        jsonObject.put(getString(R.string.save_username), user_name.text.toString() )
-        jsonObject.put(getString(R.string.save_age), user_age.text.toString())
-        jsonObject.put(getString(R.string.save_email), user_mail.text.toString())
-        jsonObject.put(getString(R.string.save_gender), genderSpinner.selectedItem.toString() )
-        jsonObject.put(getString(R.string.save_description), user_description.text.toString() )
-        jsonObject.put(getString(R.string.save_nickname), user_nickname.text.toString() )
-        jsonObject.put(getString(R.string.save_city), user_city.text.toString())
-        jsonObject.put(getString(R.string.save_languages), languagesView!!.text)
-        jsonObject.put(getString(R.string.save_telnumber), user_number.text.toString())
 
-/*
-        val test = findViewById<LinearLayout>(R.id.sportsContainer)
-        if(test.childCount > 0) {
-            jsonObject.put(getString(R.string.save_numbersports), test.childCount)
-            val listOfSports = mutableListOf<String>()
-            val listOfLevels = mutableListOf<String>()
+        /*
+                val test = findViewById<LinearLayout>(R.id.sportsContainer)
+                if(test.childCount > 0) {
+                    jsonObject.put(getString(R.string.save_numbersports), test.childCount)
+                    val listOfSports = mutableListOf<String>()
+                    val listOfLevels = mutableListOf<String>()
 
-            for (i in 0 until test.childCount) {
-                val v = test.getChildAt(i)
-                val game = v.findViewById<Spinner>(R.id.editGames)
-                val level = v.findViewById<Spinner>(R.id.editGameLevel)
-                val description = v.findViewById<TextView>(R.id.editDescription)
-                Log.d("PROVASALVATAGGIO", "$level, $description, $game")
-                listOfSports.add(game.selectedItem.toString())
-                listOfLevels.add(level.selectedItem.toString())
-            }
+                    for (i in 0 until test.childCount) {
+                        val v = test.getChildAt(i)
+                        val game = v.findViewById<Spinner>(R.id.editGames)
+                        val level = v.findViewById<Spinner>(R.id.editGameLevel)
+                        val description = v.findViewById<TextView>(R.id.editDescription)
+                        Log.d("PROVASALVATAGGIO", "$level, $description, $game")
+                        listOfSports.add(game.selectedItem.toString())
+                        listOfLevels.add(level.selectedItem.toString())
+                    }
 
-            jsonObject.put(getString(R.string.save_namesports), listOfSports)
-            jsonObject.put(getString(R.string.save_levelsports), listOfLevels)
+                    jsonObject.put(getString(R.string.save_namesports), listOfSports)
+                    jsonObject.put(getString(R.string.save_levelsports), listOfLevels)
 
-        }
+                }
 
- */
-        editor.putString("profile", jsonObject.toString())
-        editor.apply()
+         */
+
         val t = Toast.makeText(this, "Confirmed", Toast.LENGTH_SHORT)
         t.show()
 
@@ -542,29 +527,29 @@ class EditProfileActivity : AppCompatActivity() {
         }
         if(sharedPreference.contains("user_name"))
             user_name.setText(sharedPreference.getString("user_name",getString(R.string.user_name))) //?.text=sharedPreference.getString("user_name",R.string.user_name.toString())!!//view?.findViewById(R.id.)
-         //= sharedPreference.getString("user_name","ciao")             ----------------- .append per gli edit text
+        //= sharedPreference.getString("user_name","ciao")             ----------------- .append per gli edit text
         if(sharedPreference.contains("user_nickname"))
             user_nickname.setText( sharedPreference.getString("user_nickname",getString(R.string.user_nickname)))//view?.findViewById(R.id.)
         if(sharedPreference.contains("user_age"))
             user_age.setText(sharedPreference.getString("user_age",getString(R.string.user_age)))//view?.findViewById(R.id.)
 
-        var gender = sharedPreference.getString("user_gender", "Not specified")!!
+        val gender = sharedPreference.getString("user_gender", "Not specified")
         glist = genders.toMutableList()
         if (gender == "Male") {
-                glist[0] = "Male"
-                glist[1] = "Not specified"
-            }
-            if (gender == "Female") {
-                glist[0] = "Female"
-                glist[2] = "Not specified"
-            }
+            glist[0] = "Male"
+            glist[1] = "Not specified"
+        }
+        if (gender == "Female") {
+            glist[0] = "Female"
+            glist[2] = "Not specified"
+        }
 
 
         //view?.findViewById(R.id.)           sharedPreference.getString("user_gender",""=!!
 //        user_mail.setText( sharedPreference.getString("user_mail",getString(R.string.user_email)))//view?.findViewById(R.id.)
         if(sharedPreference.contains("user_number"))
             user_number.setText( sharedPreference.getString("user_number",getString(R.string.user_number)))//view?.findViewById(R.id.)
-        if(sharedPreference.contains("user_languages")) {
+        if(sharedPreference.contains("user_language")) {
             savedLanguages = sharedPreference.getString("user_languages", getString(R.string.user_languages))
             languagesView!!.text = savedLanguages
         }
@@ -578,8 +563,8 @@ class EditProfileActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun saveDataToPref(){
-        var y:String?=sharedPreference.getString("user_image",null)
-        var x=sharedPreference.edit()
+        val y:String?=sharedPreference.getString("user_image",null)
+        val x=sharedPreference.edit()
         x.clear()
         val baos = ByteArrayOutputStream()
         if (imageUri!=null){
@@ -595,16 +580,13 @@ class EditProfileActivity : AppCompatActivity() {
             val compressImage: ByteArray = baos.toByteArray()
             val sEncodedImage: String = Base64.getEncoder().encodeToString(compressImage)//Base64.encodeToString(compressImage, Base64.DEFAULT)
             x.putString("user_image",sEncodedImage)
-            context.openFileOutput(filename, MODE_PRIVATE).use {
 
-                globalBitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
-            }
 
             val storage = FirebaseStorage.getInstance()
             val storageRef = storage.reference.child("images/profile/${Firebase.auth.currentUser?.email}.jpg")
             val uploadTask = storageRef.putBytes(compressImage)
             uploadTask.addOnSuccessListener { taskSnapshot ->
-                    Log.d("STORAGE", "Scrittura Storage Riuscita")
+                Log.d("STORAGE", "Scrittura Storage Riuscita")
             }.addOnFailureListener { exception ->
                 Log.d("STORAGE", "Scrittura Storage FALLITA ${exception}")
 
@@ -618,7 +600,8 @@ class EditProfileActivity : AppCompatActivity() {
         val genderSpinner = findViewById<Spinner>(R.id.editGender)
         if (user_name.text.toString() != "") {
             x.putString("user_name", user_name.text.toString())
-           jsonObject.put(getString(R.string.save_username), user_name.text.toString() )
+            jsonObject.put(getString(R.string.save_username), user_name.text.toString() )
+
         }
         if (user_nickname.text.toString()!="") {
             x.putString("user_nickname", user_nickname.text.toString())
@@ -627,7 +610,7 @@ class EditProfileActivity : AppCompatActivity() {
         }
         if(user_age.text.toString()!="") {
             x.putString("user_age", user_age.text.toString())
-           jsonObject.put(getString(R.string.save_age), user_age.text.toString())
+            jsonObject.put(getString(R.string.save_age), user_age.text.toString())
 
         }
 
@@ -640,37 +623,42 @@ class EditProfileActivity : AppCompatActivity() {
 
         if(user_description.text.toString()!="") {
             x.putString("user_description", user_description.text.toString())
-           jsonObject.put(getString(R.string.save_description), user_description.text.toString() )
+            jsonObject.put(getString(R.string.save_description), user_description.text.toString() )
+
         }
 
         if(user_city.text.toString()!="") {
             x.putString("user_city", user_city.text.toString())
-           jsonObject.put(getString(R.string.save_city), user_city.text.toString())
+            jsonObject.put(getString(R.string.save_city), user_city.text.toString())
+
         }
         if(savedLanguages!=""){
             x.putString("user_languages",savedLanguages)
             jsonObject.put(getString(R.string.save_languages), languagesView!!.text)
 
         }
-        x.putString("user_gender" , genderSpinner.selectedItem.toString())
-        jsonObject.put(getString(R.string.save_gender), genderSpinner.selectedItem.toString() )
+
+        if(genderSpinner.selectedItem != null) {
+            x.putString("user_gender" , genderSpinner.selectedItem.toString())
+            jsonObject.put(getString(R.string.save_gender), genderSpinner.selectedItem.toString() )
+        }
 
         x.putString("profile", jsonObject.toString())
 
         x.apply()
 
         val myUser = ProfileUser(user_name.text.toString(),
-                                user_nickname.text.toString(),
-                                user_age.text.toString(),
-                                genderSpinner.selectedItem.toString(),
-                                FirebaseAuth.getInstance().currentUser?.email!!,
-                                user_number.text.toString(),
-                                user_description.text.toString(),
-                                savedLanguages,
-                                user_city.text.toString(),
+            user_nickname.text.toString(),
+            user_age.text.toString(),
+            genderSpinner.selectedItem as String?,
+            FirebaseAuth.getInstance().currentUser?.email!!,
+            user_number.text.toString(),
+            user_description.text.toString(),
+            savedLanguages,
+            user_city.text.toString(),
         )
 
-       // x.putString("user_name", if (user_name.text.length!=0){return user_name.text}; else{})
+        // x.putString("user_name", if (user_name.text.length!=0){return user_name.text}; else{})
         insertUserProfile(myUser)
 
     }
@@ -680,7 +668,7 @@ class EditProfileActivity : AppCompatActivity() {
         user.set(myuser)
             .addOnCompleteListener {
 
-                val intent = Intent(this, ShowProfileActivity::class.java)
+                val intent = Intent(this, ReservationActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
                 val t = Toast.makeText(this, "Confirmed", Toast.LENGTH_SHORT)

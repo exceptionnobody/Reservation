@@ -7,6 +7,7 @@ import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -29,14 +30,10 @@ import com.stacktips.view.utils.CalendarUtils
 import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.activities.editprofile.ShowProfileActivity
 import it.polito.g13.activities.login.LoginActivity
-import it.polito.g13.entities.PosRes
-import it.polito.g13.entities.Reservation
-import it.polito.g13.entities.Struttura
+
 import it.polito.g13.ui.main.ReservationFragment
-import it.polito.g13.viewModel.PosResViewModel
 import it.polito.g13.viewModel.ReservationsDBViewModel
-import it.polito.g13.viewModel.ReservationsViewModel
-import it.polito.g13.viewModel.StrutturaViewModel
+
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -217,8 +214,13 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
                     .signOut(this)
                     .addOnCompleteListener {
                         // ...
+                        val sharedPref = getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                        val editor = sharedPref.edit()
+                        editor.clear()
+                        editor.apply()
+                        Log.d("SHAREDPREFERENCES", "cancello le shared preferences")
                         val intent = Intent(this, LoginActivity::class.java)
-                        intent.flags = FLAG_ACTIVITY_CLEAR_TOP or FLAG_ACTIVITY_NEW_TASK
+                        intent.flags = FLAG_ACTIVITY_CLEAR_TOP or FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intent)
                         finish()
                     }
