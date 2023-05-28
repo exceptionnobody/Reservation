@@ -51,13 +51,14 @@ class PosResDBViewModel : ViewModel() {
             .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
     }
 
-    public  fun getPostResBySportTime(sport: String, from: String, to: String) {
+    public  fun getPostResBySportTimeCity(sport: String, from: String, to: String, city: String) {
         val posResCollection = db.collection("posres")
 
         posResCollection
             .whereEqualTo("tiposport", sport.lowercase())
             //.whereGreaterThanOrEqualTo("data", from)
             //.whereLessThanOrEqualTo("data", to)
+            .whereEqualTo("citta", city.lowercase())
             .whereEqualTo("flagattivo", true)
             .get()
             .addOnSuccessListener { listPosRes ->
@@ -65,6 +66,16 @@ class PosResDBViewModel : ViewModel() {
 
                 for (posres_ in listPosRes) {
                     val posResData = posres_.data
+
+                    posResData["posresid"] = posres_.id
+
+                    if (posResData["players"] != null) {
+                        val players = posResData["players"] as List<DocumentReference>
+
+                        posResData["numberOfCurrentPlayers"] = players.size.toString()
+                    } else {
+                        posResData["numberOfCurrentPlayers"] = "0"
+                    }
 
                     val posResFrom = posResData["data"] as Timestamp
                     val seconds = posResFrom.seconds
@@ -108,6 +119,8 @@ class PosResDBViewModel : ViewModel() {
                 for (posres_ in listPosRes) {
                     val posResData = posres_.data
 
+                    posResData["posresid"] = posres_.id
+
                     val idStruct = posResData["idstruttura"] as DocumentReference
 
                     idStruct
@@ -137,6 +150,7 @@ class PosResDBViewModel : ViewModel() {
 
                 for (posres_ in listPosRes) {
                     val posResData = posres_.data
+                    posResData["posresid"] = posres_.id
                     allPosRes.add(posResData)
                 }
 

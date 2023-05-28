@@ -28,6 +28,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
+            android:layout_marginEnd="20dp"
+            android:layout_toStartOf="@+id/joined_users_book_reservation"
             android:fontFamily="@font/crete_round"
             android:text="titolo, sport, hh:mm-hh:mm"
             android:textColor="@color/black"
@@ -37,20 +39,20 @@
             android:id="@+id/joined_users_book_reservation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="38dp"
-            android:layout_toEndOf="@+id/book_reservation_title"
+            android:layout_marginEnd="11dp"
+            android:layout_toStartOf="@+id/userIcon"
             android:fontFamily="@font/crete_round"
-            android:text="0/4"
+            android:textAlignment="textEnd"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
         <ImageView
+            android:id="@+id/userIcon"
             android:layout_width="30dp"
             android:layout_height="20dp"
             android:layout_marginStart="11dp"
             android:layout_marginEnd="18dp"
             android:layout_toStartOf="@+id/bookReservationDetails"
-            android:layout_toEndOf="@+id/joined_users_book_reservation"
             app:srcCompat="@drawable/joined_users" />
 
         <ImageView

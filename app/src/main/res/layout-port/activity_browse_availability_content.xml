@@ -265,10 +265,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="20dp"
+                        android:visibility="invisible"
                         app:calendarTitleTextColor="@color/black"
                         app:currentDayOfMonthColor="@color/primary_green"
-                        app:dayOfMonthTextColor="@color/black"
 
+                        app:dayOfMonthTextColor="@color/black"
                         app:dayOfWeekTextColor="@color/black"
                         app:disabledDayBackgroundColor="@color/white"
                         app:disabledDayTextColor="@color/primary_gray"
@@ -279,7 +280,8 @@
                         app:selectedDayBackgroundColor="@color/primary_green"
                         app:selectedDayTextColor="@color/white"
                         app:titleLayoutBackgroundColor="@color/white"
-                        app:weekLayoutBackgroundColor="@color/white">
+                        app:weekLayoutBackgroundColor="@color/white"
+                        tools:visibility="gone">
 
                     </com.stacktips.view.CustomCalendarView>
 
@@ -299,6 +301,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/titleBookReservation"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/margin_start_title_first_level"
@@ -307,23 +310,30 @@
                                 android:fontFamily="@font/crete_round"
                                 android:text="@string/new_reservations_available"
                                 android:textColor="@color/primary_green"
-                                android:textSize="20sp" />
+                                android:textSize="20sp"
+                                android:visibility="invisible"
+                                tools:visibility="gone" />
 
                             <LinearLayout
                                 android:id="@+id/noPosResBoxContainer"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_marginBottom="5dp"
-                                android:orientation="vertical" />
+                                android:orientation="vertical"
+                                android:visibility="invisible"
+                                tools:visibility="gone" />
 
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/bookReservationContainer"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="15dp"
-                                android:orientation="vertical" />
+                                android:orientation="vertical"
+                                android:visibility="invisible"
+                                tools:visibility="gone" />
 
                             <TextView
+                                android:id="@+id/titleJoinReservation"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/margin_start_title_first_level"
@@ -332,21 +342,27 @@
                                 android:fontFamily="@font/crete_round"
                                 android:text="@string/join_reservation"
                                 android:textColor="@color/primary_green"
-                                android:textSize="20sp" />
+                                android:textSize="20sp"
+                                android:visibility="invisible"
+                                tools:visibility="gone" />
 
                             <LinearLayout
                                 android:id="@+id/noJoinPosResBoxContainer"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_marginBottom="5dp"
-                                android:orientation="vertical" />
+                                android:orientation="vertical"
+                                android:visibility="invisible"
+                                tools:visibility="gone" />
 
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/joinReservationContainer"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="15dp"
-                                android:orientation="vertical" />
+                                android:orientation="vertical"
+                                android:visibility="invisible"
+                                tools:visibility="gone" />
                         </LinearLayout>
                     </ScrollView>
 

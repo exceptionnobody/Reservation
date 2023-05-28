@@ -66,6 +66,7 @@ class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigat
     private lateinit var to_time_availability: String
 
     private lateinit var calendarView: CustomCalendarView
+    private var daySelected: Date? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -193,13 +194,22 @@ class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigat
 
         val checkAvailability = findViewById<Button>(R.id.checkAvailabilityButton)
 
+        val cityInput = findViewById<TextView>(R.id.selectCity)
+
         checkAvailability.setOnClickListener {
             selectedSport = sportSpinner.selectedItem.toString()
 
             val from = select_from_time_availability.text.ifEmpty { "00:00" }.toString()
             val to = select_to_time_availability.text.ifEmpty { "23:59" }.toString()
 
-            posResViewModel.getPostResBySportTime(selectedSport!!, from, to)
+            daySelected = null
+            if (cityInput.text.toString().isEmpty()) {
+                cityInput.background = getDrawable(R.drawable.edit_fields_error)
+            } else {
+                cityInput.background = getDrawable(R.drawable.edit_fields)
+                calendarView.visibility = View.VISIBLE
+                posResViewModel.getPostResBySportTimeCity(selectedSport!!, from, to, cityInput.text.toString())
+            }
         }
 
         posResViewModel.listPosRes.observe(this) {
@@ -215,6 +225,7 @@ class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigat
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onDateSelected(date: Date) {
 
+                daySelected = date
                 val noPosResBoxContainer = findViewById<LinearLayout>(R.id.noPosResBoxContainer)
 
                 noPosResBoxContainer.removeAllViews()
@@ -223,28 +234,64 @@ class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigat
                 val formattedDate = sdf.parse(sdf.format(date))
                 val today = Calendar.getInstance().time
                 val formattedToday = sdf.parse(sdf.format(today))
+                val titleBookReservation = findViewById<TextView>(R.id.titleBookReservation)
+                val titleJoinReservation = findViewById<TextView>(R.id.titleJoinReservation)
+                val recyclerViewBook = findViewById<RecyclerView>(R.id.bookReservationContainer)
+                val recyclerViewJoin = findViewById<RecyclerView>(R.id.joinReservationContainer)
+
+
+                titleBookReservation.visibility = View.GONE
+                titleJoinReservation.visibility = View.GONE
+                recyclerViewBook.visibility = View.GONE
+                recyclerViewJoin.visibility = View.GONE
+                noPosResBoxContainer.visibility = View.GONE
 
                 if (formattedDate >= formattedToday) {
                     //show them in the recycler view
                     posResViewModel.listPosRes.observe(this@BrowseAvailabilityActivity) {
                         noPosResBoxContainer.removeAllViews()
+                        titleBookReservation.visibility = View.GONE
+                        titleJoinReservation.visibility = View.GONE
+                        recyclerViewBook.visibility = View.GONE
+                        recyclerViewJoin.visibility = View.GONE
+                        noPosResBoxContainer.visibility = View.GONE
                         val posResInDate = it.filter { posRes ->
                             val timestamp = posRes["data"] as com.google.firebase.Timestamp
                             val milliseconds = timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
                             val netDate = Date(milliseconds)
                             sdf.parse(sdf.format(netDate)) == formattedDate
                         }
-                        val recyclerView = findViewById<RecyclerView>(R.id.bookReservationContainer)
-                        recyclerView.adapter = PosResAdapter(posResInDate)
-                        recyclerView.layoutManager = LinearLayoutManager(this@BrowseAvailabilityActivity)
-                        if (posResInDate.isEmpty()) {
+                        val posResNew = posResInDate.filter { posRes ->
+                            posRes["numberOfCurrentPlayers"] == null || posRes["numberOfCurrentPlayers"].toString() == "0"
+                        }
+                        val posResJoin = posResInDate.filter { posRes ->
+                            posRes["numberOfCurrentPlayers"].toString() != "0"
+                        }
+
+                        if (daySelected != null && posResJoin.size > 0) {
+                            titleJoinReservation.visibility = View.VISIBLE
+                            recyclerViewJoin.visibility = View.VISIBLE
+                        }
+                        if (daySelected != null && posResNew.size > 0) {
+                            titleBookReservation.visibility = View.VISIBLE
+                            recyclerViewBook.visibility = View.VISIBLE
+                        }
+                        recyclerViewBook.adapter = PosResAdapter(posResNew)
+                        recyclerViewBook.layoutManager = LinearLayoutManager(this@BrowseAvailabilityActivity)
+                        recyclerViewJoin.adapter = PosResAdapter(posResJoin)
+                        recyclerViewJoin.layoutManager = LinearLayoutManager(this@BrowseAvailabilityActivity)
+                        if (posResNew.isEmpty() && posResJoin.isEmpty() && daySelected != null) {
+                            noPosResBoxContainer.visibility = View.VISIBLE
                             val noReservationFounded = layoutInflater.inflate(R.layout.no_reservation, noPosResBoxContainer, false)
                             noReservationFounded.findViewById<TextView>(R.id.textView).text = "No possible reservation for today"
                             noPosResBoxContainer.addView(noReservationFounded)
                         }
                     }
-
-                    //handle also reservations to join with new recycler view
+                } else {
+                    noPosResBoxContainer.visibility = View.VISIBLE
+                    val noReservationFounded = layoutInflater.inflate(R.layout.no_reservation, noPosResBoxContainer, false)
+                    noReservationFounded.findViewById<TextView>(R.id.textView).text = "No possible reservation for today"
+                    noPosResBoxContainer.addView(noReservationFounded)
                 }
             }
 
@@ -310,6 +357,7 @@ class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigat
 //define recycler view for possible reservations
 class PosResViewHolder(v: View) : RecyclerView.ViewHolder(v) {
     val tv = v.findViewById<TextView>(R.id.book_reservation_title)
+    val players = v.findViewById<TextView>(R.id.joined_users_book_reservation)
 }
 
 class PosResAdapter(val listPosRes: List<MutableMap<String, Any>>): RecyclerView.Adapter<PosResViewHolder>() {
@@ -335,8 +383,10 @@ class PosResAdapter(val listPosRes: List<MutableMap<String, Any>>): RecyclerView
         val hour2 = (hour1.split(":")[0].toInt() + 1).toString() + ":" + hour1.split(":")[1]
 
         val txt = posRes["nomestruttura"].toString() + ", " + hour1 + "-" + hour2
+        val txtPlayers = "${posRes["numberOfCurrentPlayers"].toString()}/${posRes["maxpeople"].toString()}"
 
         holder.tv.text = txt
+        holder.players.text = txtPlayers
 
         holder.itemView.setOnClickListener {
             val intent = Intent(context, ShowPosResDetailActivity::class.java)
