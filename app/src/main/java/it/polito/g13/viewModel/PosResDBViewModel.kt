@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -16,12 +17,13 @@ import java.util.*
 
 class PosResDBViewModel : ViewModel() {
     private val db = Firebase.firestore
+    private val user = FirebaseAuth.getInstance().currentUser
 
     private val _listPosRes = MutableLiveData<List<MutableMap<String, Any>>>()
     val listPosRes: LiveData<List<MutableMap<String, Any>>> = _listPosRes
 
-    private val _singlePosRes = MutableLiveData<MutableMap<String, Any>>()
-    val singlePosRes: LiveData<MutableMap<String, Any>> = _singlePosRes
+    private val _singlePosRes = MutableLiveData<MutableMap<String, Any?>>()
+    val singlePosRes: LiveData<MutableMap<String, Any?>> = _singlePosRes
 
     /*init {
         val posResCollection = db.collection("posres")
@@ -41,14 +43,39 @@ class PosResDBViewModel : ViewModel() {
             }
     }*/
 
-    public fun updatePosRes(posresId: String, flag: Boolean) {
+    public fun updatePosRes(posres: MutableMap<String, Any?>) {
         val posResCollection = db.collection("posres")
+        val posresId = posres["posresid"].toString()
+        val numberOfCurrentPlayers = posres["numberOfCurrentPlayers"].toString().toInt()
+        val maxPeople = posres["maxpeople"].toString().toInt()
+        val players : MutableList<DocumentReference> = mutableListOf()
 
-        posResCollection
-            .document(posresId.trim())
-            .update("flagattivo", flag)
-            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
-            .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
+        if (user != null && user.uid != null) {
+            if (posres["players"] != null) {
+                val playersPosres = posres["players"] as MutableList<DocumentReference>
+
+                for (player in playersPosres) {
+                    players.add(player)
+                }
+            }
+            val userPath = db.document("users/${user?.uid}")
+
+            players.add(userPath)
+
+            if (numberOfCurrentPlayers + 1 == maxPeople) {
+                posResCollection
+                    .document(posresId.trim())
+                    .update("flagattivo", false, "players", players)
+                    .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
+                    .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
+            } else {
+                posResCollection
+                    .document(posresId.trim())
+                    .update("players", players)
+                    .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
+                    .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
+            }
+        }
     }
 
     public  fun getPostResBySportTimeCity(sport: String, from: String, to: String, city: String) {
@@ -66,11 +93,18 @@ class PosResDBViewModel : ViewModel() {
 
                 for (posres_ in listPosRes) {
                     val posResData = posres_.data
+                    var skipPosRes = false
 
                     posResData["posresid"] = posres_.id
 
                     if (posResData["players"] != null) {
                         val players = posResData["players"] as List<DocumentReference>
+
+                        val userPath = db.document("users/${user?.uid}")
+
+                        if (players.any{ it == userPath }) {
+                            skipPosRes = true
+                        }
 
                         posResData["numberOfCurrentPlayers"] = players.size.toString()
                     } else {
@@ -88,8 +122,8 @@ class PosResDBViewModel : ViewModel() {
                     val formattedFrom = SimpleDateFormat("HH:mm").parse(from)
                     val formattedTo = SimpleDateFormat("HH:mm").parse(to)
 
-                    if (formattedDate.equals(formattedFrom) || formattedDate.equals(formattedTo) ||
-                        (formattedDate.after(formattedFrom) && formattedDate.before(formattedTo))) {
+                    if ((formattedDate.equals(formattedFrom) || formattedDate.equals(formattedTo) ||
+                        (formattedDate.after(formattedFrom) && formattedDate.before(formattedTo))) && !skipPosRes) {
 
                         val idStruct = posResData["idstruttura"] as DocumentReference
 
@@ -112,27 +146,40 @@ class PosResDBViewModel : ViewModel() {
         val posResCollection = db.collection("posres")
 
         posResCollection
-            .whereEqualTo("posresid", posresId)
+            .document(posresId)
             .get()
             .addOnSuccessListener { listPosRes ->
+                val posresInfo : MutableMap<String, Any?> = mutableMapOf()
 
-                for (posres_ in listPosRes) {
-                    val posResData = posres_.data
+                posresInfo.put("citta", listPosRes.get("citta"))
+                posresInfo.put("data", listPosRes.get("data"))
+                posresInfo.put("idcampo", listPosRes.get("idcampo"))
+                posresInfo.put("idstruttura", listPosRes.get("idstruttura"))
+                posresInfo.put("maxpeople", listPosRes.get("maxpeople"))
+                posresInfo.put("players", listPosRes.get("players"))
+                posresInfo.put("tiposport", listPosRes.get("tiposport"))
+                posresInfo.put("posresid", listPosRes.id)
 
-                    posResData["posresid"] = posres_.id
+                if (listPosRes.get("players") != null) {
+                    val players = listPosRes.get("players") as List<DocumentReference>
 
-                    val idStruct = posResData["idstruttura"] as DocumentReference
-
-                    idStruct
-                        .get()
-                        .addOnSuccessListener {
-                            posResData["nomestruttura"] = it.data?.get("nomestruttura")
-                            _singlePosRes.value = posResData
-                        }
-                        .addOnFailureListener {
-                            _singlePosRes.value = posResData
-                        }
+                    posresInfo.put("numberOfCurrentPlayers", players.size.toString())
+                } else {
+                    posresInfo.put("numberOfCurrentPlayers", "0")
                 }
+
+                val idStruct = listPosRes.get("idstruttura") as DocumentReference
+
+                idStruct
+                    .get()
+                    .addOnSuccessListener {
+                        posresInfo.put("nomestruttura", it.data?.get("nomestruttura"))
+                        _singlePosRes.value = posresInfo
+                    }
+                    .addOnFailureListener {
+                        _singlePosRes.value = posresInfo
+                    }
+
             }
     }
 

@@ -1,5 +1,7 @@
 package it.polito.g13.viewModel
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -31,8 +33,8 @@ class ReservationsDBViewModel : ViewModel() {
 
     init {
 
-        if (user != null && user.email != null) {
-            val reservationsRef = db.collection("users").document(user.email!!).collection("reservations")
+        if (user != null && user.uid != null) {
+            /*val reservationsRef = db.collection("users").document(user.uid!!).collection("reservations")
 
             reservationsRef
                 .get()
@@ -58,21 +60,40 @@ class ReservationsDBViewModel : ViewModel() {
                     }
 
                     _reservations.value = allReservations
-                }
+                }*/
         }
     }
 
-    fun insertReservation(posresid : String, idstruttura : Any?, data: Date, idcampo: Any?, tiposport: String, note: String) {
-        if (user != null && user.email != null) {
-            val reservationsRef = db.collection("users").document(user.email!!).collection("reservations")
+    fun insertReservation(posresid : String, idstruttura : Any?, data: Date, idcampo: Any?, tiposport: String) {
+        if (user != null && user.uid != null) {
+            val reservationsRef = db.collection("reservations")
             val data = hashMapOf(
                 "posresid" to posresid.trim(),
                 "idstruttura" to idstruttura,
                 "data" to data,
                 "idcampo" to idcampo,
                 "tiposport" to tiposport,
-                "note" to note,
                 "activeflag" to true,
+            )
+
+            reservationsRef
+                .whereEqualTo("posresid", posresid.trim())
+                .get()
+                .addOnSuccessListener {listPosRes ->
+                    if (listPosRes.isEmpty) {
+                        reservationsRef
+                            .add(data)
+                    }
+                }
+        }
+    }
+
+    fun insertReservationInUser(posresid : String, note: String) {
+        if (user != null && user.uid != null) {
+            val reservationsRef = db.collection("users").document(user.uid!!).collection("reservations")
+            val data = hashMapOf(
+                "posresid" to posresid.trim(),
+                "note" to note,
             )
 
             reservationsRef
@@ -82,17 +103,51 @@ class ReservationsDBViewModel : ViewModel() {
 
     /*fun updateReservation(idReservation: Int, newData: Date, notes: String) {
         businessLogic.changeReservation(idReservation, newData, notes)
+    }*/
+
+    fun deleteReservation(idreservation: String) {
+        if (user != null && user.email != null) {
+            db
+                .collection("users")
+                .document(user.email!!)
+                .collection("reservations")
+                .document(idreservation.trim())
+                .delete()
+        }
     }
 
-    fun deleteReservation(reservation: Reservation) {
-        businessLogic.deleteReservation(reservation)
+    fun getSingleReservation(idreservation: String) {
+        if (user != null && user.uid != null) {
+            val reservationsRef = db.collection("users").document(user.uid!!).collection("reservations")
+
+            reservationsRef
+                .document(idreservation)
+                .get()
+                .addOnSuccessListener { listPosRes ->
+
+                    var reservationData = listPosRes.data
+
+                    if (reservationData != null) {
+                        val idStruct = reservationData?.get("idstruttura") as DocumentReference
+
+                        reservationData["idprenotazione"] = idreservation
+
+                        idStruct
+                            .get()
+                            .addOnSuccessListener {
+                                reservationData["nomestruttura"] = it.data?.get("nomestruttura")
+                                _singleReservation.value = reservationData!!
+                            }
+                            .addOnFailureListener {
+                                _singleReservation.value = reservationData!!
+                            }
+                    }
+                    //}
+                }
+        }
     }
 
-    fun getSingleReservation(idReservation: Int) {
-        _singleReservation.postValue(businessLogic.getASingleReservation(idReservation))
-    }
-
-    fun getReservationsByDate(date: Date) {
+    /*fun getReservationsByDate(date: Date) {
         _listReservationsByDate.postValue(businessLogic.getReservationsByDate(date))
     }*/
 }
