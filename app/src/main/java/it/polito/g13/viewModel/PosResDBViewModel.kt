@@ -85,7 +85,7 @@ class PosResDBViewModel : ViewModel() {
             .whereEqualTo("tiposport", sport.lowercase())
             //.whereGreaterThanOrEqualTo("data", from)
             //.whereLessThanOrEqualTo("data", to)
-            .whereEqualTo("citta", city.lowercase())
+            .whereEqualTo("citta", city.lowercase().trim())
             .whereEqualTo("flagattivo", true)
             .get()
             .addOnSuccessListener { listPosRes ->
@@ -246,14 +246,12 @@ class PosResDBViewModel : ViewModel() {
                             .get()
                             .addOnSuccessListener {
                                 posResData["nomestruttura"] = it.data?.get("nomestruttura")
-                            }
 
-                        allPosRes.add(posResData)
+                                allPosRes.add(posResData)
+                                _listPosRes.value = allPosRes
+                            }
                     }
                 }
-
-                _listPosRes.value = allPosRes
-
             }
     }
 }
