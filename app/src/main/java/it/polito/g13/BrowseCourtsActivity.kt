@@ -162,17 +162,17 @@ class BrowseCourtsAdapter(
         if (court["avg"] != null) {
             holder.noPastRating.visibility = View.GONE
             holder.avgRating.rating = court["avg"] as Float
+
+            holder.itemView.setOnClickListener {
+                val intent = Intent(context, ShowAllCourtReviews::class.java)
+                intent.putExtra("structName", court["nomestruttura"].toString())
+                intent.putExtra("idStruct", court["idstruttura"].toString())
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(intent)
+            }
         }
         else {
             holder.avgRating.visibility = View.GONE
-        }
-
-        holder.itemView.setOnClickListener {
-            val intent = Intent(context, ShowAllCourtReviews::class.java)
-            intent.putExtra("structName", court["nomestruttura"].toString())
-            intent.putExtra("idStruct", court["idstruttura"].toString())
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            context.startActivity(intent)
         }
     }
 }

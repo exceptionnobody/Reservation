@@ -25,6 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.activities.editprofile.ShowProfileActivity
 import it.polito.g13.activities.login.LoginActivity
 import it.polito.g13.viewModel.ReservationsDBViewModel
+import org.w3c.dom.Text
 
 private lateinit var context : Context
 
@@ -82,17 +83,24 @@ class ListReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigatio
 
         val loading = findViewById<ProgressBar>(R.id.loading_list_review_courts)
         val container = findViewById<ScrollView>(R.id.list_review_courts_container)
+        val noReservation = findViewById<TextView>(R.id.no_courts)
 
         reservationViewModel.getUserPastReservations()
         reservationViewModel.userReservations.observe(this) {reservations ->
-            val listToReview = reservations.distinctBy { it["nomestruttura"] }
+            if (reservations.isNotEmpty()) {
+                val listToReview = reservations.distinctBy { it["nomestruttura"] }
 
-            val recyclerView = findViewById<RecyclerView>(R.id.list_review_courts)
-            recyclerView.adapter = ReviewReservationAdapter(listToReview, this)
-            recyclerView.layoutManager = LinearLayoutManager(this)
+                val recyclerView = findViewById<RecyclerView>(R.id.list_review_courts)
+                recyclerView.adapter = ReviewReservationAdapter(listToReview, this)
+                recyclerView.layoutManager = LinearLayoutManager(this)
 
-            loading.visibility = View.GONE
-            container.visibility = View.VISIBLE
+                loading.visibility = View.GONE
+                container.visibility = View.VISIBLE
+            }
+            else {
+                loading.visibility = View.GONE
+                noReservation.visibility = View.VISIBLE
+            }
         }
     }
 

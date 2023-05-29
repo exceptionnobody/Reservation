@@ -116,4 +116,5 @@
     <string name="additional_comment">Additional comment:</string>
     <string name="no_comment_inserted">No comment inserted</string>
     <string name="author">Author:</string>
+    <string name="no_reservations_found">No reservations found</string>
 </resources>
