@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -25,7 +24,6 @@ import it.polito.g13.activities.editprofile.ShowProfileActivity
 import it.polito.g13.activities.login.LoginActivity
 import it.polito.g13.viewModel.ReviewsDBViewModel
 import it.polito.g13.viewModel.StructuresDBViewModel
-import org.w3c.dom.Text
 
 private lateinit var context : Context
 
@@ -120,7 +118,12 @@ class BrowseCourtsActivity : AppCompatActivity(), NavigationView.OnNavigationIte
                     .signOut(this)
                     .addOnCompleteListener {
                         // ...
+                        val sharedPref = getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                        val editor = sharedPref.edit()
+                        editor.clear()
+                        editor.apply()
                         val intent = Intent(this, LoginActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intent)
                         finish()
                     }

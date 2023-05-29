@@ -1,7 +1,9 @@
 package it.polito.g13
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
@@ -12,16 +14,11 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.firebase.ui.auth.AuthUI
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.activities.editprofile.ShowProfileActivity
 import it.polito.g13.activities.login.LoginActivity
-import it.polito.g13.entities.PosRes
-import it.polito.g13.entities.Reservation
 import it.polito.g13.viewModel.PosResDBViewModel
-import it.polito.g13.viewModel.PosResViewModel
 import it.polito.g13.viewModel.ReservationsDBViewModel
-import it.polito.g13.viewModel.ReservationsViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -174,7 +171,13 @@ class ShowPosResDetailActivity : AppCompatActivity(), NavigationView.OnNavigatio
                     .signOut(this)
                     .addOnCompleteListener {
                         // ...
+                        val sharedPref = getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                        val editor = sharedPref.edit()
+                        editor.clear()
+                        editor.apply()
+                        Log.d("SHAREDPREFERENCES", "cancello le shared preferences")
                         val intent = Intent(this, LoginActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intent)
                         finish()
                     }

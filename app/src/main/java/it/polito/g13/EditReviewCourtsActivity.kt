@@ -1,5 +1,6 @@
 package it.polito.g13
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -20,8 +21,6 @@ import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.activities.editprofile.ShowProfileActivity
 import it.polito.g13.activities.login.LoginActivity
-import it.polito.g13.entities.review_struct
-import it.polito.g13.viewModel.ReviewStructureViewModel
 import it.polito.g13.viewModel.ReviewsDBViewModel
 
 
@@ -236,7 +235,12 @@ class EditReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigatio
                     .signOut(this)
                     .addOnCompleteListener {
                         // ...
+                        val sharedPref = getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                        val editor = sharedPref.edit()
+                        editor.clear()
+                        editor.apply()
                         val intent = Intent(this, LoginActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intent)
                         finish()
                     }

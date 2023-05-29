@@ -24,7 +24,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import it.polito.g13.R
 import it.polito.g13.ReservationActivity
-import it.polito.g13.activities.editprofile.EditProfileActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -95,7 +94,7 @@ class LoginActivity : AppCompatActivity() {
                     .signOut(this)
                     .addOnCompleteListener {
                         val intent = Intent(this, LoginActivity::class.java)
-                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intent)
                         finish()
                     }
@@ -135,6 +134,7 @@ class LoginActivity : AppCompatActivity() {
         loginLauncher.launch(intent)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun checkNonGoogleAccount(user: FirebaseUser) {
         val db = FirebaseFirestore.getInstance()
 
@@ -146,17 +146,12 @@ class LoginActivity : AppCompatActivity() {
                     if (documentSnapshot.exists()) {
 //                        Log.d("AUTENTICAZIONE", "UTENTE GIA' VERIFICATO MA ANCORA NON REGISTRATO")
                         documentRef.delete()
-                        val userRef = db.collection("users").document(user.email.toString())
+                        val userRef = db.collection("users").document(user.uid)
                             .collection("infos").document(user.displayName.toString())
+                        // Cancello le sue infos
                         userRef.delete()
-                        val intent = Intent(this, EditProfileActivity::class.java)
-                        intent.flags =
-                            Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                        startActivity(intent)
-                    } else {
-//                        Log.d("AUTENTICAZIONE","UTENTE LOGGATO CON ACCOUNT DIVERSA DA GOOGLE VERIFICATO")
-
-                        val userRef = db.collection("users")
+                        // Scrivo le loginInfo nel db
+                        val infoUserRef = db.collection("users")
                             .document(user.uid)
                             .collection("loginInfo")
                             .document(user.displayName.toString())
@@ -166,16 +161,160 @@ class LoginActivity : AppCompatActivity() {
                             "email" to user.email,
                             "timestamp_registrazione" to FieldValue.serverTimestamp()
                         )
-                        userRef.set(userInformations)
+
+                        infoUserRef.set(userInformations)
                             .addOnCompleteListener {
-                                val intent = Intent(
-                                    this,
-                                    ReservationActivity::class.java
-                                )
+
+                                // Avvio la registration Activity
+                                val intent = Intent(this, RegistrationActivity::class.java)
                                 intent.flags =
                                     Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                                 startActivity(intent)
                             }
+
+                    } else {
+//                        Log.d("AUTENTICAZIONE","UTENTE LOGGATO CON ACCOUNT DIVERSA DA GOOGLE VERIFICATO")
+
+// Devo caricare le shared preferences dell'utente
+                        val userRef = db.collection("users/${user.uid}/profile").document("info")
+
+
+                        userRef.get().addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+
+                                val documentSnapshot = task.result
+
+                                if (documentSnapshot.exists()) {
+                                    val data = documentSnapshot.data
+                                    val jsonObject = JSONObject()
+
+
+//                    Log.d("AUTENTICAZIONE", "UTENTE GIA' LOGGATO")
+                                    val sharedPreference = getSharedPreferences("preferences", 0)
+                                    val profile =
+                                        sharedPreference.getString("profile", "").toString()
+
+                                    if (profile != "") {
+                                        Log.d("SHAREDPREFERENCES", "piene")
+                                    } else {
+                                        Log.d("SHAREDPREFERENCES", "vuote")
+
+                                        if (data != null) {
+                                            val myshare = sharedPreference.edit()
+                                            myshare.putString(
+                                                "user_name",
+                                                data["name_surname"].toString()
+                                            )
+                                            jsonObject.put(
+                                                getString(R.string.save_username),
+                                                data["name_surname"].toString()
+                                            )
+                                            myshare.putString(
+                                                "user_nickname",
+                                                data["nickname"].toString()
+                                            )
+                                            jsonObject.put(
+                                                getString(R.string.save_nickname),
+                                                data["nickname"].toString()
+                                            )
+                                            if (data["city"].toString() != "") {
+                                                myshare.putString(
+                                                    "user_city",
+                                                    data["city"].toString()
+                                                )
+                                                jsonObject.put(
+                                                    getString(R.string.save_city),
+                                                    data["city"].toString()
+                                                )
+                                            }
+                                            if (data["gender"].toString() != "null") {
+                                                myshare.putString(
+                                                    "user_gender",
+                                                    data["gender"] as String?
+                                                )
+                                                jsonObject.put(
+                                                    getString(R.string.save_gender),
+                                                    data["gender"].toString()
+                                                )
+                                            }
+
+                                            if (data["phone_number"].toString() != "") {
+                                                myshare.putString(
+                                                    "user_number",
+                                                    data["phone_number"].toString()
+                                                )
+                                                jsonObject.put(
+                                                    getString(R.string.save_telnumber),
+                                                    data["phone_number"].toString()
+                                                )
+                                            }
+                                            if (data["age"].toString() != "") {
+                                                myshare.putString(
+                                                    "user_age",
+                                                    data["age"].toString()
+                                                )
+                                                jsonObject.put(
+                                                    getString(R.string.save_age),
+                                                    data["age"].toString()
+                                                )
+                                            }
+
+                                            if (data["description"].toString() != "") {
+                                                myshare.putString(
+                                                    "user_description",
+                                                    data["description"].toString()
+                                                )
+                                                jsonObject.put(
+                                                    getString(R.string.save_description),
+                                                    data["description"].toString()
+                                                )
+                                            }
+
+                                            if (data["languages"].toString() != "") {
+                                                myshare.putString(
+                                                    "user_languages",
+                                                    data["languages"].toString()
+                                                )
+                                                jsonObject.put(
+                                                    getString(R.string.save_languages),
+                                                    data["languages"].toString()
+                                                )
+                                            }
+
+                                            myshare.putString("profile", jsonObject.toString())
+                                            Log.d(
+                                                "SHAREDPREFERENCES",
+                                                "profile_lato_login: ${data}"
+                                            )
+
+                                            GlobalScope.launch(Dispatchers.IO) {
+                                                loadImage()
+                                            }
+
+                                            myshare.apply()
+                                        }
+                                    }
+                                    val intent = Intent(this, ReservationActivity::class.java)
+                                    intent.flags =
+                                        Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                    startActivity(intent)
+                                }
+
+                            }
+                        }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                     }
                 } else {
@@ -323,7 +462,7 @@ class LoginActivity : AppCompatActivity() {
         val userId = user.uid
         val email = user.email
         val documentRef = db.collection("EmailVerification").document(email!!)
-        val userRef = db.collection("users").document(email)
+        val userRef = db.collection("users").document(userId)
             .collection("infos").document(user.displayName!!)
 
         documentRef.get()

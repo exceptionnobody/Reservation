@@ -30,6 +30,9 @@ import java.io.ByteArrayOutputStream
 import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.R
 import it.polito.g13.firebase_objects.ProfileUser
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.io.FileDescriptor
 import java.io.IOException
@@ -284,9 +287,11 @@ class EditProfileActivity : AppCompatActivity() {
 
 
         if (imageUri != null) {
-            context.openFileOutput(filename, MODE_PRIVATE).use {
+            GlobalScope.launch(Dispatchers.IO) {
+                context.openFileOutput(filename, MODE_PRIVATE).use {
 
-                globalBitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
+                    globalBitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
+                }
             }
         }
 

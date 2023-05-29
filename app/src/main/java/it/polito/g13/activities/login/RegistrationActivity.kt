@@ -29,7 +29,7 @@ import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream
 import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.R
-import it.polito.g13.ReservationActivity
+import it.polito.g13.activities.editprofile.ShowProfileActivity
 import it.polito.g13.firebase_objects.ProfileUser
 import org.json.JSONObject
 import java.io.FileDescriptor
@@ -668,10 +668,10 @@ class RegistrationActivity : AppCompatActivity() {
         user.set(myuser)
             .addOnCompleteListener {
 
-                val intent = Intent(this, ReservationActivity::class.java)
+                val intent = Intent(this, ShowProfileActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
-                val t = Toast.makeText(this, "Confirmed", Toast.LENGTH_SHORT)
+                val t = Toast.makeText(this, "Welcome!", Toast.LENGTH_SHORT)
                 t.show()
                 finish()
             }

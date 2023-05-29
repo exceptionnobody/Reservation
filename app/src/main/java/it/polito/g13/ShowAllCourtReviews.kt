@@ -23,10 +23,7 @@ import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.activities.editprofile.ShowProfileActivity
 import it.polito.g13.activities.login.LoginActivity
-import it.polito.g13.viewModel.ReservationsViewModel
-import it.polito.g13.viewModel.ReviewStructureViewModel
 import it.polito.g13.viewModel.ReviewsDBViewModel
-import it.polito.g13.viewModel.StrutturaViewModel
 
 private lateinit var context : Context
 
@@ -132,7 +129,13 @@ class ShowAllCourtReviews : AppCompatActivity(), NavigationView.OnNavigationItem
                     .signOut(this)
                     .addOnCompleteListener {
                         // ...
+                        val sharedPref = getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                        val editor = sharedPref.edit()
+                        editor.clear()
+                        editor.apply()
+                        Log.d("SHAREDPREFERENCES", "cancello le shared preferences")
                         val intent = Intent(this, LoginActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intent)
                         finish()
                     }
