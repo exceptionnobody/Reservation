@@ -27,17 +27,48 @@ class StructuresDBViewModel : ViewModel() {
 
                 for (struct in listStructs) {
                     val structData = struct.data
-                    allStructs.add(structData)
+
+                    structs
+                        .document(structData["idstruttura"] as String)
+                        .collection("reviewStruttura")
+                        .get()
+                        .addOnSuccessListener { listReviews ->
+                            var sum = 0.toFloat()
+                            var count = 0
+
+                            for (review in listReviews) {
+                                val reviewData = review.data
+
+                                sum += (reviewData["voto1"] as Long).toFloat() + (reviewData["voto2"] as Long).toFloat() +
+                                        (reviewData["voto3"] as Long).toFloat() + (reviewData["voto4"] as Long).toFloat()
+
+                                count += 4
+                            }
+
+                            val avg = sum / count
+                            structData["avg"] = avg
+                            allStructs.add(structData)
+                            _structures.value = allStructs
+
+                            val courtReferences = listStructs.map { struct ->
+                                structs.document(struct.id)
+                                    .collection("campistruttura")
+                            }
+
+                            fetchCourts(courtReferences, allStructs)
+                        }
+                        .addOnFailureListener {
+                            allStructs.add(structData)
+                            _structures.value = allStructs
+
+                            val courtReferences = listStructs.map { struct ->
+                                structs.document(struct.id)
+                                    .collection("campistruttura")
+                            }
+
+                            fetchCourts(courtReferences, allStructs)
+                        }
                 }
-
-                _structures.value = allStructs
-
-                val courtReferences = listStructs.map { struct ->
-                    structs.document(struct.id)
-                        .collection("campistruttura")
-                }
-
-                fetchCourts(courtReferences, allStructs)
             }
     }
 
@@ -60,10 +91,14 @@ class StructuresDBViewModel : ViewModel() {
                         courtsData?.let {
                             val idStruct = allStructs[index]["idstruttura"] as? String
                             val structName = allStructs[index]["nomestruttura"] as? String
+                            val structCity = allStructs[index]["citta"] as? String
+                            val avg = allStructs[index]["avg"] as? Float
 
                             it.forEach { court ->
                                 court["nomestruttura"] = structName
                                 court["idstruttura"] = idStruct
+                                court["citta"] = structCity
+                                court["avg"] = avg
                             }
 
                             allCourts.addAll(it)

@@ -25,6 +25,7 @@ import it.polito.g13.activities.editprofile.ShowProfileActivity
 import it.polito.g13.activities.login.LoginActivity
 import it.polito.g13.viewModel.ReviewsDBViewModel
 import it.polito.g13.viewModel.StructuresDBViewModel
+import org.w3c.dom.Text
 
 private lateinit var context : Context
 
@@ -84,13 +85,11 @@ class BrowseCourtsActivity : AppCompatActivity(), NavigationView.OnNavigationIte
         val loading = findViewById<ProgressBar>(R.id.loading_browse_courts)
 
         structuresViewModel.courts.observe(this) {courts ->
-            reviewsViewModel.reviews.observe(this) {reviews ->
-                val recyclerView = findViewById<RecyclerView>(R.id.list_browse_courts)
-                recyclerView.adapter = BrowseCourtsAdapter(courts, reviews, this)
-                recyclerView.layoutManager = LinearLayoutManager(this)
+            val recyclerView = findViewById<RecyclerView>(R.id.list_browse_courts)
+            recyclerView.adapter = BrowseCourtsAdapter(courts, this)
+            recyclerView.layoutManager = LinearLayoutManager(this)
 
-                loading.visibility = View.GONE
-            }
+            loading.visibility = View.GONE
         }
     }
 
@@ -136,14 +135,13 @@ class BrowseCourtsActivity : AppCompatActivity(), NavigationView.OnNavigationIte
 class BrowseCourtsViewHolder(v: View) : RecyclerView.ViewHolder(v){
     val strut = v.findViewById<TextView>(R.id.browse_strut)
     val sport = v.findViewById<TextView>(R.id.browse_sport)
+    val city = v.findViewById<TextView>(R.id.browse_city)
     val noPastRating = v.findViewById<TextView>(R.id.no_past_rating_browse)
     val avgRating = v.findViewById<RatingBar>(R.id.average_past_rating_browse)
 }
 
 class BrowseCourtsAdapter(
-    val listCourts: List<MutableMap<String, Any>>,
-    val listReviews: List<MutableMap<String, Any>>,
-    context: Context) : RecyclerView.Adapter<BrowseCourtsViewHolder>() {
+    val listCourts: List<MutableMap<String, Any>>, context: Context) : RecyclerView.Adapter<BrowseCourtsViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BrowseCourtsViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.browse_court_box, parent, false)
 
@@ -155,32 +153,19 @@ class BrowseCourtsAdapter(
     }
 
     override fun onBindViewHolder(holder: BrowseCourtsViewHolder, position: Int) {
-
         val court = listCourts[position]
 
-        val reviews = listReviews.filter { it["idstruttura"] == court["idstruttura"] }
+        holder.strut.text = court["nomestruttura"].toString()
+        holder.sport.text = court["tiposport"].toString()
+        holder.city.text = court["citta"].toString()
 
-        if (reviews.isNotEmpty()) {
+        if (court["avg"] != null) {
             holder.noPastRating.visibility = View.GONE
-
-            var sumRatings = 0f
-            var countRatings = 0
-
-            for (r in reviews) {
-                sumRatings += r["voto1"].toString().toFloat() + r["voto2"].toString().toFloat() +
-                        r["voto3"].toString().toFloat() + r["voto4"].toString().toFloat()
-
-                countRatings += 4
-            }
-
-            holder.avgRating.rating = sumRatings / countRatings
+            holder.avgRating.rating = court["avg"] as Float
         }
         else {
             holder.avgRating.visibility = View.GONE
         }
-
-        holder.strut.text = court["nomestruttura"].toString()
-        holder.sport.text = court["tiposport"].toString()
 
         holder.itemView.setOnClickListener {
             val intent = Intent(context, ShowAllCourtReviews::class.java)

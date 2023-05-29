@@ -16,8 +16,8 @@ class ReviewsDBViewModel : ViewModel() {
     private val db = Firebase.firestore
     private val user = FirebaseAuth.getInstance().currentUser
 
-    private val _structures = MutableLiveData<List<MutableMap<String, Any>>>()
-    val structures: LiveData<List<MutableMap<String, Any>>> = _structures
+    //private val _structures = MutableLiveData<List<MutableMap<String, Any>>>()
+    //val structures: LiveData<List<MutableMap<String, Any>>> = _structures
 
     private val _reviews = MutableLiveData<List<MutableMap<String, Any>>>()
     val reviews: LiveData<List<MutableMap<String, Any>>> = _reviews
@@ -27,69 +27,6 @@ class ReviewsDBViewModel : ViewModel() {
 
     private val _reviewById = MutableLiveData<MutableMap<String, Any>>()
     val reviewById: LiveData<MutableMap<String, Any>> = _reviewById
-
-    init {
-        val structs = db.collection("struttura")
-
-        structs
-            .get()
-            .addOnSuccessListener { listStructs ->
-                val allStructs: MutableList<MutableMap<String, Any>> = mutableListOf()
-
-                for (struct in listStructs) {
-                    val structData = struct.data
-                    allStructs.add(structData)
-                }
-
-                _structures.value = allStructs
-
-                val reviewReferences = listStructs.map { struct ->
-                    structs.document(struct.id)
-                        .collection("reviewStruttura")
-                }
-
-                fetchReviews(reviewReferences, allStructs)
-            }
-    }
-
-    private fun fetchReviews(reviewReferences: List<CollectionReference>, allStructs: List<MutableMap<String, Any>>) {
-        val allReviews: MutableList<MutableMap<String, Any>> = mutableListOf()
-
-        val reviewListeners = mutableListOf<ListenerRegistration>()
-
-        reviewReferences.forEachIndexed { index, courtReference ->
-
-            val listener = courtReference
-                .addSnapshotListener { value, error ->
-
-                    if (error != null) {
-                        _reviews.value = emptyList()
-                    }
-                    else {
-                        val reviewsData = value?.mapNotNull { it.data }
-
-                        reviewsData?.let {
-                            val idStruct = allStructs[index]["idstruttura"] as? String
-
-                            it.forEach { review ->
-                                review["idstruttura"] = idStruct
-                            }
-
-                            allReviews.addAll(it)
-                        }
-
-                        if (allReviews.size == reviewReferences.size) {
-                            _reviews.value = allReviews
-
-                            reviewListeners.forEach { listener ->
-                                listener.remove()
-                            }
-                        }
-                    }
-                }
-            reviewListeners.add(listener)
-        }
-    }
 
     fun getReviewsByStruct(idStruct: String) {
 
