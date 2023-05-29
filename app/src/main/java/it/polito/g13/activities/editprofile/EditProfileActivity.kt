@@ -80,7 +80,7 @@ class EditProfileActivity : AppCompatActivity() {
     lateinit var user_name: EditText //= null//: String= ""
     lateinit var user_nickname: EditText //= null//:String= ""
     lateinit var user_age: EditText //= null//:Int =0
-    lateinit var user_mail: EditText //= null //:String= "" //view?.findViewById(R.id.)
+//    lateinit var user_mail: EditText //= null //:String= "" //view?.findViewById(R.id.)
     lateinit var user_number: EditText //= null//:Int =0
     lateinit var user_description: EditText //= null//:String= ""
 
@@ -292,7 +292,7 @@ class EditProfileActivity : AppCompatActivity() {
 
         jsonObject.put(getString(R.string.save_username), user_name.text.toString() )
         jsonObject.put(getString(R.string.save_age), user_age.text.toString())
-        jsonObject.put(getString(R.string.save_email), user_mail.text.toString())
+//        jsonObject.put(getString(R.string.save_email), user_mail.text.toString())
         jsonObject.put(getString(R.string.save_gender), genderSpinner.selectedItem.toString() )
         jsonObject.put(getString(R.string.save_description), user_description.text.toString() )
         jsonObject.put(getString(R.string.save_nickname), user_nickname.text.toString() )

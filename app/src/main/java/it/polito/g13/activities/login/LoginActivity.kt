@@ -2,13 +2,18 @@ package it.polito.g13.activities.login
 
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import com.firebase.ui.auth.AuthMethodPickerLayout
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
@@ -16,10 +21,17 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import it.polito.g13.R
 import it.polito.g13.ReservationActivity
 import it.polito.g13.activities.editprofile.EditProfileActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.json.JSONObject
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.util.Base64
 
 class LoginActivity : AppCompatActivity() {
 
@@ -31,6 +43,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     val db = FirebaseFirestore.getInstance()
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
@@ -174,6 +187,7 @@ class LoginActivity : AppCompatActivity() {
             }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun checkGoogleAccount(user: FirebaseUser) {
 
         val userRef = db.collection("users/${user.uid}/profile").document("info")
@@ -261,6 +275,11 @@ class LoginActivity : AppCompatActivity() {
                                 "SHAREDPREFERENCES",
                                 "profile_lato_login: ${data}"
                             )
+
+                            GlobalScope.launch(Dispatchers.IO) {
+                                loadImage()
+                            }
+
                             myshare.apply()
                         }
                     }
@@ -279,6 +298,7 @@ class LoginActivity : AppCompatActivity() {
                         "email" to user.email,
                         "timestamp_registrazione" to FieldValue.serverTimestamp()
                     )
+
                     myuserRef.set(userInformations)
                         .addOnCompleteListener {
                             val intent = Intent(
@@ -288,6 +308,9 @@ class LoginActivity : AppCompatActivity() {
                             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                             startActivity(intent)
                         }
+
+
+
 
                 }
             } else {
@@ -360,4 +383,41 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private suspend fun loadImage(){
+        val storageReference = FirebaseStorage.getInstance().reference
+        val imageRef = storageReference.child("images/profile/${FirebaseAuth.getInstance().currentUser?.email}.jpg") // Imposta il percorso del tuo file immagine
+        Log.d("CARICAIMMAGINE", "images/profile/${FirebaseAuth.getInstance().currentUser?.email}.jpg")
+
+        val localFile = File.createTempFile("image", "jpg")
+
+        imageRef.getFile(localFile)
+            .addOnSuccessListener {uri ->
+                val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                val editor = sharedPreferences.edit()
+                val baos = ByteArrayOutputStream()
+
+                Log.d("CARICAIMMAGINE", "HO CARICATO CORRETTAMENTE L'IMMAGINE")
+                val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+
+                val compressImage: ByteArray = baos.toByteArray()
+                val sEncodedImage: String = Base64.getEncoder().encodeToString(compressImage)//Base64.encodeToString(compressImage, Base64.DEFAULT)
+
+                editor.putString("user_image", sEncodedImage)
+
+                editor.apply()
+
+
+            }
+            .addOnFailureListener { exception ->
+                Log.d("CARICAIMMAGINE", "NON C'E' ALCUNA IMMAGINE L'IMMAGINE")
+
+                val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                val editor = sharedPreferences.edit()
+                editor.putString("user_image", null)
+                editor.apply()
+
+            }
+    }
 }
