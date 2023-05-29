@@ -7,6 +7,7 @@ import android.view.View.OnClickListener
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.PopupWindow
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -85,6 +86,10 @@ class ShowReservationDetailActivity : AppCompatActivity(), NavigationView.OnNavi
 
         //get selected reservation
         selectedReservationId = intent.getStringExtra("selectedReservationId").toString()
+
+        val loadingReservation = findViewById<ProgressBar>(R.id.loading_reservation_detail)
+        val container = findViewById<LinearLayout>(R.id.container)
+
         reservationViewModel.getSingleReservation(selectedReservationId);
         reservationViewModel.singleReservation.observe(this@ShowReservationDetailActivity) {
             val codeText = findViewById<TextView>(R.id.content_reservation_number)
@@ -112,6 +117,9 @@ class ShowReservationDetailActivity : AppCompatActivity(), NavigationView.OnNavi
                 val notes = findViewById<TextView>(R.id.content_notes)
                 notes.text = it["note"].toString()
             }
+
+            loadingReservation.visibility = View.GONE
+            container.visibility = View.VISIBLE
         }
 
     }

@@ -230,6 +230,10 @@ class EditReservationDetailActivity : AppCompatActivity() {
 
         //get selected reservation
         selectedReservationId = intent.getStringExtra("selectedReservationId").toString()
+
+        val loadingReservation = findViewById<ProgressBar>(R.id.loading_edit_reservation)
+        val container = findViewById<LinearLayout>(R.id.container)
+
         reservationViewModel.getSingleReservation(selectedReservationId);
         reservationViewModel.singleReservation.observe(this@EditReservationDetailActivity) {
             val codeText = findViewById<TextView>(R.id.content_reservation_number)
@@ -275,6 +279,9 @@ class EditReservationDetailActivity : AppCompatActivity() {
             if (it["note"] != null && it["note"].toString() != R.string.int_content_notes.toString()) {
                 notesInput.setText(it["note"].toString())
             }
+
+            loadingReservation.visibility = View.GONE
+            container.visibility = View.VISIBLE
         }
 
     }

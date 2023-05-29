@@ -3,6 +3,7 @@ package it.polito.g13
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -91,6 +92,9 @@ class ShowPosResDetailActivity : AppCompatActivity(), NavigationView.OnNavigatio
 
         notesInput = findViewById(R.id.content_notes_posres)
 
+        val loadingDetails = findViewById<ProgressBar>(R.id.loading_pos_res_detail)
+        val container = findViewById<LinearLayout>(R.id.containerPosRes)
+
         //get selected reservation
         selectedPosResId = intent.getStringExtra("selectedPosResId").toString()
         posResViewModel.getPosResById(selectedPosResId)
@@ -114,6 +118,9 @@ class ShowPosResDetailActivity : AppCompatActivity(), NavigationView.OnNavigatio
                 val hour2 = (hour1.split(":")[0].toInt() + 1).toString() + ":" + hour1.split(":")[1]
 
                 dateTimeText.text = date + ", " + hour1 + "-" + hour2
+
+                loadingDetails.visibility = View.GONE
+                container.visibility = View.VISIBLE
             }
         }
 

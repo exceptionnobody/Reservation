@@ -44,6 +44,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <ProgressBar
+                android:id="@+id/loading_reservations_calendar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/primary_green"
+                app:layout_constraintBottom_toBottomOf="@+id/calendar_view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/calendar_view" />
+
             <com.stacktips.view.CustomCalendarView
                 android:id="@+id/calendar_view"
                 android:layout_width="0dp"
@@ -96,6 +107,14 @@
                         android:orientation="vertical">
 
                     </LinearLayout>
+
+                    <ProgressBar
+                        android:id="@+id/loading_reservations_list"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:indeterminate="true"
+                        android:indeterminateTint="@color/primary_green" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/reservationBoxContainer"

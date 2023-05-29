@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.TimePicker
@@ -212,18 +213,27 @@ class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigat
             }
         }
 
+        val loadingCalendar = findViewById<ProgressBar>(R.id.loading_browse_availability_calendar)
+
         posResViewModel.listPosRes.observe(this) {
+            loadingCalendar.visibility = View.VISIBLE
+
             val decorators : MutableList<DayDecorator> = mutableListOf()
             decorators.add(DaysWithPosRes(it))
 
             calendarView.decorators = decorators
             calendarView.refreshCalendar(currentCalendar)
+
+            loadingCalendar.visibility = View.GONE
         }
+
+        val loadingDetails = findViewById<ProgressBar>(R.id.loading_browse_availability_details)
 
         calendarView.setCalendarListener(object : CalendarListener {
             @SuppressLint("SimpleDateFormat")
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onDateSelected(date: Date) {
+                loadingDetails.visibility = View.VISIBLE
 
                 daySelected = date
                 val noPosResBoxContainer = findViewById<LinearLayout>(R.id.noPosResBoxContainer)
@@ -293,6 +303,8 @@ class BrowseAvailabilityActivity : AppCompatActivity(), NavigationView.OnNavigat
                     noReservationFounded.findViewById<TextView>(R.id.textView).text = "No possible reservation for today"
                     noPosResBoxContainer.addView(noReservationFounded)
                 }
+
+                loadingDetails.visibility = View.GONE
             }
 
             override fun onMonthChanged(date: Date) {

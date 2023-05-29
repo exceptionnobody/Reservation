@@ -100,16 +100,24 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         calendarView.setShowOverflowDate(true)
         calendarView.refreshCalendar(currentCalendar)
 
+        val loadingCalendar = findViewById<ProgressBar>(R.id.loading_reservations_calendar)
+
         reservationViewModel.reservations.observe(this@ReservationActivity) {
             val decorators : MutableList<DayDecorator> = mutableListOf<DayDecorator>()
             decorators.add(DaysWithReservations(it))
 
             calendarView.decorators = decorators
             calendarView.refreshCalendar(currentCalendar)
+
+            loadingCalendar.visibility = View.GONE
         }
+
+        val loadingReservations = findViewById<ProgressBar>(R.id.loading_reservations_list)
 
         calendarView.setCalendarListener(object : CalendarListener {
             override fun onDateSelected(date: Date) {
+
+                loadingReservations.visibility = View.VISIBLE
 
                 val noReservationBoxContainer = findViewById<LinearLayout>(R.id.noReservationBoxContainer)
 
@@ -135,6 +143,7 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
                     }
                 }
 
+                loadingReservations.visibility = View.GONE
             }
 
             override fun onMonthChanged(date: Date) {

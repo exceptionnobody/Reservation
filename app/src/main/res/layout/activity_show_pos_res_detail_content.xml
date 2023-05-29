@@ -16,10 +16,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <ProgressBar
+            android:id="@+id/loading_pos_res_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="150dp"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/primary_green" />
+
         <LinearLayout
             android:id="@+id/containerPosRes"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             android:layout_marginStart="@dimen/margin_left_grid"
             android:layout_marginTop="@dimen/margin_top_grid"
             android:layout_marginEnd="@dimen/margin_right_grid"

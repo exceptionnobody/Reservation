@@ -259,6 +259,18 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
+                    <ProgressBar
+                        android:id="@+id/loading_browse_availability_calendar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:indeterminate="true"
+                        android:indeterminateTint="@color/primary_green"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toTopOf="@+id/bookReservationContentContainer"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/sport_availability_container"/>
+
                     <com.stacktips.view.CustomCalendarView
                         android:id="@+id/book_reservation_calendar_view"
                         android:layout_width="match_parent"
@@ -322,6 +334,15 @@
                                 android:orientation="vertical"
                                 android:visibility="invisible"
                                 tools:visibility="gone" />
+
+                            <ProgressBar
+                                android:id="@+id/loading_browse_availability_details"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:indeterminate="true"
+                                android:layout_marginBottom="15dp"
+                                android:visibility="gone"
+                                android:indeterminateTint="@color/primary_green" />
 
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/bookReservationContainer"
