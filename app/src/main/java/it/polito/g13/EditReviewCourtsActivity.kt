@@ -22,12 +22,13 @@ import it.polito.g13.activities.editprofile.ShowProfileActivity
 import it.polito.g13.activities.login.LoginActivity
 import it.polito.g13.entities.review_struct
 import it.polito.g13.viewModel.ReviewStructureViewModel
+import it.polito.g13.viewModel.ReviewsDBViewModel
 
 
 @AndroidEntryPoint
 class EditReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    val reviewStructureViewModel by viewModels<ReviewStructureViewModel>()
+    val reviewStructureViewModel by viewModels<ReviewsDBViewModel>()
 
     //initialize toolbar variables
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
@@ -36,9 +37,7 @@ class EditReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigatio
 
     private lateinit var selectedCourtName: String
     private var reviewExist: Boolean = false
-    private var selectedReviewId: Int = 0
-    private var selectedCourtId: Int = 0
-    private var userId: Int = 1
+    private lateinit var selectedCourtId: String
 
     private lateinit var structureAndCourtsRatingBar: RatingBar
     private lateinit var equipmentRatingBar: RatingBar
@@ -97,9 +96,7 @@ class EditReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigatio
 
         //set text navbar
         selectedCourtName = intent.getStringExtra("selectedCourtName").toString()
-        userId = intent.getIntExtra("userId", 0)
-        selectedReviewId = intent.getIntExtra("selectedReviewId", 0)
-        selectedCourtId = intent.getIntExtra("selectedCourtId", 0)
+        selectedCourtId = intent.getStringExtra("selectedCourtId").toString()
         val navbarText = findViewById<TextView>(R.id.navbar_text)
         navbarText.text = "Review $selectedCourtName"
 
@@ -108,13 +105,28 @@ class EditReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigatio
 
         confirmButton.setOnClickListener {
             if (reviewExist) {
+                reviewStructureViewModel.updateReviewInUser(selectedCourtId,
+                    structureAndCourtsRatingValue, equipmentRatingValue, dressingRoomsRatingValue, staffRatingValue,
+                    feedbackRate.text.toString())
+
+                reviewStructureViewModel.updateReviewInStructure(selectedCourtId,
+                    structureAndCourtsRatingValue, equipmentRatingValue, dressingRoomsRatingValue, staffRatingValue,
+                    feedbackRate.text.toString())
+
+                /*
                 reviewStructureViewModel.updateReview(review_struct(
                     selectedReviewId, userId, selectedCourtId, 0, structureAndCourtsRatingValue, equipmentRatingValue, dressingRoomsRatingValue, staffRatingValue, 0, feedbackRate.text.toString()
                 ))
+
+                 */
             } else {
-                reviewStructureViewModel.insertReview(review_struct(
-                    0, userId, selectedCourtId, 0, structureAndCourtsRatingValue, equipmentRatingValue, dressingRoomsRatingValue, staffRatingValue, 0, feedbackRate.text.toString()
-                ))
+                reviewStructureViewModel.insertReviewInUser(selectedCourtId,
+                    structureAndCourtsRatingValue, equipmentRatingValue, dressingRoomsRatingValue, staffRatingValue,
+                    feedbackRate.text.toString())
+
+                reviewStructureViewModel.insertReviewInStructure(selectedCourtId,
+                    structureAndCourtsRatingValue, equipmentRatingValue, dressingRoomsRatingValue, staffRatingValue,
+                    feedbackRate.text.toString())
             }
             val intent = Intent(this, ShowReviewCourtsActivity::class.java)
             intent.putExtra("selectedCourtName", selectedCourtName)
@@ -169,22 +181,27 @@ class EditReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigatio
 
         })
 
-        reviewStructureViewModel.getReviewById(selectedReviewId)
+        reviewStructureViewModel.getReviewById(selectedCourtId)
 
-        reviewStructureViewModel.singleReviewStructure.observe(this) {
-            if (it !== null) {
+        reviewStructureViewModel.reviewById.observe(this) {
+            if (it.isNotEmpty()) {
                 reviewExist = true
-                structureAndCourtsRatingBar.rating = it.s_q1.toFloat()
-                initialStructureAndCourtsRatingValue = it.s_q1
-                equipmentRatingBar.rating = it.s_q2.toFloat()
-                initialEquipmentRatingValue = it.s_q2
-                dressingRoomsRatingBar.rating = it.s_q3.toFloat()
-                initialDressingRoomsRatingValue = it.s_q3
-                staffRatingBar.rating = it.s_q4.toFloat()
-                initialStaffRatingValue = it.s_q4
-                if (it.description !== "" && it.description !== null) {
-                    initialFeedbackValue = it.description
-                    feedbackRate.setText(it.description)
+
+                structureAndCourtsRatingBar.rating = (it["voto1"] as Int).toFloat()
+                initialStructureAndCourtsRatingValue = it["voto1"] as Int
+
+                equipmentRatingBar.rating = (it["voto2"] as Int).toFloat()
+                initialEquipmentRatingValue = it["voto2"] as Int
+
+                dressingRoomsRatingBar.rating = (it["voto3"] as Int).toFloat()
+                initialDressingRoomsRatingValue = it["voto3"] as Int
+
+                staffRatingBar.rating = (it["voto4"] as Int).toFloat()
+                initialStaffRatingValue = it["voto4"] as Int
+
+                if (it["comment"] !== "" && it["comment"] !== null) {
+                    initialFeedbackValue = it["comment"] as String
+                    feedbackRate.setText(it["comment"] as String)
                 }
             }
         }

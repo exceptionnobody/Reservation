@@ -4,11 +4,14 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.RatingBar
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -21,22 +24,14 @@ import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.activities.editprofile.ShowProfileActivity
 import it.polito.g13.activities.login.LoginActivity
-import it.polito.g13.entities.Reservation
-import it.polito.g13.entities.Struttura
-import it.polito.g13.entities.review_struct
-import it.polito.g13.viewModel.ReservationsViewModel
-import it.polito.g13.viewModel.ReviewStructureViewModel
-import it.polito.g13.viewModel.StrutturaViewModel
-import java.text.SimpleDateFormat
+import it.polito.g13.viewModel.ReservationsDBViewModel
 
 private lateinit var context : Context
 
 @AndroidEntryPoint
 class ListReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    val reservationViewModel by viewModels<ReservationsViewModel>()
-    val structureViewModel by viewModels<StrutturaViewModel>()
-    val reviewStructureViewModel by viewModels<ReviewStructureViewModel>()
+    val reservationViewModel by viewModels<ReservationsDBViewModel>()
 
     //initialize toolbar variables
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
@@ -85,26 +80,19 @@ class ListReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigatio
         val navbarText = findViewById<TextView>(R.id.navbar_text)
         navbarText.text = "Review a court"
 
-        structureViewModel.structures.observe(this) {structures ->
-            reservationViewModel.reservations.observe(this) {reservations ->
-                val listToReview = reservations.distinctBy { it.strut }
-                val listPastReview: MutableList<review_struct> = mutableListOf()
+        val loading = findViewById<ProgressBar>(R.id.loading_list_review_courts)
+        val container = findViewById<ScrollView>(R.id.list_review_courts_container)
 
-                for (r in listToReview) {
-                    val struct = structures.find { it.structure_name == r.strut }
+        reservationViewModel.getUserPastReservations()
+        reservationViewModel.userReservations.observe(this) {reservations ->
+            val listToReview = reservations.distinctBy { it["nomestruttura"] }
 
-                    reviewStructureViewModel.getReviewByStructureAndUserId(struct?.id!!, 1)
+            val recyclerView = findViewById<RecyclerView>(R.id.list_review_courts)
+            recyclerView.adapter = ReviewReservationAdapter(listToReview, this)
+            recyclerView.layoutManager = LinearLayoutManager(this)
 
-                    reviewStructureViewModel.singleReviewStructure.observe(this) {
-                        if (it != null)
-                            listPastReview.add(it)
-                    }
-                }
-
-                val recyclerView = findViewById<RecyclerView>(R.id.list_review_courts)
-                recyclerView.adapter = ReviewReservationAdapter(listToReview, structures, listPastReview, this)
-                recyclerView.layoutManager = LinearLayoutManager(this)
-            }
+            loading.visibility = View.GONE
+            container.visibility = View.VISIBLE
         }
     }
 
@@ -150,11 +138,12 @@ class ListReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigatio
 class ReviewReservationsViewHolder(v: View) : RecyclerView.ViewHolder(v){
     val strut = v.findViewById<TextView>(R.id.review_strut)
     val sport = v.findViewById<TextView>(R.id.review_sport)
+    val city = v.findViewById<TextView>(R.id.review_city)
     val noPastRating = v.findViewById<TextView>(R.id.no_past_rating)
     val avgRating = v.findViewById<RatingBar>(R.id.average_past_rating)
 }
 
-class ReviewReservationAdapter(val listReservation: List<Reservation>, val listStructures: List<Struttura>, val listPastReview: List<review_struct>, context: Context ): RecyclerView.Adapter<ReviewReservationsViewHolder>() {
+class ReviewReservationAdapter(val listReservation: List<MutableMap<String, Any>>, context: Context ): RecyclerView.Adapter<ReviewReservationsViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewReservationsViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.review_court_box, parent, false)
 
@@ -168,19 +157,20 @@ class ReviewReservationAdapter(val listReservation: List<Reservation>, val listS
     override fun onBindViewHolder(holder: ReviewReservationsViewHolder, position: Int) {
         val reservation = listReservation[position]
 
-        holder.strut.text = reservation.strut
-        holder.sport.text = reservation.sport
+        val structId = reservation["idstruttura"].toString()
 
-        val structure = listStructures.filter { it.structure_name == reservation.strut }[0]
+        val structName = reservation["nomestruttura"].toString()
+        val sport = reservation["tiposport"].toString()
+        val city = reservation["citta"].toString()
+        val avg = reservation["avg"]
 
-        val review = listPastReview.filter { it.review_id_struct == structure.id }
+        holder.strut.text = structName
+        holder.sport.text = sport
+        holder.city.text = city
 
-        if (review.isNotEmpty()) {
+        if (avg != null) {
             holder.noPastRating.visibility = View.GONE
-
-            val avg = ((review[0].s_q1 + review[0].s_q2 + review[0].s_q3 + review[0].s_q4) / 4).toFloat()
-
-            holder.avgRating.rating = avg
+            holder.avgRating.rating = avg as Float
         }
         else {
             holder.avgRating.visibility = View.GONE
@@ -188,8 +178,8 @@ class ReviewReservationAdapter(val listReservation: List<Reservation>, val listS
 
         holder.itemView.setOnClickListener {
             val intent = Intent(context, ShowReviewCourtsActivity::class.java)
-            intent.putExtra("selectedCourtName", structure.structure_name)
-            intent.putExtra("selectedCourtId", structure.id)
+            intent.putExtra("selectedCourtName", structName)
+            intent.putExtra("selectedCourtId", structId)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
         }

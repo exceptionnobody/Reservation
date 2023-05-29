@@ -23,11 +23,12 @@ import it.polito.g13.activities.editprofile.ShowProfileActivity
 import it.polito.g13.activities.login.LoginActivity
 import it.polito.g13.viewModel.ReservationsViewModel
 import it.polito.g13.viewModel.ReviewStructureViewModel
+import it.polito.g13.viewModel.ReviewsDBViewModel
 
 @AndroidEntryPoint
 class ShowReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    val reviewStructureViewModel by viewModels<ReviewStructureViewModel>()
+    val reviewStructureViewModel by viewModels<ReviewsDBViewModel>()
 
     //initialize toolbar variables
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
@@ -35,9 +36,7 @@ class ShowReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigatio
     private lateinit var navView: NavigationView
 
     private lateinit var selectedCourtName: String
-    private var selectedCourtId: Int = 0
-    private var selectedReviewId: Int = 0
-    private var userId: Int = 1
+    private lateinit var selectedCourtId: String
 
     private lateinit var structureAndCourtsRatingBar: RatingBar
     private lateinit var equipmentRatingBar: RatingBar
@@ -88,7 +87,7 @@ class ShowReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigatio
         val navbarText = findViewById<TextView>(R.id.navbar_text)
         navbarText.text = "Review $selectedCourtName"
 
-        selectedCourtId = intent.getIntExtra("selectedCourtId", 0)
+        selectedCourtId = intent.getStringExtra("selectedCourtId").toString()
 
         // set value from db
         structureAndCourtsRatingBar = findViewById(R.id.rating_structure_courts)
@@ -101,21 +100,21 @@ class ShowReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigatio
 
         feedbackRate = findViewById(R.id.feedback_rate)
 
-        reviewStructureViewModel.getReviewByStructureAndUserId(selectedCourtId,userId)
+        reviewStructureViewModel.getReviewById(selectedCourtId)
 
-        reviewStructureViewModel.singleReviewStructure.observe(this) {
-            if (it !== null) {
-                selectedReviewId = it.id
-                structureAndCourtsRatingBar.rating = it.s_q1.toFloat()
-                equipmentRatingBar.rating = it.s_q2.toFloat()
-                dressingRoomsRatingBar.rating = it.s_q3.toFloat()
-                staffRatingBar.rating = it.s_q4.toFloat()
-                if (it.description.isNotEmpty()) {
-                    feedbackRate.text = it.description
+        reviewStructureViewModel.reviewById.observe(this) {
+            if (it.isNotEmpty()) {
+
+                structureAndCourtsRatingBar.rating = (it["voto1"] as Int).toFloat()
+                equipmentRatingBar.rating = (it["voto2"] as Int).toFloat()
+                dressingRoomsRatingBar.rating = (it["voto3"] as Int).toFloat()
+                staffRatingBar.rating = (it["voto4"] as Int).toFloat()
+
+                if (it["comment"] !== "" && it["comment"] !== null) {
+                    feedbackRate.setText(it["comment"] as String)
                 }
             }
         }
-
     }
     //handle toolbar items
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -166,8 +165,6 @@ class ShowReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigatio
             val intent = Intent(this, EditReviewCourtsActivity::class.java)
             intent.putExtra("selectedCourtName", selectedCourtName)
             intent.putExtra("selectedCourtId", selectedCourtId)
-            intent.putExtra("selectedReviewId", selectedReviewId)
-            intent.putExtra("userId", userId)
             startActivity(intent)
             return true
         }
