@@ -7,7 +7,6 @@ import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -227,7 +226,6 @@ class ReservationActivity : AppCompatActivity(), NavigationView.OnNavigationItem
                         val editor = sharedPref.edit()
                         editor.clear()
                         editor.apply()
-                        Log.d("SHAREDPREFERENCES", "cancello le shared preferences")
                         val intent = Intent(this, LoginActivity::class.java)
                         intent.flags = FLAG_ACTIVITY_CLEAR_TOP or FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intent)

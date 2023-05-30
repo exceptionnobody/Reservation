@@ -14,23 +14,20 @@ class VerificationActivity : AppCompatActivity() {
         val user = FirebaseAuth.getInstance().currentUser
 
         val dialogBuilder = AlertDialog.Builder(this)
-            .setMessage("Sembra che la tua email ( ${user?.email} ) ancora non sia stata confermata.\nSe non hai ricevuto l'email o risconti dei problemi, contattaci!")
-            .setPositiveButton("Riprova") { dialog, which ->
+            .setMessage("It seems that your email ( ${user?.email} ) has not been confirmed yet.\nMake sure to confirm the email!")
+            .setPositiveButton("Retry") { dialog, which ->
 
                 AuthUI.getInstance()
                     .signOut(this)
                     .addOnCompleteListener {
                         val intent = Intent(this, LoginActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intent)
                         finish()
                     }
 
             }
-            .setNegativeButton("Contattaci") { dialog, which ->
-                val intent = Intent(this, LoginActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
+
 
         val dialog = dialogBuilder.create()
         dialog.show()

@@ -125,7 +125,7 @@ class LoginActivity : AppCompatActivity() {
         val intent = AuthUI.getInstance()
             .createSignInIntentBuilder()
             .setAvailableProviders(providers)
-            .setIsSmartLockEnabled(false)
+//            .setIsSmartLockEnabled(false)
             .setAuthMethodPickerLayout(authUiLayout)
             .setLogo(R.drawable.logo_no_bg) // Set logo drawable
             .setTheme(R.style.Theme_Mad)
@@ -504,12 +504,20 @@ class LoginActivity : AppCompatActivity() {
                                         }
                                         .addOnFailureListener { e ->
                                             // Errore durante la creazione
+                                            Log.d("AUTH_ERROR", e.printStackTrace().toString())
+                                            val intent = Intent(this, LoginActivity::class.java)
+                                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                            startActivity(intent)
+                                            finish()
                                         }
 
                                 } else {
-                                    // Da gestire
                                     val _exception = task.exception
-
+                                    Log.d("AUTH_ERROR", _exception?.printStackTrace().toString())
+                                    val intent = Intent(this, LoginActivity::class.java)
+                                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                    startActivity(intent)
+                                    finish()
                                 }
                             }
                     }
@@ -517,6 +525,11 @@ class LoginActivity : AppCompatActivity() {
             }
             .addOnFailureListener { e ->
                 // Errore durante il recupero del documento
+                Log.d("AUTH_ERROR", e.printStackTrace().toString())
+                val intent = Intent(this, LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                finish()
             }
 
 
