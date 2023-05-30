@@ -387,6 +387,24 @@
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
+                <LinearLayout
+                    android:id="@+id/sports_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_start_content_text"
+                    android:layout_marginEnd="@dimen/margin_end_content_text"
+                    android:paddingStart="@dimen/input_padding_x"
+                    android:paddingEnd="@dimen/input_padding_x"
+                    android:paddingBottom="@dimen/input_padding_y"
+                    android:orientation="vertical">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/list_sports"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+                </LinearLayout>
+
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

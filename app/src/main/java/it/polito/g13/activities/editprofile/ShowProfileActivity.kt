@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.*
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +21,8 @@ import androidx.core.graphics.drawable.toDrawable
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.auth.AuthUI
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -28,7 +31,9 @@ import it.polito.g13.BrowseCourtsActivity
 import it.polito.g13.ListReviewCourtsActivity
 import it.polito.g13.R
 import it.polito.g13.ReservationActivity
+import it.polito.g13.StructReviewsAdapter
 import it.polito.g13.activities.login.LoginActivity
+import it.polito.g13.viewModel.UserDBViewModel
 
 import org.json.JSONObject
 import java.util.*
@@ -42,6 +47,8 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
 
     // TEST VIEWMODEL POSRES
     //private val posResViewModel by viewModels<PosResViewModel>()
+
+    private val userViewModel by viewModels<UserDBViewModel>()
 
     //initialize toolbar variables
     lateinit var toolbar: androidx.appcompat.widget.Toolbar
@@ -122,6 +129,47 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         this.user_languages=findViewById(R.id.user_languages)
         this.user_description=findViewById(R.id.user_description)
         this.user_city =findViewById(R.id.user_city)
+
+        val noSports = findViewById<TextView>(R.id.user_games)
+        val sportsLevel = mutableMapOf<String, String>()
+        val sportsAchievements = mutableMapOf<String, String>()
+
+        userViewModel.userData.observe(this) {
+            if (it["basketLevel"] != "") {
+                sportsLevel["basket"] = it["basketLevel"].toString()
+                sportsAchievements["basket"] = it["basketAchievements"].toString()
+                noSports.visibility = View.GONE
+            }
+            if (it["footballLevel"] != "") {
+                sportsLevel["football"] = it["footballLevel"].toString()
+                sportsAchievements["football"] = it["footballAchievements"].toString()
+                noSports.visibility = View.GONE
+            }
+            if (it["padelLevel"] != "") {
+                sportsLevel["padel"] = it["padelLevel"].toString()
+                sportsAchievements["padel"] = it["padelAchievements"].toString()
+                noSports.visibility = View.GONE
+            }
+            if (it["rugbyLevel"] != "") {
+                sportsLevel["rugby"] = it["rugbyLevel"].toString()
+                sportsAchievements["rugby"] = it["rugbyAchievements"].toString()
+                noSports.visibility = View.GONE
+            }
+            if (it["tennisLevel"] != "") {
+                sportsLevel["tennis"] = it["tennisLevel"].toString()
+                sportsAchievements["tennis"] = it["tennisAchievements"].toString()
+                noSports.visibility = View.GONE
+            }
+            if (it["volleyballLevel"] != "") {
+                sportsLevel["volleyball"] = it["volleyballLevel"].toString()
+                sportsAchievements["volleyball"] = it["volleyballAchievements"].toString()
+                noSports.visibility = View.GONE
+            }
+
+            val recyclerView = findViewById<RecyclerView>(R.id.list_sports)
+            recyclerView.adapter = SportsAdapter(sportsLevel.toList(), sportsAchievements.toList(), this)
+            recyclerView.layoutManager = LinearLayoutManager(this)
+        }
 
         // TEST VIEWMODEL RESERVATIONS
         /* Activity/Fragment observes viewModel
@@ -405,4 +453,39 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
     }
 
 
+}
+
+//define recycler view for
+class SportsViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+    val sport = v.findViewById<TextView>(R.id.show_sport)
+    val level = v.findViewById<TextView>(R.id.show_sport_level)
+    val achievement = v.findViewById<TextView>(R.id.show_sport_achievements)
+}
+
+class SportsAdapter(val sportsLevel: List<Pair<String, String>>, val sportsAchievement: List<Pair<String, String>>, context: Context ): RecyclerView.Adapter<SportsViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SportsViewHolder {
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.sport_box, parent, false)
+
+        return SportsViewHolder(v)
+    }
+
+    override fun getItemCount(): Int {
+        return sportsLevel.size
+    }
+
+    override fun onBindViewHolder(holder: SportsViewHolder, position: Int) {
+        val sport = sportsLevel[position].first
+        val level = sportsLevel[position].second
+        val achievement = sportsAchievement[position].second
+
+        holder.sport.text = sport
+        holder.level.text = level
+
+        if (achievement != "") {
+            holder.achievement.text = achievement
+        }
+        else {
+            holder.achievement.visibility = View.GONE
+        }
+    }
 }
