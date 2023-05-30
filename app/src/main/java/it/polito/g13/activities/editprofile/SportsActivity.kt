@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -20,7 +19,6 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.core.widget.addTextChangedListener
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
@@ -367,16 +365,41 @@ class SportsActivity : AppCompatActivity() {
             myuser.volleyballAchievements = selectedSportsAchievement["Volleyball"].toString()
         }
 
-        val user = db.collection("users").document(FirebaseAuth.getInstance().uid!!).collection("profile").document("info")
-        user.set(myuser)
-            .addOnCompleteListener {
+        if(FirebaseAuth.getInstance().currentUser?.providerId != "google.com") {
+            val user =
+                db.collection("users").document(FirebaseAuth.getInstance().uid!!)
+                    .collection("profile")
+                    .document("info")
+            user.set(myuser)
+                .addOnCompleteListener {
+                    val userRef =
+                        db.collection("users")
+                            .document(FirebaseAuth.getInstance().currentUser?.uid!!)
+                    val subCollectionRef = userRef.collection("infos")
+                    // Cancello le sue infos
+                    subCollectionRef.get()
+                        .addOnSuccessListener { querySnapshot ->
+                            val batch = db.batch()
+                            for (document in querySnapshot.documents) {
+                                batch.delete(document.reference)
+                            }
+                            batch.commit().addOnSuccessListener {
+                                userRef.delete().addOnSuccessListener {
+                                    val intent = Intent(this, ShowProfileActivity::class.java)
+                                    intent.flags =
+                                        Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                    startActivity(intent)
+                                    val t = Toast.makeText(this, "Confirmed", Toast.LENGTH_SHORT)
+                                    t.show()
+                                    finish()
 
-                val intent = Intent(this, ShowProfileActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-                val t = Toast.makeText(this, "Confirmed", Toast.LENGTH_SHORT)
-                t.show()
-                finish()
-            }
+                                }
+
+                            }
+
+
+                        }
+                }
+        }
     }
 }

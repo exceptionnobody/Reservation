@@ -16,6 +16,7 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.*
 import android.widget.*
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.exifinterface.media.ExifInterface
@@ -95,6 +96,28 @@ class RegistrationActivity : AppCompatActivity() {
     var num_sports =0
 //gender=spinner no edit view
 
+
+    val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if(FirebaseAuth.getInstance().currentUser?.providerId != "google.com") {
+                val userInformations = hashMapOf(
+                    "name" to FirebaseAuth.getInstance().currentUser?.displayName.toString(),
+                    "email" to FirebaseAuth.getInstance().currentUser?.email.toString()
+
+                )
+                val userRef =
+                    db.collection("users").document(FirebaseAuth.getInstance().currentUser?.uid!!)
+                        .collection("infos")
+                        .document(FirebaseAuth.getInstance().currentUser?.displayName.toString())
+                userRef.set(userInformations)
+            }
+            FirebaseAuth.getInstance().signOut();
+            finishAffinity()
+        }
+    }
+
+
+
     @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,7 +125,7 @@ class RegistrationActivity : AppCompatActivity() {
         context = this.applicationContext
         setContentView(R.layout.registration_profile)
         jsonObject = JSONObject()
-
+        this.onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
         imageView = findViewById(R.id.user_image)
         sharedPreference =  getSharedPreferences("preferences", 0)
         editor = sharedPreference.edit()
@@ -330,7 +353,17 @@ class RegistrationActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        Log.d("lifecycle","onResume invoked")
+
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("lifecycle","onDestroy invoked")
+
+    }
+
+
     //restore state when device is rotated
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
@@ -347,7 +380,7 @@ class RegistrationActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        Log.d("lifecyclePause","onPause invoked")
+        Log.d("lifecycle","onPause invoked")
     }
 
     //option selected to edit profile picture
