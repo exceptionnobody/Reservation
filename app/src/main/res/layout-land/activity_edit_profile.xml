@@ -383,87 +383,6 @@
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
-                <TextView
-                    android:id="@+id/title_games"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_start_title_second_level"
-                    android:layout_marginTop="@dimen/margin_top_title_second_level"
-                    android:fontFamily="@font/crete_round"
-                    android:text="@string/title_games"
-                    android:textColor="@color/primary_green"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/title_basic_information" />
-
-                <LinearLayout
-                    android:id="@+id/sportsContainer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-                </LinearLayout>
-
-                <RelativeLayout
-                    android:id="@+id/addSportTextContainer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/addSportIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginTop="10dp"
-                        android:clickable="true"
-                        android:contentDescription="@string/add_sport"
-                        android:focusable="true"
-                        app:backgroundTint="@color/primary_orange"
-                        app:fabCustomSize="20dp"
-                        app:srcCompat="@drawable/plus_icon" />
-
-                    <TextView
-                        android:id="@+id/addSport"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="52dp"
-                        android:layout_marginTop="20dp"
-                        android:fontFamily="@font/crete_round"
-                        android:text="@string/add_sport"
-                        android:textColor="@color/primary_orange"
-                        android:textSize="20sp" />
-                </RelativeLayout>
-
-                <TextView
-                    android:id="@+id/title_feedback"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_start_title_first_level"
-                    android:layout_marginTop="@dimen/margin_top_title_first_level"
-                    android:fontFamily="@font/crete_round"
-                    android:lineSpacingExtra="26sp"
-                    android:text="@string/title_feedback"
-                    android:textColor="@color/primary_green"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:id="@+id/user_feedback"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_start_content_text"
-                    android:layout_marginTop="@dimen/margin_top_under_first_title"
-                    android:fontFamily="@font/crete_round"
-                    android:paddingStart="@dimen/input_padding_x"
-                    android:paddingTop="@dimen/input_padding_y"
-                    android:paddingEnd="@dimen/input_padding_x"
-                    android:paddingBottom="@dimen/input_padding_y"
-                    android:text="@string/user_feedback"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="99dp">
@@ -474,7 +393,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="40dp"
                         android:background="@drawable/confirm_button"
-                        android:text="@string/confirm_button"
+                        android:text="@string/continue_button"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/cancel_button"

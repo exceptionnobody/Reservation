@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
@@ -26,19 +25,20 @@
         android:theme="@style/Theme.Mad"
         tools:targetApi="31">
         <activity
+            android:name=".activities.editprofile.SportsActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.login.ConfermationActivity"
-            android:label="My Dialog Activity"
-            />
+            android:label="My Dialog Activity" />
         <activity
             android:name=".activities.login.VerificationActivity"
-            android:label="My Dialog Activity"
-            />
+            android:label="My Dialog Activity" />
         <activity
             android:name=".activities.login.LoginActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -72,14 +72,9 @@
         <activity
             android:name=".BrowseAvailabilityActivity"
             android:exported="false" />
-
-
-
         <activity
             android:name=".ReservationActivity"
-            android:exported="false">
-
-        </activity>
+            android:exported="false"></activity>
 
         <meta-data
             android:name="android.preference"
@@ -91,7 +86,6 @@
         <activity
             android:name=".activities.editprofile.ShowProfileActivity"
             android:exported="true" />
-
     </application>
 
 </manifest>

@@ -1,5 +1,7 @@
 package it.polito.g13.firebase_objects
 
+import java.io.Serializable
+
 data class ProfileUser(
 
    // var photo: String? = null,
@@ -22,5 +24,23 @@ data class ProfileUser(
 
     var city : String = "",
 
-    ) {
+    var basketLevel: String = "",
+    var basketAchievements: String = "",
+
+    var footballLevel: String = "",
+    var footballAchievements: String = "",
+
+    var padelLevel: String = "",
+    var padelAchievements: String = "",
+
+    var rugbyLevel: String = "",
+    var rugbyAchievements: String = "",
+
+    var tennisLevel: String = "",
+    var tennisAchievements: String = "",
+
+    var volleyballLevel: String = "",
+    var volleyballAchievements: String = ""
+
+    ) : Serializable {
 }

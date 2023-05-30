@@ -50,8 +50,8 @@ val cities = listOf(
     "Vercelli", "Verona", "Vibo Valentia", "Vicenza", "Viterbo"
 )
 val genders = listOf("Not specified", "Male", "Female")
-val sports = listOf("Basket", "Football", "Padel", "Rugby", "Tennis", "Volleyball")
-val sportLevels = listOf("Beginner", "Intermediate", "Professional")
+//val sports = listOf("Basket", "Football", "Padel", "Rugby", "Tennis", "Volleyball")
+//val sportLevels = listOf("Beginner", "Intermediate", "Professional")
 val languages = arrayOf("English", "Italian", "French", "German", "Spanish", "Arabic", "Chinese")
 var glist= mutableListOf<String>()
 const val filename = "myPhoto"
@@ -95,7 +95,7 @@ class EditProfileActivity : AppCompatActivity() {
     private lateinit var jsonObject : JSONObject
     private lateinit var globalBitmap: Bitmap
     private lateinit var editor: SharedPreferences.Editor
-    var num_sports =0
+    //var num_sports =0
 //gender=spinner no edit view
 
     @SuppressLint("SetTextI18n")
@@ -184,6 +184,7 @@ class EditProfileActivity : AppCompatActivity() {
            // Toast.makeText(this, "Selected city: $selectedCity", Toast.LENGTH_SHORT).show()
         }
 
+        /*
         //add a new sport
         val addSportTextContainer = findViewById<RelativeLayout>(R.id.addSportTextContainer)
         val addSportIcon = findViewById<FloatingActionButton>(R.id.addSportIcon)
@@ -201,6 +202,8 @@ class EditProfileActivity : AppCompatActivity() {
                 num_sports++
             }
         }
+
+         */
 
         //multi selection menu for languages
         languagesView = findViewById(R.id.editLanguages)
@@ -507,6 +510,7 @@ class EditProfileActivity : AppCompatActivity() {
         }
     }
 
+    /*
     //handle adding new sport
     @SuppressLint("InflateParams")
     private fun handleNewSport() {
@@ -531,6 +535,8 @@ class EditProfileActivity : AppCompatActivity() {
             num_sports--
         }
     }
+
+     */
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getDataFromSharedPref(){
@@ -675,11 +681,15 @@ class EditProfileActivity : AppCompatActivity() {
                                 user_city.text.toString(),
         )
 
-       // x.putString("user_name", if (user_name.text.length!=0){return user_name.text}; else{})
-        insertUserProfile(myUser)
+        val intent = Intent(this, SportsActivity::class.java)
+        intent.putExtra("myUser", myUser)
+        startActivity(intent)
 
+       // x.putString("user_name", if (user_name.text.length!=0){return user_name.text}; else{})
+        //insertUserProfile(myUser)
     }
 
+    /*
     private fun insertUserProfile(myuser: ProfileUser) {
         val user = db.collection("users").document(FirebaseAuth.getInstance().uid!!).collection("profile").document("info")
         user.set(myuser)
@@ -693,9 +703,5 @@ class EditProfileActivity : AppCompatActivity() {
                 finish()
             }
     }
-
-
-
-
+     */
 }
-

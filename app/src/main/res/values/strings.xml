@@ -117,4 +117,6 @@
     <string name="no_comment_inserted">No comment inserted</string>
     <string name="author">Author:</string>
     <string name="no_reservations_found">No reservations found</string>
+    <string name="select_sports_you_play">Select sports you play</string>
+    <string name="continue_button">Continue</string>
 </resources>

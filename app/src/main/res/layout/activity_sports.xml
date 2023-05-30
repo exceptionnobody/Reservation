@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        layout="@layout/navbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activities.editprofile.SportsActivity">
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_left_grid"
+                android:layout_marginEnd="@dimen/margin_right_grid"
+                android:orientation="vertical"
+                android:paddingTop="15dp">
+
+                <LinearLayout
+                    android:id="@+id/linearLayout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/title_games"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_start_title_first_level"
+                        android:fontFamily="@font/crete_round"
+                        android:lineSpacingExtra="26sp"
+                        android:text="@string/select_sports_you_play"
+                        android:textColor="@color/primary_green"
+                        android:textSize="20sp"/>
+
+                    <LinearLayout
+                        android:id="@+id/sportsContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/addSportTextContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/addSportIcon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginTop="10dp"
+                            android:clickable="true"
+                            android:contentDescription="@string/add_sport"
+                            android:focusable="true"
+                            app:backgroundTint="@color/primary_orange"
+                            app:fabCustomSize="20dp"
+                            app:srcCompat="@drawable/plus_icon" />
+
+                        <TextView
+                            android:id="@+id/addSport"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="54dp"
+                            android:layout_marginTop="20dp"
+                            android:fontFamily="@font/crete_round"
+                            android:text="@string/add_sport"
+                            android:textColor="@color/primary_orange"
+                            android:textSize="20sp" />
+                    </RelativeLayout>
+                </LinearLayout>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="99dp">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/confirm_button"
+                        android:layout_width="180dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/confirm_button"
+                        android:text="@string/confirm_button"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

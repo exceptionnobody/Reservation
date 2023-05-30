@@ -30,6 +30,7 @@ import java.io.ByteArrayOutputStream
 import dagger.hilt.android.AndroidEntryPoint
 import it.polito.g13.R
 import it.polito.g13.activities.editprofile.ShowProfileActivity
+import it.polito.g13.activities.editprofile.SportsActivity
 import it.polito.g13.firebase_objects.ProfileUser
 import org.json.JSONObject
 import java.io.FileDescriptor
@@ -177,6 +178,7 @@ class RegistrationActivity : AppCompatActivity() {
             // Toast.makeText(this, "Selected city: $selectedCity", Toast.LENGTH_SHORT).show()
         }
 
+        /*
         //add a new sport
         val addSportTextContainer = findViewById<RelativeLayout>(R.id.addSportTextContainer)
         val addSportIcon = findViewById<FloatingActionButton>(R.id.addSportIcon)
@@ -194,6 +196,8 @@ class RegistrationActivity : AppCompatActivity() {
                 num_sports++
             }
         }
+
+         */
 
         //multi selection menu for languages
         languagesView = findViewById(R.id.editLanguages)
@@ -487,6 +491,7 @@ class RegistrationActivity : AppCompatActivity() {
         }
     }
 
+    /*
     //handle adding new sport
     @SuppressLint("InflateParams")
     private fun handleNewSport() {
@@ -511,6 +516,8 @@ class RegistrationActivity : AppCompatActivity() {
             num_sports--
         }
     }
+
+     */
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getDataFromSharedPref(){
@@ -658,11 +665,16 @@ class RegistrationActivity : AppCompatActivity() {
             user_city.text.toString(),
         )
 
+        val intent = Intent(this, SportsActivity::class.java)
+        intent.putExtra("myUser", myUser)
+        startActivity(intent)
+
         // x.putString("user_name", if (user_name.text.length!=0){return user_name.text}; else{})
-        insertUserProfile(myUser)
+        //insertUserProfile(myUser)
 
     }
 
+    /*
     private fun insertUserProfile(myuser: ProfileUser) {
         val user = db.collection("users").document(FirebaseAuth.getInstance().uid!!).collection("profile").document("info")
         user.set(myuser)
@@ -676,6 +688,8 @@ class RegistrationActivity : AppCompatActivity() {
                 finish()
             }
     }
+
+     */
 
 
 
