@@ -71,27 +71,27 @@ class SportsActivity : AppCompatActivity() {
         val loadingSports = findViewById<ProgressBar>(R.id.loading_sports)
 
         userViewModel.userData.observe(this) {
-            if (it["basketLevel"] != "") {
+            if (it?.get("basketLevel") != null && it.get("basketLevel") != "") {
                 sportsLevel["Basket"] = it["basketLevel"].toString()
                 sportsAchievements["Basket"] = it["basketAchievements"].toString()
             }
-            if (it["footballLevel"] != "") {
+            if (it?.get("footballLevel") != null && it.get("footballLevel") != "") {
                 sportsLevel["Football"] = it["footballLevel"].toString()
                 sportsAchievements["Football"] = it["footballAchievements"].toString()
             }
-            if (it["padelLevel"] != "") {
+            if (it?.get("padelLevel") != null && it.get("padelLevel") != "") {
                 sportsLevel["Padel"] = it["padelLevel"].toString()
                 sportsAchievements["Padel"] = it["padelAchievements"].toString()
             }
-            if (it["rugbyLevel"] != "") {
+            if (it?.get("rugbyLevel") != null && it.get("rugbyLevel") != "") {
                 sportsLevel["Rugby"] = it["rugbyLevel"].toString()
                 sportsAchievements["Rugby"] = it["rugbyAchievements"].toString()
             }
-            if (it["tennisLevel"] != "") {
+            if (it?.get("tennisLevel") != null && it.get("tennisLevel") != "") {
                 sportsLevel["Tennis"] = it["tennisLevel"].toString()
                 sportsAchievements["Tennis"] = it["tennisAchievements"].toString()
             }
-            if (it["volleyballLevel"] != "") {
+            if (it?.get("volleyballLevel") != null && it.get("volleyballLevel") != "") {
                 sportsLevel["Volleyball"] = it["volleyballLevel"].toString()
                 sportsAchievements["Volleyball"] = it["volleyballAchievements"].toString()
             }
@@ -158,6 +158,11 @@ class SportsActivity : AppCompatActivity() {
             val sportSpinner = sportList.findViewById<Spinner>(R.id.editGames)
             sportSpinner.adapter =
                 ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, sports)
+
+            if (!sports.contains(selectedSport)) {
+                sports.add(selectedSport)
+            }
+
             sportSpinner.setSelection(sports.indexOf(selectedSport))
 
             //spinner for selectedSport level
