@@ -49,6 +49,14 @@
                         android:textColor="@color/primary_green"
                         android:textSize="20sp"/>
 
+                    <ProgressBar
+                        android:id="@+id/loading_sports"
+                        android:layout_marginTop="15dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:indeterminate="true"
+                        android:indeterminateTint="@color/primary_green" />
+
                     <LinearLayout
                         android:id="@+id/sportsContainer"
                         android:layout_width="wrap_content"

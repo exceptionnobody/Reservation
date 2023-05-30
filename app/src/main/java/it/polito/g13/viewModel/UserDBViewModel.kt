@@ -19,7 +19,7 @@ class UserDBViewModel : ViewModel() {
 
             db
                 .collection("users")
-                .document(user.uid!!)
+                .document(user.uid)
                 .collection("profile")
                 .document("info")
                 .get()

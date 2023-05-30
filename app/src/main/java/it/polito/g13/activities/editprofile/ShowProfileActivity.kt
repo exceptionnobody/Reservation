@@ -136,33 +136,33 @@ class ShowProfileActivity : AppCompatActivity(), NavigationView.OnNavigationItem
 
         userViewModel.userData.observe(this) {
             if (it["basketLevel"] != "") {
-                sportsLevel["basket"] = it["basketLevel"].toString()
-                sportsAchievements["basket"] = it["basketAchievements"].toString()
+                sportsLevel["Basket"] = it["basketLevel"].toString()
+                sportsAchievements["Basket"] = it["basketAchievements"].toString()
                 noSports.visibility = View.GONE
             }
             if (it["footballLevel"] != "") {
-                sportsLevel["football"] = it["footballLevel"].toString()
-                sportsAchievements["football"] = it["footballAchievements"].toString()
+                sportsLevel["Football"] = it["footballLevel"].toString()
+                sportsAchievements["Football"] = it["footballAchievements"].toString()
                 noSports.visibility = View.GONE
             }
             if (it["padelLevel"] != "") {
-                sportsLevel["padel"] = it["padelLevel"].toString()
-                sportsAchievements["padel"] = it["padelAchievements"].toString()
+                sportsLevel["Padel"] = it["padelLevel"].toString()
+                sportsAchievements["Padel"] = it["padelAchievements"].toString()
                 noSports.visibility = View.GONE
             }
             if (it["rugbyLevel"] != "") {
-                sportsLevel["rugby"] = it["rugbyLevel"].toString()
-                sportsAchievements["rugby"] = it["rugbyAchievements"].toString()
+                sportsLevel["Rugby"] = it["rugbyLevel"].toString()
+                sportsAchievements["Rugby"] = it["rugbyAchievements"].toString()
                 noSports.visibility = View.GONE
             }
             if (it["tennisLevel"] != "") {
-                sportsLevel["tennis"] = it["tennisLevel"].toString()
-                sportsAchievements["tennis"] = it["tennisAchievements"].toString()
+                sportsLevel["Tennis"] = it["tennisLevel"].toString()
+                sportsAchievements["Tennis"] = it["tennisAchievements"].toString()
                 noSports.visibility = View.GONE
             }
             if (it["volleyballLevel"] != "") {
-                sportsLevel["volleyball"] = it["volleyballLevel"].toString()
-                sportsAchievements["volleyball"] = it["volleyballAchievements"].toString()
+                sportsLevel["Volleyball"] = it["volleyballLevel"].toString()
+                sportsAchievements["Volleyball"] = it["volleyballAchievements"].toString()
                 noSports.visibility = View.GONE
             }
 

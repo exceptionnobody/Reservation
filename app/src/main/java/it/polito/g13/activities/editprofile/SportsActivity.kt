@@ -14,10 +14,12 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.widget.addTextChangedListener
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
@@ -26,6 +28,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import it.polito.g13.R
 import it.polito.g13.firebase_objects.ProfileUser
+import it.polito.g13.viewModel.UserDBViewModel
 
 val sports = mutableListOf("Basket", "Football", "Padel", "Rugby", "Tennis", "Volleyball")
 val selectedSportsLevel = mutableMapOf<String, String>()
@@ -33,6 +36,9 @@ val selectedSportsAchievement = mutableMapOf<String, String>()
 val sportLevels = listOf("Beginner", "Intermediate", "Professional")
 
 class SportsActivity : AppCompatActivity() {
+
+    private val userViewModel by viewModels<UserDBViewModel>()
+
     private val db = Firebase.firestore
 
     var num_sports = 0
@@ -59,8 +65,52 @@ class SportsActivity : AppCompatActivity() {
 
         num_sports = 0
 
+        val sportsLevel = mutableMapOf<String, String>()
+        val sportsAchievements = mutableMapOf<String, String>()
+
+        val loadingSports = findViewById<ProgressBar>(R.id.loading_sports)
+
+        userViewModel.userData.observe(this) {
+            if (it["basketLevel"] != "") {
+                sportsLevel["Basket"] = it["basketLevel"].toString()
+                sportsAchievements["Basket"] = it["basketAchievements"].toString()
+            }
+            if (it["footballLevel"] != "") {
+                sportsLevel["Football"] = it["footballLevel"].toString()
+                sportsAchievements["Football"] = it["footballAchievements"].toString()
+            }
+            if (it["padelLevel"] != "") {
+                sportsLevel["Padel"] = it["padelLevel"].toString()
+                sportsAchievements["Padel"] = it["padelAchievements"].toString()
+            }
+            if (it["rugbyLevel"] != "") {
+                sportsLevel["Rugby"] = it["rugbyLevel"].toString()
+                sportsAchievements["Rugby"] = it["rugbyAchievements"].toString()
+            }
+            if (it["tennisLevel"] != "") {
+                sportsLevel["Tennis"] = it["tennisLevel"].toString()
+                sportsAchievements["Tennis"] = it["tennisAchievements"].toString()
+            }
+            if (it["volleyballLevel"] != "") {
+                sportsLevel["Volleyball"] = it["volleyballLevel"].toString()
+                sportsAchievements["Volleyball"] = it["volleyballAchievements"].toString()
+            }
+
+            if (sportsLevel.isNotEmpty()) {
+                addSportIcon.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+                addSportText.setTextColor(Color.GRAY)
+
+                addSportTextContainer.isClickable = false
+                addSportIcon.isClickable = false
+
+                loadSports(sportsLevel, sportsAchievements)
+            }
+
+            loadingSports.visibility = View.GONE
+        }
+
         addSportTextContainer.setOnClickListener {
-            if(num_sports < sports.size){
+            if(num_sports < 6){
                 handleNewSport()
                 num_sports++
 
@@ -73,7 +123,7 @@ class SportsActivity : AppCompatActivity() {
         }
 
         addSportIcon.setOnClickListener {
-            if(num_sports < sports.size){
+            if(num_sports < 6){
                 handleNewSport()
                 num_sports++
 
@@ -89,6 +139,103 @@ class SportsActivity : AppCompatActivity() {
 
         confirmButton.setOnClickListener {
             insertUserProfile(myUser)
+        }
+    }
+
+    private fun loadSports(sportsLevel: MutableMap<String, String>, sportsAchievements: MutableMap<String, String>) {
+        var countConfirm = 0
+
+        for (sportLevel in sportsLevel.toList()) {
+            num_sports++
+
+            val selectedSport = sportLevel.first
+
+            val addSportContainer = findViewById<LinearLayout>(R.id.sportsContainer)
+
+            val sportList = layoutInflater.inflate(R.layout.add_new_sport, addSportContainer, false)
+
+            //spinner for selectedSport
+            val sportSpinner = sportList.findViewById<Spinner>(R.id.editGames)
+            sportSpinner.adapter =
+                ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, sports)
+            sportSpinner.setSelection(sports.indexOf(selectedSport))
+
+            //spinner for selectedSport level
+            val sportLevelSpinner = sportList.findViewById<Spinner>(R.id.editGameLevel)
+            sportLevelSpinner.adapter =
+                ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, sportLevels)
+            sportLevelSpinner.setSelection(sportLevels.indexOf(sportsLevel[selectedSport]))
+
+            addSportContainer.addView(sportList)
+
+            //handle inserted sport achievement
+            val sportAchievement = sportList.findViewById<TextInputEditText>(R.id.editDescription)
+            sportAchievement.setText(sportsAchievements[selectedSport])
+
+            //confirm inserted sport
+            val confirmSportIcon = sportList.findViewById<FloatingActionButton>(R.id.confirm_sport)
+            confirmSportIcon.setOnClickListener {
+                selectedSportsLevel[selectedSport] = sportLevel.second
+                selectedSportsAchievement[selectedSport] = sportsAchievements[selectedSport].toString()
+                sports.remove(selectedSport)
+
+                countConfirm++
+
+                if (countConfirm == sportsLevel.size) {
+                    addSportIcon.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF5722"))
+                    addSportText.setTextColor(Color.parseColor("#FF5722"))
+
+                    addSportTextContainer.isClickable = true
+                    addSportIcon.isClickable = true
+
+                    addSportTextContainer.setOnClickListener {
+                        if(num_sports < 6){
+                            handleNewSport()
+                            num_sports++
+
+                            addSportIcon.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+                            addSportText.setTextColor(Color.GRAY)
+
+                            addSportTextContainer.isClickable = false
+                            addSportIcon.isClickable = false
+                        }
+                    }
+
+                    addSportIcon.setOnClickListener {
+                        if(num_sports < 6){
+                            handleNewSport()
+                            num_sports++
+
+                            addSportIcon.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+                            addSportText.setTextColor(Color.GRAY)
+
+                            addSportTextContainer.isClickable = false
+                            addSportIcon.isClickable = false
+                        }
+                    }
+                }
+
+                confirmSportIcon.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+                confirmSportIcon.isClickable = false
+            }
+
+            //delete inserted sport
+            val deleteSportIcon = sportList.findViewById<FloatingActionButton>(R.id.delete_sport)
+            deleteSportIcon.setOnClickListener {
+                addSportContainer.removeView(sportList)
+
+                selectedSportsLevel.remove(selectedSport)
+                selectedSportsAchievement.remove(selectedSport)
+                sports.add(selectedSport)
+
+                addSportIcon.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF5722"))
+                addSportText.setTextColor(Color.parseColor("#FF5722"))
+
+                addSportTextContainer.isClickable = true
+                addSportIcon.isClickable = true
+
+                num_sports--
+            }
         }
     }
 
