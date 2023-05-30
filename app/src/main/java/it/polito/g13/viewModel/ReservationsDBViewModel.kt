@@ -33,6 +33,9 @@ class ReservationsDBViewModel : ViewModel() {
     private val _userReservations = MutableLiveData<List<MutableMap<String, Any>>>()
     val userReservations: LiveData<List<MutableMap<String, Any>>> = _userReservations
 
+    private val _userHasPastReservations = MutableLiveData<Boolean>()
+    val userHasPastReservations: LiveData<Boolean> = _userHasPastReservations
+
     private val _singleReservation = MutableLiveData<MutableMap<String, Any?>>()
     val singleReservation: LiveData<MutableMap<String, Any?>> = _singleReservation
 
@@ -89,73 +92,98 @@ class ReservationsDBViewModel : ViewModel() {
         reservationsRef
             .get()
             .addOnSuccessListener { listReservations ->
-                val allUserReservations: MutableList<MutableMap<String, Any>> = mutableListOf()
+                if (listReservations.isEmpty) {
+                    _userHasPastReservations.value = false
+                }
+                else {
+                    _userHasPastReservations.value = true
 
-                for (reservation in listReservations) {
-                    val reservationData = reservation.data
+                    val allUserReservations: MutableList<MutableMap<String, Any>> = mutableListOf()
 
-                    db
-                        .collection("reservations")
-                        .document(reservationData["posresid"].toString())
-                        .get()
-                        .addOnSuccessListener {
-                            if (it.data?.get("idstruttura") != null && !it.data?.get("idstruttura").toString().isNullOrBlank() && !it.data?.get("idstruttura").toString().isNullOrEmpty()) {
+                    for (reservation in listReservations) {
+                        val reservationData = reservation.data
 
-                                val retrievedDate = it.data?.get("data") as Timestamp
-                                val seconds = retrievedDate.seconds
-                                val nanoseconds = retrievedDate.nanoseconds
-                                val milliseconds = seconds * 1000 + nanoseconds / 1_000_000
+                        db
+                            .collection("reservations")
+                            .document(reservationData["posresid"].toString())
+                            .get()
+                            .addOnSuccessListener {
+                                if (it.data?.get("idstruttura") != null && !it.data?.get("idstruttura")
+                                        .toString().isNullOrBlank() && !it.data?.get("idstruttura")
+                                        .toString().isNullOrEmpty()
+                                ) {
 
-                                val date = SimpleDateFormat("yyyy-MM-dd", Locale.UK).format(Date(milliseconds))
-                                val formattedDate = SimpleDateFormat("yyyy-MM-dd").parse(date)
-                                val today = SimpleDateFormat("yyyy-MM-dd", Locale.UK).format(Date())
-                                val formattedToday = SimpleDateFormat("yyyy-MM-dd").parse(today)
+                                    val retrievedDate = it.data?.get("data") as Timestamp
+                                    val seconds = retrievedDate.seconds
+                                    val nanoseconds = retrievedDate.nanoseconds
+                                    val milliseconds = seconds * 1000 + nanoseconds / 1_000_000
 
-                                if (formattedDate.before(formattedToday)) {
-                                    val idStruct = it.data?.get("idstruttura") as DocumentReference
+                                    val date = SimpleDateFormat("yyyy-MM-dd", Locale.UK).format(
+                                        Date(milliseconds)
+                                    )
+                                    val formattedDate = SimpleDateFormat("yyyy-MM-dd").parse(date)
+                                    val today =
+                                        SimpleDateFormat("yyyy-MM-dd", Locale.UK).format(Date())
+                                    val formattedToday = SimpleDateFormat("yyyy-MM-dd").parse(today)
 
-                                    val idStructStr = idStruct.path.substring(idStruct.path.lastIndexOf('/') + 1)
+                                    if (formattedDate.before(formattedToday)) {
+                                        val idStruct =
+                                            it.data?.get("idstruttura") as DocumentReference
 
-                                    reservationData["idstruttura"] = idStructStr
-                                    reservationData["tiposport"] = it.data?.get("tiposport")
-                                    reservationData["data"] = it.data?.get("data")
-                                    reservationData["reservationid"] = it.id
+                                        val idStructStr =
+                                            idStruct.path.substring(idStruct.path.lastIndexOf('/') + 1)
 
-                                    idStruct
-                                        .get()
-                                        .addOnSuccessListener {
-                                            reservationData["nomestruttura"] = it.data?.get("nomestruttura")
-                                            reservationData["citta"] = it.data?.get("citta")
+                                        reservationData["idstruttura"] = idStructStr
+                                        reservationData["tiposport"] = it.data?.get("tiposport")
+                                        reservationData["data"] = it.data?.get("data")
+                                        reservationData["reservationid"] = it.id
 
-                                            idStruct
-                                                .collection("reviewStruttura")
-                                                .document(user.uid)
-                                                .get()
-                                                .addOnSuccessListener {
-                                                    val voto1 = (it.data?.get("voto1") as Long).toFloat()
-                                                    val voto2 = (it.data?.get("voto2") as Long).toFloat()
-                                                    val voto3 = (it.data?.get("voto3") as Long).toFloat()
-                                                    val voto4 = (it.data?.get("voto4") as Long).toFloat()
+                                        idStruct
+                                            .get()
+                                            .addOnSuccessListener {
+                                                reservationData["nomestruttura"] =
+                                                    it.data?.get("nomestruttura")
+                                                reservationData["citta"] = it.data?.get("citta")
 
-                                                    val avg = (voto1 + voto2 + voto3 + voto4) / 4
+                                                idStruct
+                                                    .collection("reviewStruttura")
+                                                    .document(user.uid)
+                                                    .get()
+                                                    .addOnSuccessListener {
+                                                        if (it.data?.get("voto1") != null) {
+                                                            val voto1 =
+                                                                (it.data?.get("voto1") as Long).toFloat()
+                                                            val voto2 =
+                                                                (it.data?.get("voto2") as Long).toFloat()
+                                                            val voto3 =
+                                                                (it.data?.get("voto3") as Long).toFloat()
+                                                            val voto4 =
+                                                                (it.data?.get("voto4") as Long).toFloat()
 
-                                                    reservationData["avg"] = avg
+                                                            val avg =
+                                                                (voto1 + voto2 + voto3 + voto4) / 4
 
-                                                    allUserReservations.add(reservationData)
-                                                    _userReservations.value = allUserReservations
-                                                }
-                                                .addOnFailureListener {
-                                                    allUserReservations.add(reservationData)
-                                                    _userReservations.value = allUserReservations
-                                                }
-                                        }
-                                        .addOnFailureListener {
-                                            allUserReservations.add(reservationData)
-                                            _userReservations.value = allUserReservations
-                                        }
+                                                            reservationData["avg"] = avg
+                                                        }
+
+                                                        allUserReservations.add(reservationData)
+                                                        _userReservations.value =
+                                                            allUserReservations
+                                                    }
+                                                    .addOnFailureListener {
+                                                        allUserReservations.add(reservationData)
+                                                        _userReservations.value =
+                                                            allUserReservations
+                                                    }
+                                            }
+                                            .addOnFailureListener {
+                                                allUserReservations.add(reservationData)
+                                                _userReservations.value = allUserReservations
+                                            }
+                                    }
                                 }
                             }
-                        }
+                    }
                 }
             }
     }

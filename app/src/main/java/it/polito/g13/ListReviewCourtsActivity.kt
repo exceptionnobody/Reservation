@@ -86,16 +86,19 @@ class ListReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigatio
         val noReservation = findViewById<TextView>(R.id.no_courts)
 
         reservationViewModel.getUserPastReservations()
-        reservationViewModel.userReservations.observe(this) {reservations ->
-            if (reservations.isNotEmpty()) {
-                val listToReview = reservations.distinctBy { it["nomestruttura"] }
 
-                val recyclerView = findViewById<RecyclerView>(R.id.list_review_courts)
-                recyclerView.adapter = ReviewReservationAdapter(listToReview, this)
-                recyclerView.layoutManager = LinearLayoutManager(this)
+        reservationViewModel.userHasPastReservations.observe(this) {userHasPastReservations ->
+            if (userHasPastReservations) {
+                reservationViewModel.userReservations.observe(this) {reservations ->
+                    val listToReview = reservations.distinctBy { it["nomestruttura"] }
 
-                loading.visibility = View.GONE
-                container.visibility = View.VISIBLE
+                    val recyclerView = findViewById<RecyclerView>(R.id.list_review_courts)
+                    recyclerView.adapter = ReviewReservationAdapter(listToReview, this)
+                    recyclerView.layoutManager = LinearLayoutManager(this)
+
+                    loading.visibility = View.GONE
+                    container.visibility = View.VISIBLE
+                }
             }
             else {
                 loading.visibility = View.GONE

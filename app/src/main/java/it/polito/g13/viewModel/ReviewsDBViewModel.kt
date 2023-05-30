@@ -16,9 +16,6 @@ class ReviewsDBViewModel : ViewModel() {
     private val db = Firebase.firestore
     private val user = FirebaseAuth.getInstance().currentUser
 
-    //private val _structures = MutableLiveData<List<MutableMap<String, Any>>>()
-    //val structures: LiveData<List<MutableMap<String, Any>>> = _structures
-
     private val _reviews = MutableLiveData<List<MutableMap<String, Any>>>()
     val reviews: LiveData<List<MutableMap<String, Any>>> = _reviews
 
@@ -29,7 +26,6 @@ class ReviewsDBViewModel : ViewModel() {
     val reviewById: LiveData<MutableMap<String, Any>> = _reviewById
 
     fun getReviewsByStruct(idStruct: String) {
-
         db
             .collection("struttura")
             .document(idStruct)
@@ -94,15 +90,20 @@ class ReviewsDBViewModel : ViewModel() {
                 .document(structId)
                 .get()
                 .addOnSuccessListener {
-                    val reviewData: MutableMap<String, Any> = mutableMapOf()
+                    if (it.data?.get("voto1") != null) {
+                        val reviewData: MutableMap<String, Any> = mutableMapOf()
 
-                    reviewData["voto1"] = (it.data?.get("voto1") as Long).toInt()
-                    reviewData["voto2"] = (it.data?.get("voto2") as Long).toInt()
-                    reviewData["voto3"] = (it.data?.get("voto3") as Long).toInt()
-                    reviewData["voto4"] = (it.data?.get("voto4") as Long).toInt()
-                    reviewData["comment"] = it.data?.get("comment") as String
+                        reviewData["voto1"] = (it.data?.get("voto1") as Long).toInt()
+                        reviewData["voto2"] = (it.data?.get("voto2") as Long).toInt()
+                        reviewData["voto3"] = (it.data?.get("voto3") as Long).toInt()
+                        reviewData["voto4"] = (it.data?.get("voto4") as Long).toInt()
+                        reviewData["comment"] = it.data?.get("comment") as String
 
-                    _reviewById.value = reviewData
+                        _reviewById.value = reviewData
+                    }
+                    else {
+                        _reviewById.value = mutableMapOf()
+                    }
                 }
                 .addOnFailureListener {
                     _reviewById.value = mutableMapOf()
