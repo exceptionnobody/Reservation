@@ -85,7 +85,7 @@ class StructuresDBViewModel : ViewModel() {
                     if (error != null) {
                         _courts.value = emptyList()
                     }
-                    else {
+                    else if (index < allStructs.size) {
                         val courtsData = value?.mapNotNull { it.data }
 
                         courtsData?.let {
