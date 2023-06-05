@@ -88,6 +88,9 @@ class ListReviewCourtsActivity : AppCompatActivity(), NavigationView.OnNavigatio
         reservationViewModel.getUserPastReservations()
 
         reservationViewModel.userHasPastReservations.observe(this) {userHasPastReservations ->
+            noReservation.visibility = View.GONE
+            loading.visibility = View.VISIBLE
+
             if (userHasPastReservations) {
                 reservationViewModel.userReservations.observe(this) {reservations ->
                     val listToReview = reservations.distinctBy { it["nomestruttura"] }

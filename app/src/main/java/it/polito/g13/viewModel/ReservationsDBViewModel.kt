@@ -96,7 +96,7 @@ class ReservationsDBViewModel : ViewModel() {
                     _userHasPastReservations.value = false
                 }
                 else {
-                    _userHasPastReservations.value = true
+                    _userHasPastReservations.value = false
 
                     val allUserReservations: MutableList<MutableMap<String, Any>> = mutableListOf()
 
@@ -127,6 +127,8 @@ class ReservationsDBViewModel : ViewModel() {
                                     val formattedToday = SimpleDateFormat("yyyy-MM-dd").parse(today)
 
                                     if (formattedDate.before(formattedToday)) {
+                                        _userHasPastReservations.value = true
+
                                         val idStruct =
                                             it.data?.get("idstruttura") as DocumentReference
 
